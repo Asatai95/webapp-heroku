@@ -11,4 +11,5 @@ pipelines:
         caches:
           - pip
         script: # Modify the commands below to build your repository.
-          - pip install -r requirements.txt
+          - composer install
+          - git push https://heroku:77f327da-cb8f-426f-bfc6-f93256179c66@git.heroku.com/webapp2-heroku.git HEAD

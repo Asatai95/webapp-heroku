@@ -15,7 +15,9 @@
     <div class='test'>
       <p class='text'>test</p>
       <p class='text'>{{test}}</p>
-      <img src="static/img/test.png" alt="">
+      <div class='img'>
+        <img src="static/img/test.png" alt="">
+      </div>
     </div>
   </body>
 </html>

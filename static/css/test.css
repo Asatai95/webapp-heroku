@@ -7,7 +7,8 @@ p.text {
   text-align: center;
 }
 
-div.test img {
+div.img img {
+  margin: 0 auto;
   text-align: center;
   width: 200px;
   height: 200px;

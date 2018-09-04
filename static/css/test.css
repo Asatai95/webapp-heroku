@@ -6,3 +6,11 @@ p.text {
   font-weight: 600;
   text-align: center;
 }
+
+div.test img {
+  text-align: center;
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+  box-shadow: 0 0 8px gray;
+}

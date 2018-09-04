@@ -14,6 +14,8 @@
   <body>
     <div class='test'>
       <p class='text'>test</p>
+      <p class='text'>{{test}}</p>
+      <img src="static/img/test.png" alt="">
     </div>
   </body>
 </html>

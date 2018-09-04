@@ -5,6 +5,10 @@ import os
 def test(path):
     return static_file(path, root='static')
 
+@get("/static/img/<filepath:re:.*\.(jpg|png|gif|ico|svg)>")
+def img(filepath):
+    return static_file(filepath, root="static/img")
+
 @route('/')
 def test():
 

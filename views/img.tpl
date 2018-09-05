@@ -35,6 +35,9 @@
     <input class="button" type="submit" value="登録" />
   </form>
 </div>
+<div class='test_sub'>
+  <p class='test_sub_img'><img src="{{img_sub}}" alt=""></p>
+</div>
 
 </body>
 </html>

@@ -194,7 +194,7 @@ def text_db():
 
     if img_file and allowed_file(img_file.filename):
         filename = img_file.filename
-        img_file.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
+        img_file.save(os.path.join(UPLOAD_FOLDER, filename))
         path = UPLOAD_FOLDER + filename
         print(path)
 

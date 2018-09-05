@@ -14,7 +14,6 @@ import smtplib
 import os
 import stripe
 import sys
-from MySQLdb.cursors import DictCursor
 
 charset.add_charset('utf-8', charset.SHORTEST, None, 'utf-8')
 cset = 'utf-8'
@@ -28,15 +27,6 @@ stripe_keys = {
 
 stripe.api_key = stripe_keys['secret_key']
 
-
-if __name__ == "__main__":
-    connector = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
-    connector.cursorclass = MySQLdb.cursors.DictCursor
-    cursor = connector.cursor()
-    cursor.execute("SET NAMES utf8")
-    cursor.fetchall()
-    cursor.close()
-    connector.close()
 
 @route("/static/:path#.+#", name='static')
 def test(path):
@@ -165,7 +155,7 @@ def text_db():
 
     message = 'データベースの中身を公開するよー！！'
 
-    form = request.forms.get('form')
+    form = request.forms.get(str('form'))
     print(form)
 
     db = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
@@ -173,7 +163,7 @@ def text_db():
     print('???')
 
     sql = 'insert into test(test) values(%s)'
-    text = con.execute(sql, [form])
+    text = con.execute(sql, [str(form)])
     db.commit()
     print(text)
 

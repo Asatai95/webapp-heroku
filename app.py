@@ -190,8 +190,8 @@ def text_db():
 @route('/text_sub', method='POST')
 def text_db():
 
-    img = request.files.img_file
-    print(img)
+    img_file = request.files.img_file
+    print(img_file)
 
     if img_file and allowed_file(img_file.filename):
         filename = secure_filename(img_file.filename)

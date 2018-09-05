@@ -137,7 +137,6 @@ def text():
 
     message = 'データベースの中身を公開するよー！！'
 
-
     db = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
     con = db.cursor()
 
@@ -154,6 +153,8 @@ def text():
 @route('/text', method='POST')
 def text_db():
 
+    message = 'データベースの中身を公開するよー！！'
+
     form = request.forms.get('form')
     print(form)
 
@@ -169,7 +170,7 @@ def text_db():
     result = con.fetchall()
     print(result)
 
-    return template('message')
+    return template('message', main=form, message=message)
 
 @route('/text_sub', method='POST')
 def text_db():

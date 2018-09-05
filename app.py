@@ -182,6 +182,11 @@ def text_db():
 
     return template('message', main=form, message=message)
 
+@route('/text_sub')
+def text_db():
+
+    return template('img')
+
 @route('/text_sub', method='POST')
 def text_db():
 

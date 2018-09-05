@@ -1,0 +1,80 @@
+@charset "UTF-8";
+
+.test {
+  text-align: center;
+}
+
+.test_sub {
+  font-size: 30px;
+  font-weight: 800;
+}
+
+fb:login-button {
+  width: 200px;
+  height: 100px;
+  border: 1px solid black;
+}
+
+.fb_iframe_widget  {
+  padding: 30px;
+}
+
+.fb_iframe_widget iframe {
+  position: relative;
+}
+
+form article label {
+  display: block;
+  margin: 5px;
+}
+form .submit {
+  margin: 15px 0;
+}
+
+body {
+  text-align: center;
+  width: 1064px;
+  background-color: rgba(123, 128, 132, 0.8);
+  height: 750px;
+  margin: 0;
+  padding: 0;
+}
+
+.test {
+  background-image: url('../img/map.jpeg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  height: 100%;
+  width: 100%;
+}
+
+.img {
+  margin: 0 auto;
+  padding: 50px;
+}
+
+#form input[type=text] {
+  width: 300px;
+  height: 50px;
+  font-size: 20px;
+  color: black;
+  font-weight: 600;
+  border: 1px solid;
+  border-radius: 10px;
+  text-align: left;
+}
+
+#form input[type=submit] {
+  width: 100px;
+  height: 50px;
+  font-size: 20px;
+  border: 3px solid;
+  border-radius: 30px;
+  cursor: pointer;
+  background-color: : rgba(123, 128, 132, 0.1);
+}
+
+#form input[type=submit]:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px gray;
+}

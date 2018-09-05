@@ -162,7 +162,7 @@ def text_db():
     print('???')
 
     sql = 'insert into test(test) values(%s)'
-    text = con.execute(sql, ('form'))
+    text = con.execute(sql, str(form))
     db.commit()
     print(text)
 
@@ -172,7 +172,6 @@ def text_db():
     return result
 
 @route('/text_sub', method='POST')
-@view('message')
 def text_db():
 
     form = request.forms.get('form')
@@ -190,7 +189,7 @@ def text_db():
     result = con.fetchall()
     print(result)
 
-    return result
+    return template('message')
 
 
 run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

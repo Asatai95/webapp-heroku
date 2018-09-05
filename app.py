@@ -24,7 +24,6 @@ UPLOAD_FOLDER = './static/img/'
 ALLOWED_EXTENSIONS = set(['png', 'jpeg', 'gif'])
 path = './static/img/*.ALLOWED_EXTENSIONS'
 
-
 def allowed_file(filename):
 
     return '.' in filename and \
@@ -194,7 +193,7 @@ def text_db():
     print(img_file)
 
     if img_file and allowed_file(img_file.filename):
-        filename = secure_filename(img_file.filename)
+        filename = img_file.filename
         img_file.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
         path = UPLOAD_FOLDER + filename
         print(path)

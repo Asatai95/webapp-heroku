@@ -182,8 +182,8 @@ def text_db():
     con = db.cursor()
     print('???')
 
-    sql = 'insert into test(test) values(%s)'
-    text = con.execute(sql, str('form'))
+    sql = 'insert into test (test) values (%s)'
+    text = con.execute(sql, str(form))
     db.commit()
     print(text)
 

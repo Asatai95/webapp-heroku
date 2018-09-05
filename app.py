@@ -169,7 +169,7 @@ def text_db():
     result = con.fetchall()
     print(result)
 
-    return result
+    return template('message')
 
 @route('/text_sub', method='POST')
 def text_db():

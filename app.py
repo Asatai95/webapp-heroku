@@ -1,4 +1,3 @@
-#!/usr/bin/venv python
 # -*- coding: utf_8 -*-
 import MySQLdb
 from bottle import get, route, run, template, static_file, request, redirect, response, view
@@ -163,19 +162,19 @@ def text_db():
     print('???')
 
     sql = 'insert into test(test) values(%s)'
-    text = con.execute(sql, [str(form)])
+    text = con.execute(sql, [form])
     db.commit()
     print(text)
 
     result = con.fetchall()
     print(result)
 
-    return template('message', main=str(form), message=message)
+    return template('message', main=form, message=message)
 
 @route('/text_sub', method='POST')
 def text_db():
 
-    form = request.forms.get('form')
+    form = request.forms.get("form")
     print(form)
 
     db = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
@@ -183,7 +182,7 @@ def text_db():
     print('???')
 
     sql = 'insert into test (test) values (%s)'
-    text = con.execute(sql, str(form))
+    text = con.execute(sql, [form])
     db.commit()
     print(text)
 

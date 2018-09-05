@@ -32,6 +32,10 @@ stripe.api_key = stripe_keys['secret_key']
 if __name__ == "__main__":
     connector = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
     connector.cursorclass = MySQLdb.cursors.DictCursor
+    cursor = connector.cursor()
+    cursor.execute("SET NAMES utf8")
+    cursor.execute.fetchall()
+    cursor.close()
     connector.close()
 
 @route("/static/:path#.+#", name='static')

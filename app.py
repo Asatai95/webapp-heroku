@@ -36,8 +36,6 @@ if __name__ == "__main__":
     cursor.execute = connector.cursor()
     cursor.execute.execute('SELECT * FROM sample limit 10')
     res = cursor.execute.fetchall()
-    for row in res:
-     print row['users']
     cursor.close()
     connector.close()
 

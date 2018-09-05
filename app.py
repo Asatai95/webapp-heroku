@@ -15,7 +15,6 @@ import os
 import stripe
 import sys
 
-application = __name__
 
 charset.add_charset('utf-8', charset.SHORTEST, None, 'utf-8')
 cset = 'utf-8'
@@ -24,8 +23,7 @@ sys.setrecursionlimit(30000)
 UPLOAD_FOLDER = './static/img/'
 ALLOWED_EXTENSIONS = set(['png', 'jpeg', 'gif'])
 path = './static/img/*.ALLOWED_EXTENSIONS'
-application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-application.config['SECRET_KEY'] = os.urandom(24)
+
 
 def allowed_file(filename):
 

@@ -183,7 +183,7 @@ def text_db():
     print('???')
 
     sql = 'insert into test(test) values(%s)'
-    text = con.execute(sql, [form])
+    text = con.execute(sql, str(form))
     db.commit()
     print(text)
 

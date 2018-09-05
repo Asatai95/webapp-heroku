@@ -209,6 +209,6 @@ def text_db():
         result = con.fetchall()
         print(result)
 
-        return template('img', path=img_sub)
+        return template('img', img_sub=path)
 
 run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

@@ -163,14 +163,14 @@ def text_db():
     print('???')
 
     sql = 'insert into test(test) values(%s)'
-    text = con.execute(sql, [form])
+    text = con.execute(sql, [str(form)])
     db.commit()
     print(text)
 
     result = con.fetchall()
     print(result)
 
-    return template('message', main=form, message=message)
+    return template('message', main=str(form), message=message)
 
 @route('/text_sub', method='POST')
 def text_db():

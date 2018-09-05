@@ -32,6 +32,7 @@
         <input id="file" class="file" type="file" name="file" value="" style="display:none;">
       </label> -->
     </div>
+    <input class="button" type="submit" value="登録" />
   </form>
 </div>
 

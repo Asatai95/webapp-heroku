@@ -34,7 +34,7 @@ if __name__ == "__main__":
     connector.cursorclass = MySQLdb.cursors.DictCursor
     cursor = connector.cursor()
     cursor.execute("SET NAMES utf8")
-    cursor.execute.fetchall()
+    cursor.fetchall()
     cursor.close()
     connector.close()
 

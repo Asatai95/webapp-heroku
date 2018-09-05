@@ -1,4 +1,6 @@
 # -*- coding: utf_8 -*-
+# coding: UTF-8
+
 import MySQLdb
 from bottle import get, route, run, template, static_file, request, redirect, response, view
 from email.header import Header
@@ -11,7 +13,7 @@ import base64
 import smtplib
 import os
 import stripe
-import sys
+from MySQLdb.cursors import DictCursor
 
 charset.add_charset('utf-8', charset.SHORTEST, None, 'utf-8')
 cset = 'utf-8'
@@ -26,6 +28,18 @@ stripe_keys = {
 stripe.api_key = stripe_keys['secret_key']
 
 
+if __name__ == "__main__":
+    connector = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
+    connector.cursorclass = MySQLdb.cursors.DictCursor
+    cursor = connector.cursor()
+    cursor.execute("SET NAMES utf8")
+    cursor.execute = connector.cursor()
+    cursor.execute.execute('SELECT * FROM sample limit 10')
+    res = cursor.execute.fetchall()
+    for row in res:
+     print row['users']
+    cursor.close()
+    connector.close()
 
 @route("/static/:path#.+#", name='static')
 def test(path):

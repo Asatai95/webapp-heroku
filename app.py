@@ -15,11 +15,6 @@ import os
 import stripe
 import sys
 
-
-charset.add_charset('utf-8', charset.SHORTEST, None, 'utf-8')
-cset = 'utf-8'
-sys.setrecursionlimit(30000)
-
 UPLOAD_FOLDER = './static/img/'
 ALLOWED_EXTENSIONS = set(['png', 'jpeg', 'gif'])
 path = './static/img/*.ALLOWED_EXTENSIONS'
@@ -28,6 +23,10 @@ def allowed_file(filename):
 
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+charset.add_charset('utf-8', charset.SHORTEST, None, 'utf-8')
+cset = 'utf-8'
+sys.setrecursionlimit(30000)
 
 stripe_keys = {
   'secret_key': os.environ['SECRET_KEY'],
@@ -203,7 +202,7 @@ def text_db():
         print('???')
 
         sql = 'insert into test(img) values(%s)'
-        test = con.execute(sql, [img])
+        test = con.execute(sql, [path])
         db.commit()
         print(test)
 

@@ -59,6 +59,16 @@ def test_view():
 @route("/test", method='POST')
 def test_sub():
 
+    db = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
+    con = db.cursor()
+
+    sql = 'select test from test where id = 1'
+    test = con.execute(sql)
+    db.commit()
+
+    result = con.fetchall()
+    result = result[0][0]
+
     amount = '500'
 
     stripe_token = request.forms.get('stripeToken')
@@ -112,7 +122,7 @@ def test_sub():
         print('Email')
         if server is not False:
             message = '確かに支払いは完了しました。'
-            return template('message' ,message=message)
+            return template('message' ,message=message, main=result)
 
         server.close()
 

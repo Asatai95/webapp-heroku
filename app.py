@@ -155,7 +155,7 @@ def text_db():
 
     message = 'データベースの中身を公開するよー！！'
 
-    form = request.forms.get(str('form'))
+    form = request.forms.form
     print(form)
 
     db = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')

@@ -183,7 +183,9 @@ def text_db():
 @route('/text_sub')
 def text_db():
 
-    return template('img')
+    img_sub = 'static/img/ninwanko.png'
+
+    return template('img', img_sub=img_sub)
 
 @route('/text_sub', method='POST')
 def text_db():

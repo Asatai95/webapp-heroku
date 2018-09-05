@@ -15,10 +15,22 @@ import os
 import stripe
 import sys
 
+application = __name__
+
 charset.add_charset('utf-8', charset.SHORTEST, None, 'utf-8')
 cset = 'utf-8'
 sys.setrecursionlimit(30000)
 
+UPLOAD_FOLDER = './static/img/'
+ALLOWED_EXTENSIONS = set(['png', 'jpeg', 'gif'])
+path = './static/img/*.ALLOWED_EXTENSIONS'
+application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+application.config['SECRET_KEY'] = os.urandom(24)
+
+def allowed_file(filename):
+
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 stripe_keys = {
   'secret_key': os.environ['SECRET_KEY'],
@@ -175,22 +187,27 @@ def text_db():
 @route('/text_sub', method='POST')
 def text_db():
 
-    form = request.forms.get("form")
-    print(form)
+    img = request.files.img_file
+    print(img)
 
-    db = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
-    con = db.cursor()
-    print('???')
+    if img_file and allowed_file(img_file.filename):
+        filename = secure_filename(img_file.filename)
+        img_file.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
+        path = UPLOAD_FOLDER + filename
+        print(path)
 
-    sql = 'insert into test (test) values (%s)'
-    text = con.execute(sql, [form])
-    db.commit()
-    print(text)
+        db = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
+        con = db.cursor()
+        print('???')
 
-    result = con.fetchall()
-    print(result)
+        sql = 'insert into test(img) values(%s)'
+        test = con.execute(sql, [img])
+        db.commit()
+        print(test)
 
-    return template('message')
+        result = con.fetchall()
+        print(result)
 
+        return template('img')
 
 run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

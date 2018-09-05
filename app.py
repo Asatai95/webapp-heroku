@@ -13,6 +13,7 @@ import base64
 import smtplib
 import os
 import stripe
+import sys
 from MySQLdb.cursors import DictCursor
 
 charset.add_charset('utf-8', charset.SHORTEST, None, 'utf-8')

@@ -10,5 +10,11 @@ pipelines:
     - step:
         caches:
           - pip
-        script: # Modify the commands below to build your repository.
+        name:
+          - pip install -r requirements.txt
+
+    - step:
+        name: Deploy to Heroku
+        deployment: production
+        script:
           - git push https://heroku:77f327da-cb8f-426f-bfc6-f93256179c66@git.heroku.com/webapp2-heroku.git HEAD

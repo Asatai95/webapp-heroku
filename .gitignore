@@ -1,4 +1,4 @@
 env_webapp2/
 README.md
 Procfile
-test.txt
+*.txt

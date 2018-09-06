@@ -1726,7 +1726,7 @@ a .overlay .info p.title {
   display: inline-block;
   width: 120px;
   height: 120px;
-  background-image: url('../img/badge_best_of_cameo.png');
+  background-image: url('../img/si-sa.png');
   background-repeat: no-repeat;
   background-size: 100%;
   opacity: 0;
@@ -2735,7 +2735,7 @@ div.footer_last {
  }
 
  #video_main header div.header_video {
-   background-image: url('../img/badge_best_of_cameo.png');
+   background-image: url('../img/si-sa.png');
  }
 
  #video_main .video_list .video_item .video_item_main a div.post_video_picture1 {

@@ -1724,7 +1724,7 @@ a .overlay .info p.title {
 
 #video_main header div.header_video {
   display: inline-block;
-  width: 120px;
+  width: 150px;
   height: 120px;
   background-image: url('../img/si-sa.png');
   background-repeat: no-repeat;

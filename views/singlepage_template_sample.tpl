@@ -770,9 +770,6 @@
               <p>test sample</p>
             </div>
           </div>
-          <div class='footer_last'>
-            <p> ©️ test</p>
-          </div>
          </section>
         </footer>
       </div>

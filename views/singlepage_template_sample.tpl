@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="static/css/singlepage_template_sample.css">
   <link rel="shortcut icon" href="static/img/fab_out.png">
 
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="static/js/jquery-3.1.1.min.js"></script>
   <script type="text/javascript" src="static/js/singlepage_template_sample.js"></script>
   <link rel="stylesheet" type="text/css" href="static/js/slick-1.8.1/slick/slick.css"/>
   <link rel="stylesheet" type="text/css" href="static/js/slick-1.8.1/slick/slick-theme.css"/>

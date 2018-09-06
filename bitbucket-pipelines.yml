@@ -10,5 +10,6 @@ pipelines:
     - step:
         caches:
           - pip
+
         script:
-          - git push https://heroku:77f327da-cb8f-426f-bfc6-f93256179c66@git.heroku.com/webapp2-heroku.git HEAD
+          - git push https://heroku:6c161e87-12dc-44ae-a267-5c191a3b2aed@git.heroku.com/webapp2-heroku.git HEAD

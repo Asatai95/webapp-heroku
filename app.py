@@ -15,9 +15,9 @@ import os
 import stripe
 import sys
 
-UPLOAD_FOLDER = 'static/img/'
+UPLOAD_FOLDER = './static/img/'
 ALLOWED_EXTENSIONS = set(['png', 'jpeg', 'gif'])
-path = 'static/img/*.ALLOWED_EXTENSIONS'
+path = './static/img/*.ALLOWED_EXTENSIONS'
 
 def allowed_file(filename):
 

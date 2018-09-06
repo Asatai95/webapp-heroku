@@ -25,7 +25,7 @@
   <form action="/text_sub" method="POST" enctype="multipart/form-data">
     <div class="inline_img">
       <label id='image' for="userid" class='name'>image</label>
-      <img src="./static/img/ninwanko.png" alt="プロフィール画像">
+      <p class='test_sub_img'><img src="{{img_sub}}" alt=""></p>
       <input id="img_file" class="file" type="file" name="img_file" value="画像選択">
       <!-- <label for="file" class="view_box">
         +画像を選択
@@ -34,9 +34,6 @@
     </div>
     <input class="button" type="submit" value="登録" />
   </form>
-</div>
-<div class='test_sub'>
-  <p class='test_sub_img'><img src="{{img_sub}}" alt=""></p>
 </div>
 
 </body>

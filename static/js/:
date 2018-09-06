@@ -1,0 +1,97 @@
+$(function() {
+  var scrolltop = $('#scrolltop');
+  $('#scrolltop').on('click', function() {
+    $('html, body').animate({
+      scrollTop: 0
+    }, 500);
+    return false;
+  });
+});
+
+// $(function(){
+//   $('div.image').each(function(){
+//     $win = $(window),
+//     $winH = $win.height(),
+//     $this = $(this),
+//     test = $this.offset().top,
+//     image = 0,
+//     img = 0,
+//     scroll = $win.scrollTop();
+//   $win.on('load scroll', function(){
+//     scroll = $win.scrollTop();
+//     image = (1- (test - scroll) / $winH) * 2 ;
+//     $('.scrollTopd').text($winH);
+//     if (image > 0.99) {
+//       img = 3.03 - image;
+//     }
+//     if (scroll > test - $winH) {
+//       $this.css('transform', 'scale(' + img + ')');
+//       $('.scrollTope').text(img);
+//       $('.scrollTopa').text(image);
+//       $('.scrollTopb').text(test);
+//       $('.scrollTobc').text(scroll);
+//
+//     }
+//   });
+//  });
+// });
+
+$(function() {
+  $('div.sample').each(function() {
+    $wind = $(window),
+      $windH = $wind.height(),
+      $this = $(this),
+      same = $this.offset().top,
+      some = 0,
+      some_win = 0,
+      scroll_img = $wind.scrollTop();
+
+    $wind.on('load scroll', function() {
+      scroll_img = $wind.scrollTop() * 4.5;
+      some = (1 - (same - scroll_img) / $windH) * 5;
+      if (some > 1.0) {
+        some_win = 6.0 - some;
+      }
+      if (scroll_img > same - $windH) {
+        $('div.sample').css({
+          opacity: some_win
+        });
+        $('.scrollTopy').text($windH);
+        $('.scrollTopq').text(some_win);
+        $('.scrollTopw').text(some);
+        $('.scrollTopr').text(scroll_img);
+        $('.scrollTopt').text(same);
+      }
+    });
+  });
+
+  $('div.image').each(function() {
+      $win = $(window),
+      $winH = $win.height(),
+      $this = $(this),
+      test = $this.offset().top,
+      image = 0,
+      img = 0,
+      scroll = $win.scrollTop();
+    $win.on('load scroll', function() {
+      scroll = $win.scrollTop();
+      image = (1 - (test - scroll) / $winH) * 5;
+      $('.scrollTopd').text($winH);
+      if (image > 0.99) {
+        img = 6.03 - image;
+      }
+      if (scroll > test - $winH) {
+        $('div.image').css('transform', 'scale(' + img + ')');
+        $('.scrollTope').text(img);
+        $('.scrollTopa').text(image);
+        $('.scrollTopb').text(test);
+        $('.scrollTopc').text(scroll);
+      } else if ( scroll > 110 ) {
+        $('div.image').css('background', 'url( ../img/umi_image.png)');
+      } else {
+        $('div.image').css('background', 'url( ../img/umi_image.png)');
+      }
+    });
+  });
+
+});

@@ -1,0 +1,40 @@
+$('div.image_back').css('transform', 'translate3d(-50%, 313.75px, 0px) '+' scale(0.126087)')
+<p class="scrollTopd">1.1206521739130433</p>
+<p class="scrollTopj">-0.7543478260869572</p>
+<p class="scrollTopj">-0.835597826086957</p>
+<p class="scrollTopd">-0.7918478260869568</p>
+<p class="scrollTopd">-0.7398843930635843</p>
+<p class="scrollTopd">-0.7398843930635843</p>
+-----------------------------------------------------------------------
+
+// $(function(){
+//   $('div.image').each(function(){
+//     $win = $(window),
+//     $winH = $win.height(),
+//     $this = $(this),
+//     test = $this.offset().top,
+//     image = 0,
+//     img = 0,
+//     scroll = $win.scrollTop();
+//   $win.on('load scroll', function(){
+//     scroll = $win.scrollTop();
+//     image = (1- (test - scroll) / $winH) * 2 ;
+//     $('.scrollTopd').text($winH);
+//     if (image > 0.99) {
+//       img = 3.03 - image;
+//     }
+//     if (scroll > test - $winH) {
+//       $this.css('transform', 'scale(' + img + ')');
+//       $('.scrollTope').text(img);
+//       $('.scrollTopa').text(image);
+//       $('.scrollTopb').text(test);
+//       $('.scrollTobc').text(scroll);
+//
+//     }
+//   });
+//  });
+// });
+
+
+<p class="scrollToph">-0.733236994219653</p>
+<p class="scrollToph">-0.7398843930635843</p>

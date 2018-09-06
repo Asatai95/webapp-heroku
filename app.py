@@ -213,4 +213,10 @@ def text_db():
 
         return template('img', img_sub=path)
 
+@route('/view')
+def view():
+
+    return template('singlepage_template_sample')
+
+
 run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

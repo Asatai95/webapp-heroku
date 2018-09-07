@@ -27,7 +27,7 @@
         <img src="static/img/tatume.png" alt="">
       </div>
       <ul id='header' class='header_main'>
-        <a href="/info"><li class='text'>TATUME</li></a>
+        <a href="/info"><li class='text_now'>TATUME</li></a>
         <a href="#"><li class='text'>イラスト</li></a>
         <a href="#"><li class='login'>ログイン</li></a>
       </ul>

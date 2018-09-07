@@ -20,7 +20,7 @@ div.main {
 
 div.header {
   width: 100%;
-  height: 120px;
+  height: 500px;
   background-image: url('../img/enpitu.jpg');
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -32,6 +32,7 @@ div.img img {
   float: left;
   margin: 30px;
   margin-left: 50px;
+  margin-top: 80px;
 }
 
 ul.header_main {
@@ -39,6 +40,7 @@ ul.header_main {
   padding: 10px;
   font-size: 25px;
   font-weight: 800;
+  margin-top: 50px;
 }
 
 li.text {
@@ -48,6 +50,16 @@ li.text {
   float: left;
   padding: 10px;
   color: black;
+}
+
+li.text_now {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
+  border-bottom: 1px solid black;
 }
 
 li.login {

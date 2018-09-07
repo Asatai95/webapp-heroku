@@ -78,7 +78,7 @@ li.text:hover {
   box-shadow: 0 0 15px white;
 }
 
-li.test_now:hover {
+li.text_now:hover {
   border-radius: 50px;
   border: 1px solid black;
   transform: scale(1.1);
@@ -172,6 +172,7 @@ p.content_tatume_title {
   text-align: left;
   margin-left: 50px;
   margin-bottom: 30px;
+  font-family: inherit;
 }
 
 p.content_tatume_img {

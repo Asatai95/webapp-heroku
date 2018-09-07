@@ -12,7 +12,7 @@ $(function () {
         scroll;
     $win.on('load scroll', function () {
       scroll = $win.scrollTop();
-      current = (1 - (position - scroll) / $winH) * 1 * 100;
+      current = (1 - (position - scroll) / $winH) * 2 * 100;
       if (current > 99.9) {
         current = 100;
       }

@@ -37,9 +37,12 @@
         <p>test</p>
       </div>
     </div>
-    <div class='content_right'>
+    <div class='content_left'>
       <div class='content_title'>
-        
+        <p class='text_right'>TATUME</p>
+      </div>
+      <div class='content_title_last'>
+        <p class='text_right'>経歴</p>
       </div>
     </div>
   </div>

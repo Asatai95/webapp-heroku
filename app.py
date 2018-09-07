@@ -53,10 +53,10 @@ def top():
 
     return template("tatume")
 
-@route("/test_sub")
-def test():
+@route("/info")
+def info():
 
-    return template('top')
+    return template('info')
 
 @route("/test")
 @view("test")

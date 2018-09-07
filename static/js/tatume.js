@@ -12,19 +12,18 @@ $(function () {
         scroll;
     $win.on('load scroll', function () {
       scroll = $win.scrollTop();
-      $('.class_text').text(position);
-      $('.class_text1').text(scroll);
-      $('.class_text2').text($winH);
-      current = (1 - (position - scroll) / $winH) * 0.5 * 100;
-      $('.class_text3').text(current);
+      current = (1 - (position - scroll) / $winH) * 1.1 * 100;
       if (current > 99.9) {
         current = 100;
-
-      }
-      if (scroll > position - $winH) {
         $('div.header_sub').css('position', 'fixed');
         $('div.header_sub').css('background-color', 'rgba(255, 255, 255, 0.7)');
         $('div.header_sub').css('z-index', '5');
+        $('div.img img').css('width', '130px');
+        $('div.img img').css('height', '80px');
+        $('div.img img').css('margin-top', '20px');
+        $('.header_main').css('margin-top', '0');
+        $('.header_main').css('margin', '25px 0 25px 0 25px');
+        $('.header_main').css('font-size', '20px');
       }
     });
   });

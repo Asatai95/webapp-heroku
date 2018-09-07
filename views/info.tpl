@@ -33,11 +33,6 @@
       </ul>
     </div>
     <div class='content'>
-      <div class='header'>
-        <div class='header_img'>
-          <img src="static/img/tatume.png" alt="">
-        </div>
-      </div>
       <div class='content_sub'>
         <div class='content_title'>
           <div class='content_text'>

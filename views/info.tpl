@@ -23,6 +23,9 @@
 <body>
   <div class='main'>
     <p class='class_text'></p>
+    <p class='class_text1'></p>
+    <p class='class_text2'></p>
+    <p class='class_text3'></p>
     <div class='header'>
      <div class='header_sub'>
       <div class='img'>

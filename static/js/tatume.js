@@ -13,10 +13,10 @@ $(function () {
     $win.on('load scroll', function () {
       scroll = $win.scrollTop();
       $('.class_text').text(position);
-      $('.class_text').text(scroll);
-      $('.class_text').text($winH);
+      $('.class_text1').text(scroll);
+      $('.class_text2').text($winH);
       current = (1 - (position - scroll) / $winH) * 0.5 * 100;
-      $('.class_text').text(current);
+      $('.class_text3').text(current);
       if (current > 99.9) {
         current = 100;
 

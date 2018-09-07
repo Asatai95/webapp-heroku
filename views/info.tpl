@@ -23,6 +23,7 @@
 <body>
   <div class='main'>
     <div class='header'>
+     <div class='header_sub'>
       <div class='img'>
         <img src="static/img/tatume.png" alt="">
       </div>
@@ -31,6 +32,7 @@
         <a href="#"><li class='text'>イラスト</li></a>
         <a href="#"><li class='login'>ログイン</li></a>
       </ul>
+     </div>
     </div>
     <div class='content'>
       <div class='content_sub'>

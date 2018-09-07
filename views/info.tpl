@@ -34,7 +34,16 @@
     </div>
     <div class='content'>
       <div class='content_sub'>
-        <p>test</p>
+        <p class='content_text'>TATUME</p>
+      </div>
+      <div class='content_tatume'>
+        <p class='content_tatume_title'>TATUMEとは</p>
+        <p class='content_tatume_img'><img src="static/img/text.png" alt=""></p>
+        <p class='content_tatume_text'>
+          大切な人に伝えられない思いを手紙に書き記します。<br>
+          携帯電話が普及している世の中、大切な人のために手紙を残しませんか？<br>
+          照れ臭い気持ちを私たちが代筆致します。<br>
+        </p>
       </div>
     </div>
     <div class='content_left'>

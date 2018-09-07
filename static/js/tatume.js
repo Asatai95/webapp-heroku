@@ -12,7 +12,7 @@ $(function () {
         scroll;
     $win.on('load scroll', function () {
       scroll = $win.scrollTop();
-      current = (1 - (position - scroll) / $winH) * 1.1 * 100;
+      current = (1 - (position - scroll) / $winH) * 0.9 * 100;
       if (current > 99.9) {
         current = 100;
         $('div.header_sub').css('position', 'fixed');
@@ -22,8 +22,16 @@ $(function () {
         $('div.img img').css('height', '80px');
         $('div.img img').css('margin-top', '20px');
         $('.header_main').css('margin-top', '0');
-        $('.header_main').css('margin', '25px 0 25px 0 25px');
+        $('.header_main').css('margin', '25px 0 25px 0');
         $('.header_main').css('font-size', '20px');
+      } else {
+        $('div.header_sub').css('display', 'none');
+        $('div.img img').css('width', '150px');
+        $('div.img img').css('height', '100px');
+        $('div.img img').css('margin-top', '80px');
+        $('.header_main').css('margin-top', '80px');
+        $('.header_main').css('margin', '0 auto');
+        $('.header_main').css('font-size', '25px');
       }
     });
   });

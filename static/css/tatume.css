@@ -44,6 +44,7 @@ li.text {
   font-family: serif;
   float: left;
   padding: 10px;
+  color: black;
 }
 
 li.login {
@@ -52,14 +53,19 @@ li.login {
   font-family: serif;
   float: left;
   padding: 10px;
+  color: black;
 }
 
 li.text:hover {
-  transform: scale(1.1);  
-  box-shadow: 0 0 8px white;
+  border-radius: 50px;
+  border: 1px solid black;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px white;
 }
 
 li.login:hover {
+  border-radius: 50px;
+  border: 1px solid black;
   transform: scale(1.1);
-  box-shadow: 0 0 8px white;
+  box-shadow: 0 0 15px white;
 }

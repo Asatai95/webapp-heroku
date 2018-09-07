@@ -34,11 +34,12 @@
     </div>
     <div class='content'>
       <div class='content_sub'>
-        <div class='content_title'>
-          <div class='content_text'>
-            <p class='text'>test</p>
-          </div>
-        </div>
+        <p>test</p>
+      </div>
+    </div>
+    <div class='content_right'>
+      <div class='content_title'>
+        
       </div>
     </div>
   </div>

@@ -17,9 +17,9 @@ $(function () {
         current = 100;
       }
       if (scroll > position - $winH) {
-        $('header_sub').css('position', 'fixed');
-        $('header_sub').css('background-color', 'rgba(255, 255, 255, 0.7)');
-        $('header_sub').css('z-index', '5');
+        $('div.header_sub').css('position', 'fixed');
+        $('div.header_sub').css('background-color', 'rgba(255, 255, 255, 0.7)');
+        $('div.header_sub').css('z-index', '5');
       }
     });
   });

@@ -22,6 +22,7 @@
 </head>
 <body>
   <div class='main'>
+    <p class='class_text'></p>
     <div class='header'>
      <div class='header_sub'>
       <div class='img'>

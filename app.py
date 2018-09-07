@@ -51,7 +51,7 @@ def js(filepath):
 @route("/")
 def top():
 
-    return template("top")
+    return template("tatume")
 
 @route("/test_sub")
 def test():

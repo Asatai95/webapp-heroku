@@ -48,6 +48,7 @@
       </div>
       <div class='content_tatume_last'>
         <div class='content_last_text'>
+          <p class='content_tatume_text'>経歴</p>
           <p class='content_tatume_text'>2018/09/10 沖縄県に創業</p>
         </div>
       </div>

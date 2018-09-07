@@ -162,3 +162,31 @@ p.content_text {
   margin-left: 80px;
   padding-left: 50px;
 }
+
+.content_tatume {
+  margin-top: 75px;
+}
+
+p.content_tatume_title {
+  font-size: 25px;
+  text-align: left;
+  margin-left: 50px;
+  margin-bottom: 30px;
+}
+
+p.content_tatume_img {
+  margin-bottom: 30px;
+  text-align: left;
+  margin-left: 70px;
+}
+
+p.content_tatume_img img {
+  width: 350px;
+  height: 100px;
+}
+
+.content_tatume_text {
+  text-align: left;
+  margin-left: 50px;
+  line-height: 2.0;
+}

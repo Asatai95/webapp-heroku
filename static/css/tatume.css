@@ -8,17 +8,58 @@ body {
   text-align: center;
   font-size: 20px;
   font-weight: 400;
-  font-family: font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
+  font-family: "ヒラギノ明朝 ProN W6", "HiraMinProN-W6", "HG明朝E", "ＭＳ Ｐ明朝", "MS PMincho", "MS 明朝", serif;
 }
 
 div.main {
   width: 1064px;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(123, 128, 132, 0.3);
+  line-height: 1.4em;
 }
 
 div.header {
   width: 100%;
+  height: 120px;
+  border-bottom: 2px solid green;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+div.img img {
+  width: 100px;
   height: 100px;
-  border-bottom: 1px solid green;
+  float: left;
+  margin: 10px;
+  margin-left: 50px;
+}
+
+ul.header_main {
+  float: right;
+  padding: 10px;
+}
+
+li.text {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+}
+
+li.login {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+}
+
+li.text:hover {
+  transform: scale(1.1);  
+  box-shadow: 0 0 8px white;
+}
+
+li.login:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px white;
 }

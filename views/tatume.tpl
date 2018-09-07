@@ -27,9 +27,9 @@
         <img src="static/img/ninwanko.png" alt="">
       </div>
       <ul id='header' class='header_main'>
-        <li class='text'>TATUME</li>
-        <li class='text'>イラスト</li>
-        <li class='login'>ログイン</li>
+        <a href="#"><li class='text'>TATUME</li></a>
+        <a href="#"><li class='text'>イラスト</li></a>
+        <a href="#"><li class='login'>ログイン</li></a>
       </ul>
     </div>
   </div>

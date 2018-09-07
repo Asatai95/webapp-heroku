@@ -33,9 +33,17 @@
       </ul>
     </div>
     <div class='content'>
+      <div class='header'>
+        <div class='header_img'>
+          <img src="static/img/tatume.png" alt="">
+        </div>
+      </div>
       <div class='content_sub'>
-        <p class='name'>TATUME</p>
-        <p class='main_text'>大切な人への思いを代筆します。</p>
+        <div class='content_title'>
+          <div class='content_text'>
+            <p class='text'>test</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>

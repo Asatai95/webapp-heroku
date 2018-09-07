@@ -24,7 +24,7 @@
   <div class='main'>
     <div class='header'>
       <div class='img'>
-        <img src="static/img/ninwanko.png" alt="">
+        <img src="static/img/tatume.png" alt="">
       </div>
       <ul id='header' class='header_main'>
         <a href="#"><li class='text'>TATUME</li></a>

@@ -32,6 +32,12 @@
         <a href="#"><li class='login'>ログイン</li></a>
       </ul>
     </div>
+    <div class='content'>
+      <div class='content_sub'>
+        <p class='name'>TATUME</p>
+        <p class='main_text'>大切な人への思いを代筆します。</p>
+      </div>
+    </div>
   </div>
 </body>
 </html>

@@ -74,8 +74,10 @@ def img():
     sql = 'select img from img'
     img = con.execute(sql)
     db.commit()
+    print(img)
 
     result = con.fetchall()
+    result = result[0][0]
     print(result)
 
     return template('image', images=result)

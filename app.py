@@ -14,6 +14,7 @@ import smtplib
 import os
 import stripe
 import sys
+from test import hello
 
 UPLOAD_FOLDER = './static/img/'
 ALLOWED_EXTENSIONS = set(['png', 'jpeg', 'gif'])
@@ -58,7 +59,7 @@ def js(filepath):
 @route("/")
 def top():
 
-    return template("templates/tatume", url=url)
+    return template("templates/tatume")
 
 @route("/info")
 def info():
@@ -251,7 +252,8 @@ def view():
 @route('/test_main')
 def test_main():
 
-    return template('templates/index')
+    hello_str = hello()
+    return template('templates/index', hello=hello_str)
 
 
 run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

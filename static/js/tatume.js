@@ -9,9 +9,10 @@ $(function () {
     $win.on('load scroll', function () {
       scroll = $win.scrollTop();
       current = (1 - (position - scroll) / $winH) * 1 * 80;
+      $('p.text_view').text(current);
       if (current > 99.9) {
         current = 100;
-        $('.text_view').text(current);
+
         $('div.header_sub').css('position', 'fixed');
         $('div.header_sub').css('background-color', 'rgba(255, 255, 255, 0.7)');
         $('div.header_sub').css('z-index', '5');

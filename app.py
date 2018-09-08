@@ -37,8 +37,8 @@ stripe.api_key = stripe_keys['secret_key']
 
 def test():
 
-    if request.url == 'https://https://webapp2-heroku.herokuapp.com':
-        url = request.url.replace('https://https://webapp2-heroku.herokuapp.com', 'https://www.webapp2.com', 1)
+    if request.url == 'https://webapp2-heroku.herokuapp.com':
+        url = request.url.replace('https://webapp2-heroku.herokuapp.com', 'https://www.webapp2.com', 1)
         code = 301
         return redirect(url, code=code)
 

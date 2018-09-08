@@ -40,11 +40,13 @@
     </div>
   </div>
   <div class='content_img'>
-    %for img in images:
+
     <ul id='img_main' class='img_main'>
-      <li class='img_main_content'><a href="#"><img src="{{img['img']}" alt=""></a></li>
+      %for img in images:
+      <li class='img_main_content'><a href="#"><img src="{{img['img']}}" alt=""></a></li>
+      %end
     </ul>
-    %end
+
   </div>
  </div>
 </body>

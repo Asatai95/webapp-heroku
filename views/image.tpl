@@ -25,7 +25,7 @@
   <div class='header'>
    <div class='header_sub'>
     <div class='img'>
-      <img src="static/img/tatume.png" alt="">
+      <a href="/"><img src="static/img/tatume.png" alt=""></a>
     </div>
     <ul id='header' class='header_main'>
       <a href="/info"><li class='text'>TATUME</li></a>

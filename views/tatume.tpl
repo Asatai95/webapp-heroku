@@ -36,6 +36,8 @@
       <div class='content_sub'>
         <p class='name'>TATUME</p>
         <p class='main_text'>大切な人への思いを代筆します。</p>
+        <p class='login'>さっそく、ログインしてみよう！！</p>
+        <p class='button'><img src="static/img/tegami.png" alt=""></p>
       </div>
     </div>
   </div>

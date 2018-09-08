@@ -8,8 +8,7 @@ $(function () {
         scroll;
     $win.on('load scroll', function () {
       scroll = $win.scrollTop();
-      current = (1 - (position - scroll) / $winH) * 1 * 80;
-      $('p.text_view').text(current);
+      current = (1 - (position - scroll) / $winH) * 1 * 90;
       if (current > 99.9) {
         current = 100;
 

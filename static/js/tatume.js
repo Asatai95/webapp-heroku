@@ -1,7 +1,3 @@
-$(function(){
-  $('html').fadeIn(800);
-});
-
 $(function () {
   $('div.header').each(function () {
     var $win = $(window),

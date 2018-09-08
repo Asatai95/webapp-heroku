@@ -8,9 +8,10 @@ $(function () {
         scroll;
     $win.on('load scroll', function () {
       scroll = $win.scrollTop();
-      current = (1 - (position - scroll) / $winH) * 1 * 50;
+      current = (1 - (position - scroll) / $winH) * 1 * 80;
       if (current > 99.9) {
         current = 100;
+        $('.text_view').text(current);
         $('div.header_sub').css('position', 'fixed');
         $('div.header_sub').css('background-color', 'rgba(255, 255, 255, 0.7)');
         $('div.header_sub').css('z-index', '5');
@@ -28,7 +29,7 @@ $(function () {
         $('div.img img').css('height', '100px');
         $('div.img img').css('margin-top', '80px');
         $('.header_main').css('margin-top', '80px');
-        $('.header_main').css('margin', '0 auto');
+        $('.header_main').css('margin', '80px 0 0 0');
         $('.header_main').css('font-size', '25px');
       }
     });

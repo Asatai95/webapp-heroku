@@ -65,6 +65,21 @@ def info():
 
     return template('info')
 
+@route("/img")
+def img():
+
+    db = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
+    con = db.cursor()
+
+    sql = 'select img from img'
+    img = con.execute(sql)
+    db.commit()
+
+    result = con.fetchall()
+    print(result)
+
+    return template('image', images=result)
+
 @route("/test")
 @view("test")
 def test_view():

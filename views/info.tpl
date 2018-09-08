@@ -29,7 +29,7 @@
       </div>
       <ul id='header' class='header_main'>
         <a href="/info"><li class='text_now'>TATUME</li></a>
-        <a href="#"><li class='text'>イラスト</li></a>
+        <a href="/img"><li class='text'>イラスト</li></a>
         <a href="#"><li class='login'>ログイン</li></a>
       </ul>
      </div>

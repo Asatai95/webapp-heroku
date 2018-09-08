@@ -58,12 +58,12 @@ def js(filepath):
 @route("/")
 def top():
 
-    return template("tatume")
+    return template("tatume/top")
 
 @route("/info")
 def info():
 
-    return template('info')
+    return template('info/info')
 
 @route("/img")
 def img():

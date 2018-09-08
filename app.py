@@ -15,6 +15,12 @@ import os
 import stripe
 import sys
 
+def enforceHttpsInHeroku():
+    if request.headers.get('https://') == 'webapp2-heroku.herokuapp.com':
+    url = request.url.replace('webapp2-heroku.herokuapp.com', 'www.webapp2.com', 1)
+    code = 301
+    return redirect(url, code=code)
+
 UPLOAD_FOLDER = './static/img/'
 ALLOWED_EXTENSIONS = set(['png', 'jpeg', 'gif'])
 path = './static/img/*.ALLOWED_EXTENSIONS'

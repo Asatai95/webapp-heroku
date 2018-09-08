@@ -40,7 +40,7 @@
     </div>
   </div>
   <div class='content_img'>
-    <div class='content_text'>
+    <div class='content_text_main'>
       <p class='text'>イラスト</p>
     </div>
 

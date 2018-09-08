@@ -91,6 +91,7 @@ li.login:hover {
   left: 0;
   bottom: 0;
   margin: auto;
+  margin-top: 250px;
 }
 
 .name {
@@ -102,4 +103,24 @@ li.login:hover {
 .main_text {
   font-size: 20px;
   font-weight: 800;
+}
+
+p.login {
+  margin-bottom: 0;
+  margin-top: 45px;
+}
+
+p.button {
+  margin: 0;
+  width: 100px;
+  background-image: url('../img/tegami.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+p.button:hover {
+  margin: 0;
+  background-image: url('../img/tori.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }

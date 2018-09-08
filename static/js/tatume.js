@@ -8,7 +8,7 @@ $(function () {
         scroll;
     $win.on('load scroll', function () {
       scroll = $win.scrollTop();
-      current = (1 - (position - scroll) / $winH) * 0.9 * 100;
+      current = (1 - (position - scroll) / $winH) * 1.3 * 100;
       if (current > 99.9) {
         current = 100;
         $('div.header_sub').css('position', 'fixed');
@@ -21,7 +21,9 @@ $(function () {
         $('.header_main').css('margin', '25px 0 25px 0');
         $('.header_main').css('font-size', '20px');
       } else {
-        $('div.header_sub').css('display', 'none');
+        $('div.header_sub').css('display', 'block');
+        $('div.header_sub').css('background-color', 'none');
+        $('div.header_sub').css('z-index', '0');
         $('div.img img').css('width', '150px');
         $('div.img img').css('height', '100px');
         $('div.img img').css('margin-top', '80px');

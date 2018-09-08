@@ -80,7 +80,7 @@ def img():
     result = result[0][0]
     print(result)
 
-    return template('image', images=result)
+    return template('image', img=result)
 
 @route("/test")
 @view("test")

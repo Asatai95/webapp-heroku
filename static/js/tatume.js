@@ -24,7 +24,7 @@ $(function () {
         $('.header_main').css('font-size', '20px');
       } else {
         $('div.header_sub').css('display', 'block');
-        $('div.header_sub').css('background-color', 'none');
+        $('div.header_sub').css('background-color', 'rgba(255, 255, 255, 0)');
         $('div.header_sub').css('z-index', '0');
         $('div.img img').css('width', '150px');
         $('div.img img').css('height', '100px');

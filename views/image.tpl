@@ -42,9 +42,7 @@
   <div class='content_img'>
     :before
     <ul id='img_main' class='img_main'>
-      {% for img in images %}
-      <li class='img_main_content'><a href="#"><img src="{{img[0]}}" alt=""></a></li>
-      {% endfor %}
+      <li class='img_main_content'><a href="#"><img src="{{img}}" alt=""></a></li>
     </ul>
     :after
   </div>

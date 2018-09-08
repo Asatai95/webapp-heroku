@@ -76,7 +76,11 @@ def img():
     db.commit()
     print(image)
 
-    result = con.fetchall()
+    result = []
+    for row in con.fetchall():
+        result.append({
+            "img": row[0]
+        })
     print(result)
 
     return template('image', images=result)

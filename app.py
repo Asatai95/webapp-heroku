@@ -58,12 +58,12 @@ def js(filepath):
 @route("/")
 def top():
 
-    return template("tatume/top")
+    return template("templates/tatume")
 
 @route("/info")
 def info():
 
-    return template('info/info')
+    return template('templates/info')
 
 @route("/img")
 def img():
@@ -247,6 +247,11 @@ def text_db():
 def view():
 
     return template('singlepage_template_sample')
+
+@route('test_main')
+def test_main():
+
+    return template('templates/index')
 
 
 run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

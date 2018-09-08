@@ -77,6 +77,7 @@ def img():
     print(image)
 
     result = con.fetchall()
+    result = result[0]
     print(result)
 
     return template('image', images=result)

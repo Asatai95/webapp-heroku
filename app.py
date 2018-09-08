@@ -183,7 +183,10 @@ def text():
     result = con.fetchall()
     result = result[0][0]
 
-    return template('message', message=message, main=result)
+    if request.urlparts.path == 'https://webapp2-heroku.herokuapp.com':
+        url = request.urlparts.path.replace('https://webapp2-heroku.herokuapp.com', 'https://www.webapp2.com', 1)
+
+    return template('message', message=message, main=result, url=url)
 
 @route('/text', method='POST')
 def text_db():

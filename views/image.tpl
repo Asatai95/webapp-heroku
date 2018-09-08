@@ -40,11 +40,11 @@
     </div>
   </div>
   <div class='content_img'>
-    :before
+    %for img in images:
     <ul id='img_main' class='img_main'>
-      <li class='img_main_content'><a href="#"><img src="{{img}}" alt=""></a></li>
+      <li class='img_main_content'><a href="#"><img src="{{img['img']}" alt=""></a></li>
     </ul>
-    :after
+    %end
   </div>
  </div>
 </body>

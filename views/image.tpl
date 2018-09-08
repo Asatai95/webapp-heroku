@@ -40,6 +40,9 @@
     </div>
   </div>
   <div class='content_img'>
+    <div class='content_text'>
+      <p class='text'>イラスト</p>
+    </div>
 
     <ul id='img_main' class='img_main'>
       %for image in images:

@@ -36,8 +36,8 @@ stripe_keys = {
 stripe.api_key = stripe_keys['secret_key']
 
 def enforceHttpsInHeroku():
-    if request.headers.get('https://') == 'webapp2-heroku.herokuapp.com':
-        url = request.url.replace('webapp2-heroku.herokuapp.com', 'www.webapp2.com', 1)
+    if request.headers.get('https://webapp2-heroku.herokuapp.com'):
+        url = request.url.replace('https://webapp2-heroku.herokuapp.com', 'https://www.webapp2.com', 1)
         code = 301
 
         return redirect(url, code=code)

@@ -27,113 +27,10 @@
     js.src = 'https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v3.1&appId=704097009951110&autoLogAppEvents=1';
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));</script>
-<!--
-  <script>
-   function statusChangeCallback(response) {
-     console.log('statusChangeCallback');
-     console.log(response);
-
-     if (response.status === 'connected') {
-
-       testAPI();
-     } else if (response.status === 'not_authorized') {
-
-       document.getElementById('status').innerHTML = 'Please log ' +
-         'into this app.';
-     } else {
-
-       document.getElementById('status').innerHTML = 'Please log ' +
-         'into Facebook.';
-     }
-   }
-
-   function checkLoginState() {
-     FB.getLoginStatus(function(response) {
-       statusChangeCallback(response);
-     });
-   }
-
-   // function Logout() {
-   //   FB.Logout(function(response) {
-   //
-   //   });
-   // }
-
-   window.fbAsyncInit = function() {
-     FB.init({
-       appId: '704097009951110',
-       status : true,
-       cookie: true,
-       xfbml: true,
-       version: 'v3.1'
-     });
-
-     FB.getLoginStatus(function(response) {
-       statusChangeCallback(response);
-     });
-
-     // FB.Logout(function(response) {
-     //
-     // });
-
-     FB.AppEvents.logPageView();
-
-   };
-
-   (function(d, s, id) {
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {
-       return;
-     }
-     js = d.createElement(s);
-     js.id = id;
-     js.src = "https://connect.facebook.net/en_JP/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-
-   function testAPI() {
-     console.log('Welcome!  Fetching your information.... ');
-     FB.api('/me', function(response) {
-       console.log('Successful login for: ' + response.name);
-       document.getElementById('status').innerHTML =
-         'Thanks for logging in, ' + response.name + '!';
-     });
-   }
-  </script> -->
-
-</head>
-<body>
-
-
-  <div class='main_text'>
-    <div class='title'>
-      <p class='title_text'>ログイン</p>
-    </div>
-    <div class='main_content'>
-
-      <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type='login_with' data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false" data-width="200px" data-height='50px'></div>
-      <button id="authorize_button" ><a href="/login_gmail">Authorize</a></button>
-
-
-      <pre id="content"></pre>
-
-    </div>
-    <p class='ma'><span class='sen'><img src="static/img/sen.jpeg" alt=""></span>
-      または
-      <span class='sen'><img src="static/img/sen.jpeg" alt=""></span>
-    </p>
-    <div class='login'>
-      <form action="/" method="GET">
-        <p class='login_mail'><input type="text" name="log_id" maxlength="32" autocomplete="OFF" placeholder='メールアドレス'/></p>
-        <p class='login_pass'><input type="password" name="passwd" maxlength="32" autocomplete="OFF" placeholder='パスワード' /></p>
-        <p class="submit"><input type="submit" value="ログイン" /></p>
-      </form>
-    </div>
-  </div>
   <script type="text/javascript">
       // Client ID and API key from the Developer Console
-      var CLIENT_ID = '593034558997-rnq0i9i24ttavcv3g9tkdr7f6538jru3.apps.googleusercontent.com';
-      var API_KEY = 'n1EHVXrPMrHIt_Ll-tifpJnq';
+      var CLIENT_ID = '593034558997-1rq8bnc2o3lm0gc1ko0dgtc4du0kr4c7.apps.googleusercontent.com';
+      var API_KEY = 't11YjCZt6lPxgv0msKQxqLLF';
 
       // Array of API discovery doc URLs for APIs used by the quickstart
       var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest"];
@@ -242,5 +139,33 @@
       onload="this.onload=function(){};handleClientLoad()"
       onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>
+</head>
+<body>
+
+
+  <div class='main_text'>
+    <div class='title'>
+      <p class='title_text'>ログイン</p>
+    </div>
+    <div class='main_content'>
+
+      <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type='login_with' data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false" data-width="200px" data-height='50px'></div>
+      <button id="authorize_button" ><a href="/login_gmail">Authorize</a></button>
+
+
+    </div>
+    <p class='ma'><span class='sen'><img src="static/img/sen.jpeg" alt=""></span>
+      または
+      <span class='sen'><img src="static/img/sen.jpeg" alt=""></span>
+    </p>
+    <div class='login'>
+      <form action="/" method="GET">
+        <p class='login_mail'><input type="text" name="log_id" maxlength="32" autocomplete="OFF" placeholder='メールアドレス'/></p>
+        <p class='login_pass'><input type="password" name="passwd" maxlength="32" autocomplete="OFF" placeholder='パスワード' /></p>
+        <p class="submit"><input type="submit" value="ログイン" /></p>
+      </form>
+    </div>
+  </div>
+
 </body>
 </html>

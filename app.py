@@ -14,7 +14,7 @@ import smtplib
 import os
 import stripe
 import sys
-from quickstart import main, get_credentials
+from quickstart import get_credentials, main
 
 
 
@@ -62,8 +62,8 @@ def js(filepath):
 @route("/login_gmail")
 def login_gmil():
 
-    get = get_credentials
-    main = main
+    get = get_credentials()
+    main = main()
 
     return get , main
 

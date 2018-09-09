@@ -81,3 +81,7 @@ span.sen img {
   height: 20px;
   margin: 5px 10px 0 10px;
 }
+
+div.fb-login-button {
+  margin: 20px auto;
+}

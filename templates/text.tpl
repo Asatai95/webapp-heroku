@@ -30,7 +30,7 @@
 
 </head>
 <body>
- <script>
+ <!-- <script>
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
     console.log(response);
@@ -101,7 +101,7 @@
         'Thanks for logging in, ' + response.name + '!';
     });
   }
- </script>
+ </script> -->
 
   <div class='main_text'>
     <div class='title'>

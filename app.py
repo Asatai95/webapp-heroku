@@ -14,7 +14,8 @@ import smtplib
 import os
 import stripe
 import sys
-from test import hello
+from quickstart import main, get_credentials
+
 
 
 
@@ -61,7 +62,10 @@ def js(filepath):
 @route("/login_gmail")
 def login_gmil():
 
-    return template('templates/text')
+    get = get_credentials
+    main = main
+
+    return get , main
 
 @route("/")
 def top():

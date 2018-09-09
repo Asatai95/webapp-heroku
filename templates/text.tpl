@@ -19,15 +19,15 @@
 
   <title>TATUME</title>
 
-  <!-- <div id="fb-root"></div>
+  <div id="fb-root"></div>
   <script>(function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
     js = d.createElement(s); js.id = id;
     js.src = 'https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v3.1&appId=704097009951110&autoLogAppEvents=1';
     fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));</script> -->
-
+  }(document, 'script', 'facebook-jssdk'));</script>
+<!--
   <script>
    function statusChangeCallback(response) {
      console.log('statusChangeCallback');
@@ -99,7 +99,7 @@
          'Thanks for logging in, ' + response.name + '!';
      });
    }
-  </script>
+  </script> -->
 
 </head>
 <body>
@@ -130,11 +130,10 @@
       </form>
     </div>
   </div>
-
   <script type="text/javascript">
       // Client ID and API key from the Developer Console
-      var CLIENT_ID = '<YOUR_CLIENT_ID>';
-      var API_KEY = '<YOUR_API_KEY>';
+      var CLIENT_ID = '593034558997-rnq0i9i24ttavcv3g9tkdr7f6538jru3.apps.googleusercontent.com';
+      var API_KEY = 'n1EHVXrPMrHIt_Ll-tifpJnq';
 
       // Array of API discovery doc URLs for APIs used by the quickstart
       var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest"];

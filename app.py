@@ -64,7 +64,7 @@ def login_gmil():
     get = get_credentials()
     main = main()
 
-    return get, main
+    return template('get' , get=get, main=main)
 
 @route("/")
 def top():

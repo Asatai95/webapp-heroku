@@ -27,6 +27,7 @@
     js.src = 'https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v3.1&appId=704097009951110&autoLogAppEvents=1';
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));</script>
+
   <script type="text/javascript">
       // Client ID and API key from the Developer Console
       var CLIENT_ID = '593034558997-1rq8bnc2o3lm0gc1ko0dgtc4du0kr4c7.apps.googleusercontent.com';

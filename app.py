@@ -15,6 +15,7 @@ import os
 import stripe
 import sys
 from test import hello
+from quickstart import get_credentials, main
 
 
 UPLOAD_FOLDER = './static/img/'
@@ -57,6 +58,13 @@ def img(filepath):
 def js(filepath):
     return static_file(filepath, root="static/js")
 
+@route("/login_gmail")
+def login_gmil():
+
+    get = get_credentials()
+    main = main()
+
+    return get, main
 
 @route("/")
 def top():

@@ -19,89 +19,91 @@
 
   <title>TATUME</title>
 
-  <div id="fb-root"></div>
+  <!-- <div id="fb-root"></div>
   <script>(function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
     js = d.createElement(s); js.id = id;
     js.src = 'https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v3.1&appId=704097009951110&autoLogAppEvents=1';
     fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));</script>
+  }(document, 'script', 'facebook-jssdk'));</script> -->
+
+  <script>
+   function statusChangeCallback(response) {
+     console.log('statusChangeCallback');
+     console.log(response);
+
+     if (response.status === 'connected') {
+
+       testAPI();
+     } else if (response.status === 'not_authorized') {
+
+       document.getElementById('status').innerHTML = 'Please log ' +
+         'into this app.';
+     } else {
+
+       document.getElementById('status').innerHTML = 'Please log ' +
+         'into Facebook.';
+     }
+   }
+
+   function checkLoginState() {
+     FB.getLoginStatus(function(response) {
+       statusChangeCallback(response);
+     });
+   }
+
+   // function Logout() {
+   //   FB.Logout(function(response) {
+   //
+   //   });
+   // }
+
+   window.fbAsyncInit = function() {
+     FB.init({
+       appId: '704097009951110',
+       status : true,
+       cookie: true,
+       xfbml: true,
+       version: 'v3.1'
+     });
+
+     FB.getLoginStatus(function(response) {
+       statusChangeCallback(response);
+     });
+
+     // FB.Logout(function(response) {
+     //
+     // });
+
+     FB.AppEvents.logPageView();
+
+   };
+
+   (function(d, s, id) {
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {
+       return;
+     }
+     js = d.createElement(s);
+     js.id = id;
+     js.src = "https://connect.facebook.net/en_JP/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+   function testAPI() {
+     console.log('Welcome!  Fetching your information.... ');
+     FB.api('/me', function(response) {
+       console.log('Successful login for: ' + response.name);
+       document.getElementById('status').innerHTML =
+         'Thanks for logging in, ' + response.name + '!';
+     });
+   }
+  </script>
 
 </head>
 <body>
- <!-- <script>
-  function statusChangeCallback(response) {
-    console.log('statusChangeCallback');
-    console.log(response);
 
-    if (response.status === 'connected') {
-
-      testAPI();
-    } else if (response.status === 'not_authorized') {
-
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into this app.';
-    } else {
-
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into Facebook.';
-    }
-  }
-
-  function checkLoginState() {
-    FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
-    });
-  }
-
-  // function Logout() {
-  //   FB.Logout(function(response) {
-  //
-  //   });
-  // }
-
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId: '704097009951110',
-      status : true,
-      cookie: true,
-      xfbml: true,
-      version: 'v3.1'
-    });
-
-    FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
-    });
-
-    // FB.Logout(function(response) {
-    //
-    // });
-
-    FB.AppEvents.logPageView();
-
-  };
-
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) {
-      return;
-    }
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "https://connect.facebook.net/en_JP/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
-
-  function testAPI() {
-    console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
-      console.log('Successful login for: ' + response.name);
-      document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
-    });
-  }
- </script> -->
 
   <div class='main_text'>
     <div class='title'>

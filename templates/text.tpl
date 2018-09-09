@@ -112,7 +112,7 @@
     <div class='main_content'>
 
       <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type='login_with' data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false" data-width="200px" data-height='50px'></div>
-      <button id="authorize_button" herf='/login_gmail'>Authorize</button>
+      <button id="authorize_button" ><a href="/login_gmail">Authorize</a></button>
 
 
       <pre id="content"></pre>

@@ -60,15 +60,15 @@ def js(filepath):
 @route('/callback')
 def callback():
 
+    get = get_credentials()
+    main = main()
 
+    return template("templates/get", main=main, get=get)
 
 @route("/")
 def top():
 
-    get = get_credentials()
-    main = main()
-
-    return template("templates/tatume", main=main, get=get)
+    return template("templates/tatume")
 
 @route("/info")
 def info():

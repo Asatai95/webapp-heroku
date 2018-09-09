@@ -8,6 +8,9 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email import message
 from email import charset
+from selenium import webdriver
+import pandas
+import time
 import email
 import base64
 import smtplib
@@ -65,6 +68,11 @@ def top():
 def info():
 
     return template('templates/info')
+
+@route("/login")
+def login():
+
+    return template('templates/text')
 
 @route("/img")
 def img():

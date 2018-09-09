@@ -61,7 +61,7 @@ def js(filepath):
 @route("/login_gmail")
 def login_gmil():
 
-    return template('text')
+    return template('templates/text')
 
 @route("/")
 def top():

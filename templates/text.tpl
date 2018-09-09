@@ -154,7 +154,8 @@
       <button id="authorize_button" style="display: none;">Authorize</button>
       <button id="signout_button" style="display: none;">Sign Out</button>
 
-
+      <pre id="content"></pre>
+      
     </div>
     <p class='ma'><span class='sen'><img src="static/img/sen.jpeg" alt=""></span>
       または

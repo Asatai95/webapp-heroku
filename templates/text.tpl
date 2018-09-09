@@ -154,7 +154,7 @@
       <button id="authorize_button" style="display: none;">Authorize</button>
       <button id="signout_button" style="display: none;">Sign Out</button>
 
-      <pre id="content"><button><a href="https://accounts.google.com/signin/oauth/oauthchooseaccount?client_id=593034558997-1rq8bnc2o3lm0gc1ko0dgtc4du0kr4c7.apps.googleusercontent.com&as=iyolh0XwafM-sKDHTojxMA&destination=http%3A%2F%2Flocalhost%3A8080&approval_state=!ChRoOE8tNHZkRDB4cVVRVHVsWjF1WBIfRTkwak9VXzVQZEFjY01pNW5wOWhjSFF2aWkzaFd4WQ∙ANKMe1QAAAAAW5ZURo7EmgW4kf4n9ADs2hhAsesebpXo&xsrfsig=AHgIfE_sAKbIZkxEc_biPDmZspDUnH8iKA&flowName=GeneralOAuthFlow">test</a></button></pre>
+      <pre id="content"><button><a href="http://localhost:8080/">test</a></button></pre>
 
     </div>
     <p class='ma'><span class='sen'><img src="static/img/sen.jpeg" alt=""></span>

@@ -15,7 +15,7 @@ import os
 import stripe
 import sys
 from test import hello
-from quickstart import get_credentials, main
+
 
 UPLOAD_FOLDER = './static/img/'
 ALLOWED_EXTENSIONS = set(['png', 'jpeg', 'gif'])
@@ -57,13 +57,6 @@ def img(filepath):
 def js(filepath):
     return static_file(filepath, root="static/js")
 
-@route('/callback')
-def callback():
-
-    get = get_credentials()
-    main = main()
-
-    return template("templates/get", main=main, get=get)
 
 @route("/")
 def top():

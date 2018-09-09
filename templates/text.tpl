@@ -154,7 +154,7 @@
       <button id="authorize_button" style="display: none;">Authorize</button>
       <button id="signout_button" style="display: none;">Sign Out</button>
 
-      <pre id="content"><button><a href="http://www.webapp2.com"></a></button></pre>
+      <pre id="content"><button><a href="http://www.webapp2.com/">test</a></button></pre>
 
     </div>
     <p class='ma'><span class='sen'><img src="static/img/sen.jpeg" alt=""></span>

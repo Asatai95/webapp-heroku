@@ -74,7 +74,7 @@ def login_sub():
 
 def back(name):
 
-    return name * 10
+    return name * 20
 
 @route('/login_sub/oauth2callback')
 def login_sub():

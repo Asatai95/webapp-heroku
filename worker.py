@@ -3,7 +3,7 @@ import os
 import redis
 from rq import Worker, Queue, Connection
 
-listen = 'http://localhost:8080/oauth2callback'
+listen = 'http://www.webapp2.com/oauth2callback'
 
 redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:8080')
 

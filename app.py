@@ -15,7 +15,7 @@ import stripe
 import sys
 import requests
 from quickstart import get_credentials, main
-from login_sub import SessionGoogle
+
 
 
 UPLOAD_FOLDER = './static/img/'

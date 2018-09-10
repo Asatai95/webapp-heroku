@@ -7,6 +7,6 @@
   <title>Document</title>
 </head>
 <body>
-  <p>{{main}}{{get}}</p>
+  <p>{{get}}{{main}}</p>
 </body>
 </html>

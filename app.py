@@ -15,6 +15,8 @@ import stripe
 import sys
 import requests
 from quickstart import get_credentials, main
+from rq import Queue
+from worker import conn
 
 
 
@@ -58,13 +60,21 @@ def img(filepath):
 def js(filepath):
     return static_file(filepath, root="static/js")
 
+q = Queue(connection=conn)
+
 @route('/oauth2callback')
 def login_sub():
 
     get = get_credentials()
     main_sub = main()
 
-    return get, main_sub
+    result = q.enqueue(background_process , get , main_sub)
+
+    return result
+
+def back(name):
+
+    return name * 10
 
 @route('/login_sub/oauth2callback')
 def login_sub():

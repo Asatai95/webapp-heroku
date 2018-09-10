@@ -14,7 +14,7 @@ import os
 import stripe
 import sys
 import requests
-from quickstart import get_credentials, main
+from quickstart import get_credentials
 from rq import Queue
 from worker import conn
 
@@ -87,8 +87,8 @@ def login_sub():
 def login_sub():
 
     get = get_credentials()
-    
-    return get, main_sub
+
+    return get
 
 @route("/")
 def top():

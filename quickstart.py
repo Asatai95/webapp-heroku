@@ -2,7 +2,6 @@ from __future__ import print_function
 import httplib2
 import os
 
-from bottle import run
 from apiclient import discovery
 from oauth2client import client
 from oauth2client import tools
@@ -66,4 +65,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

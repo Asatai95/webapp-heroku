@@ -1,6 +1,5 @@
 # -*- coding: utf_8 -*-
 # coding: UTF-8
-
 import MySQLdb
 from bottle import get, route, run, template, static_file, request, redirect, response, view, url
 from email.header import Header
@@ -8,15 +7,16 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email import message
 from email import charset
+from bs4 import BeautifulSoup
 import email
 import base64
 import smtplib
 import os
 import stripe
 import sys
+import requests
 from quickstart import get_credentials, main
-
-
+from login_sub import SessionGoogle
 
 
 UPLOAD_FOLDER = './static/img/'
@@ -59,13 +59,13 @@ def img(filepath):
 def js(filepath):
     return static_file(filepath, root="static/js")
 
-@route("/login_gmail")
-def login_gmil():
+@route('/login_sub')
+def login_sub():
 
     get = get_credentials()
-    main = main()
+    main_sub = main()
 
-    return get , main
+    return template('templates/get', get=get, main=main_sub)
 
 @route("/")
 def top():

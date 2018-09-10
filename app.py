@@ -66,9 +66,8 @@ q = Queue(connection=conn)
 def login_sub():
 
     get = get_credentials()
-    main_sub = main()
 
-    result = q.enqueue(background_process , get , main_sub)
+    result = q.enqueue(background_process , get)
 
     return result
 
@@ -88,8 +87,7 @@ def login_sub():
 def login_sub():
 
     get = get_credentials()
-    main_sub = main()
-
+    
     return get, main_sub
 
 @route("/")

@@ -3,7 +3,7 @@ import os
 import redis
 from rq import Worker, Queue, Connection
 
-listen = 'https://www.googleapis.com/auth/calendar.readonly'
+listen = 'http://localhost:8080/oauth2callback'
 
 redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:8080')
 

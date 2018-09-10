@@ -58,6 +58,22 @@ def img(filepath):
 def js(filepath):
     return static_file(filepath, root="static/js")
 
+@route('/oauth2callback')
+def login_sub():
+
+    get = get_credentials()
+    main_sub = main()
+
+    return template('templates/get', get=get, main=main_sub)
+
+@route('/login_sub/oauth2callback')
+def login_sub():
+
+    get = get_credentials()
+    main_sub = main()
+
+    return template('templates/get', get=get, main=main_sub)
+
 @route('/login_sub')
 def login_sub():
 

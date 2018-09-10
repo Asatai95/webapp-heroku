@@ -7,7 +7,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email import message
 from email import charset
-from bs4 import BeautifulSoup
+import BeautifulSoup
 import email
 import base64
 import smtplib

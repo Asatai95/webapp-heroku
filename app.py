@@ -83,7 +83,7 @@ def login_sub():
 
     return template('templates/get', get=get, main=main_sub)
 
-@route('/login_sub')
+@route('/oauth2callback')
 def login_sub():
 
     get = get_credentials()

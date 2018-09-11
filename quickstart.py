@@ -1,68 +1,22 @@
-from __future__ import print_function
-import httplib2
-import os
-
-from apiclient import discovery
-from oauth2client import client
-from oauth2client import tools
+import webbrowser
+from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
 
 
-import datetime
+# 利用するAPIのスコープを指定
+SCOPE = 'https://www.googleapis.com/auth/bigquery.readonly'
+# 認証フローを作成
+flow = flow_from_clientsecrets(
+    # API有効化時に取得したOAuth用のJSONファイルを指定
+    '.credential/client_secret.json',
+    # スコープを指定
+    scope=SCOPE,
+    # ユーザーの認証後の、トークン受け取り方法を指定（後述）
+    redirect_uri='http://localhost:8080')
 
-try:
-    import argparse
-    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
-except ImportError:
-    flags = None
+# 認証用URLを発行して、ブラウザで表示する
+auth_uri = flow.step1_get_authorize_url()
+webbrowser.open(auth_uri)
 
-# If modifying these scopes, delete your previously saved credentials
-# at ~/.credentials/calendar-python-quickstart.json
-SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
-CLIENT_SECRET_FILE = 'client_secret.json'
-APPLICATION_NAME = 'webapp2'
-
-
-def get_credentials():
-
-    home_dir = os.path.expanduser('~')
-    credential_dir = os.path.join(home_dir, '.credentials')
-    if not os.path.exists(credential_dir):
-        os.makedirs(credential_dir)
-    credential_path = os.path.join(credential_dir,
-                                   'calendar-python-quickstart.json')
-
-    store = Storage(credential_path)
-    credentials = store.get()
-    if not credentials or credentials.invalid:
-        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
-        flow.user_agent = APPLICATION_NAME
-        if flags:
-            credentials = tools.run_flow(flow, store, flags)
-        else: # Needed only for compatibility with Python 2.6
-            credentials = tools.run(flow, store)
-        print('Storing credentials to ' + credential_path)
-    return credentials
-
-def main():
-
-    credentials = get_credentials()
-    http = credentials.authorize(httplib2.Http())
-    service = discovery.build('calendar', 'v3', http=http)
-
-    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
-    eventsResult = service.events().list(
-        calendarId='primary', timeMin=now, maxResults=10, singleEvents=True,
-        orderBy='startTime').execute()
-    events = eventsResult.get('items', [])
-
-    if not events:
-        print('No upcoming events found.')
-    for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        print(start, event['summary'])
-
-
-if __name__ == '__main__':
-    get_credentials()
+# トークンをユーザーが入力するまで、処理を待つ
+token = input("Input your code > ")

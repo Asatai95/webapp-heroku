@@ -14,7 +14,7 @@ import os
 import stripe
 import sys
 import requests
-from quickstart import get_credentials
+from quickstart import get_credentials, main
 from rq import Queue
 from worker import conn
 
@@ -73,6 +73,7 @@ def login_sub():
 def login_sub():
 
     get = get_credentials()
+    main = main()
 
     return get
 

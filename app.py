@@ -14,9 +14,7 @@ import os
 import stripe
 import sys
 import requests
-from quickstart import get_credentials, main
-from rq import Queue
-from worker import conn
+
 
 
 
@@ -61,21 +59,10 @@ def js(filepath):
     return static_file(filepath, root="static/js")
 
 
-@route('/login_sub/oauth2callback')
-def login_sub():
-
-    get = get_credentials()
-    main_sub = main()
-
-    return template('templates/get', get=get, main=main_sub)
-
 @route('/oauth2callback')
-def login_sub():
+def callback():
 
-    get = get_credentials()
-    main = main()
-
-    return get
+    return template('templates/google')
 
 @route("/")
 def top():

@@ -1,40 +1,25 @@
+import requests
+
+DEVELOPER_KEY = '' # 取得したデベロッパーキー
+USER_ID = '' # プロフィール情報を取得したい人のユーザID(例はよく使われるChris氏のユーザID)
 
 
-class UserRegisterHandler(BaseJsonHandler):
-    def post(self, *args, **kwargs):
-        """
-        ユーザの登録orログイン
-        :return:
-        """
-        email = self.request.get('email')
-        password = self.request.get('password')
-        # TODO: 適宜リクエストの不正等のエラーは返すといいでしょう
+# webAPIからJSONの形式の文字列の結果をもらう
+def get_profile():
 
-        # authモジュールのUserモデルにはauth_idからUserをクエリするメソッドが用意されています。
-        # Idやpasswordのエラーが返されるのでハンドルします
-        try:
-            user = User.get_by_auth_password(email, password)
-            # ログイン成功時はセッションにユーザ情報を保存します
-            self._set_session(user)
-            return 'logged in'
-        except auth.InvalidAuthIdError:
-            # 今回はユーザ未登録の場合は新規作成をします
+    # URIスキーム
+    url = 'https://www.googleapis.com/plus/v1/people/' + USER_ID +'?key=' + DEVELOPER_KEY
 
-            # 同じくUserモデルにはuser作成のメソッドも用意されています。
-            # 返り値がタプルなので注意
-            result, info = User.create_user(auth_id=email)
-            # 成功時のみinfoにuserエンティティが入ります
-            user = info if result else None
-            if not user:
-                # ユーザ作成失敗時はエラーを返すといいでしょう
-                return 'user cannot create'
+    # webAPIからのリクエストを送信
+    response = requests.get(url)
 
-            self._set_session(user)
-            return 'user created'
-        except auth.InvalidPasswordError:
-            # password error
-            return 'password invalid'
+    # json に変換
+    json_data = response.json()
 
-    def _set_session(self, user):
-        user_dict = self.auth.store.user_to_dict(user)
-        self.auth.set_session(user_dict)
+    return json_data
+
+
+if __name__ == '__main__':
+
+    user_prof = get_profile()
+    print(user_prof)

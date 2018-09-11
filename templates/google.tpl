@@ -17,6 +17,13 @@
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
   <script type="text/javascript" src="static/js/slick-1.8.1/slick/slick.min.js"></script> -->
 
+
+  <title>TATUME</title>
+</head>
+
+<body>
+  <div id="google-plus-button">Google+ Sign In</div>
+
   <script src="https://apis.google.com/js/api:client.js"></script>
 
   <script type="text/javascript">
@@ -54,10 +61,7 @@
       });
     });
   </script>
-  <title>TATUME</title>
-</head>
 
-<body>
   <div id="google-plus-button">Google+ Sign In</div>
 
 </body>

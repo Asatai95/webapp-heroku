@@ -6,3 +6,4 @@ memo.txt
 test_susb.txt
 test.txt
 .credential/
+__pycache__/

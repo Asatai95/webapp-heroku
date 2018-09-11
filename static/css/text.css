@@ -85,3 +85,17 @@ span.sen img {
 div.fb-login-button {
   margin: 20px auto;
 }
+
+
+html body div.root div.ltr span #button.Ndb {
+ width: 250px !important;
+ height: 40px !important;
+}
+
+
+div.g-signin {
+  width: 240px;
+  margin: 0 auto;
+  height: 40px;
+
+}

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="ja">
+<html lang="ja" itemscope itemtype="http://schema.org/Article">
 
 <head>
   <meta http-equiv="Content-Type" content="text/plain" ; charset="UTF-8" ; Content-Transfer-Encoding="base64" />
@@ -17,53 +17,61 @@
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
   <script type="text/javascript" src="static/js/slick-1.8.1/slick/slick.min.js"></script> -->
 
+  <script type="text/javascript">
+
+
+  function signinCallback(authResult) {
+    if (authResult['access_token']) {
+      // 正常に承認されました
+      // ユーザーが認証されたのでログイン ボタンを非表示にします。例:
+      document.getElementById('signinButton').setAttribute('style', 'display: none');
+
+  	//追加部分--------------
+  	var info = document.getElementById('info');
+  	var textNode = document.createTextNode("Google+にログインできた。");
+  	info.appendChild(textNode);
+  	//---------追加部分終わり
+
+
+    } else if (authResult['error']) {
+      // エラーが発生しました。
+      // 可能性のあるエラー コード:
+      //   「access_denied」 - ユーザーがアプリへのアクセスを拒否しました
+      //   「immediate_failed」 - ユーザーを自動的にログインできませんでした
+      // console.log（「There was an error: 」 + authResult[「エラー」]）;
+     }
+   }
+
+    </script>
 
   <title>TATUME</title>
 </head>
 
 <body>
-  <div id="google-plus-button">Google+ Sign In</div>
 
-  <script src="https://apis.google.com/js/api:client.js"></script>
+  <span id="signinButton">
+    <span
+      class="g-signin"
+      data-callback="signinCallback"
+      data-clientid="CLIENT_ID"
+      data-cookiepolicy="single_host_origin"
+      data-requestvisibleactions="http://schemas.google.com/AddActivity"
+      data-scope="https://www.googleapis.com/auth/plus.login">
+    </span>
+  </span>
 
-  <script type="text/javascript">
-    gapi.load('auth2', function() {
-      var auth2;
+  <div id="info"></div>
 
-      auth2 = gapi.auth2.init({
-        client_id: "1079133430628-rhbrhpfsoc59u3hqiv86tj9qe08piu3j.apps.googleusercontent.com",
-        scope: "https://www.googleapis.com/auth/bigquery.readonly"
-      });
 
-      auth2.then(function() {
-        var button = document.getElementById("google-plus-button");
-        console.log("User is signed-in in Google+ platform?", auth2.isSignedIn.get() ? "Yes" : "No");
 
-        auth2.attachClickHandler(button, {}, function(googleUser) {
-          // Send access-token to backend to finish the authenticate
-          // with your application
-
-          var authResponse = googleUser.getAuthResponse();
-          var $form;
-          var $input;
-
-          $form = $("<form>");
-          $form.attr("action", "/complete/google-plus");
-          $form.attr("method", "post");
-          $input = $("<input>");
-          $input.attr("name", "id_token");
-          $input.attr("value", authResponse.id_token);
-          $form.append($input);
-          // Add csrf-token if needed
-          $(document.body).append($form);
-          $form.submit();
-        });
-      });
-    });
-  </script>
-
-  <div id="google-plus-button">Google+ Sign In</div>
-
+      <!-- この非同期 JavaScript を </body> タグの直前に置きます -->
+      <script type="text/javascript">
+        (function() {
+         var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+         po.src = 'https://apis.google.com/js/client:plusone.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+       })();
+      </script>
 </body>
 
 </html>

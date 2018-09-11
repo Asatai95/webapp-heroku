@@ -17,6 +17,8 @@
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
   <script type="text/javascript" src="static/js/slick-1.8.1/slick/slick.min.js"></script> -->
 
+  <meta name="google-signin-client_id" content="1079133430628-rhbrhpfsoc59u3hqiv86tj9qe08piu3j.apps.googleusercontent.com">
+
   <title>TATUME</title>
 
   <div id="fb-root"></div>
@@ -29,33 +31,6 @@
       js.src = 'https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v3.1&appId=704097009951110&autoLogAppEvents=1';
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
-  </script>
-
-  <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()">
-  </script>
-
-  <script type="text/javascript">
-    function signinCallback(authResult) {
-      if (authResult['access_token']) {
-        // 正常に承認されました
-        // ユーザーが認証されたのでログイン ボタンを非表示にします。例:
-        document.getElementById('signinButton').setAttribute('style', 'display: none');
-
-        //追加部分--------------
-        var info = document.getElementById('info');
-        var textNode = document.createTextNode("Google+にログインできた。");
-        info.appendChild(textNode);
-        //---------追加部分終わり
-
-
-      } else if (authResult['error']) {
-        // エラーが発生しました。
-        // 可能性のあるエラー コード:
-        //   「access_denied」 - ユーザーがアプリへのアクセスを拒否しました
-        //   「immediate_failed」 - ユーザーを自動的にログインできませんでした
-        // console.log（「There was an error: 」 + authResult[「エラー」]）;
-      }
-    }
   </script>
 
 
@@ -73,28 +48,10 @@
       <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type='login_with' data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false" data-width="200" data-height='50'></div>
 
 
-      <div id="signinButton">
-        <div id='dv1' class="g-signin" data-callback="signinCallback" data-width="230" data-height='50' data-clientid="1079133430628-rhbrhpfsoc59u3hqiv86tj9qe08piu3j.apps.googleusercontent.com" data-cookiepolicy="single_host_origin" data-requestvisibleactions="http://schemas.google.com/AddActivity"
-          data-scope="https://www.googleapis.com/auth/plus.login" style='width: 230px; heigth: 40px;'></div>
-      </div>
-
-      <div id="info"></div>
-
-      <script type="text/javascript">
-        (function() {
-          var po = document.createElement('script');
-          po.type = 'text/javascript';
-          po.async = true;
-          po.src = 'https://apis.google.com/js/client:plusone.js?onload=start';
-          var s = document.getElementsByTagName('script')[0];
-          s.parentNode.insertBefore(po, s);
-        })();
-      </script>
-
       <div id="my-signin2"></div>
       <script>
         function onSuccess(googleUser) {
-          console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+          console.log('Googleにログイン : ' + googleUser.getBasicProfile().getName());
         }
 
         function onFailure(error) {
@@ -104,8 +61,9 @@
         function renderButton() {
           gapi.signin2.render('my-signin2', {
             'scope': 'profile email',
+            'content': 'test',
             'width': 240,
-            'height': 50,
+            'height': 40,
             'longtitle': true,
             'theme': 'dark',
             'onsuccess': onSuccess,

@@ -39,7 +39,64 @@ $('div.image_back').css('transform', 'translate3d(-50%, 313.75px, 0px) '+' scale
 <p class="scrollToph">-0.733236994219653</p>
 <p class="scrollToph">-0.7398843930635843</p>
 
+{
+  "access_token": "ya29.GlsVBvYzo9rHPqLlUZd3adsALvguAlindSZppA7XOTEq4EAnbv-Gh1askQYF4UYFn1pQu8jlmg77zQM5HQmzkPWlkEHz8uobg6_UR3ADeMEXYh3_qdSuibbwW53E",
+  "expires_in": 3600,
+  "refresh_token": "1/rQJkuh0hFXNfHlpJDd1Me_lVjug0f7QNIgLyjfMzjbE294E2VKYTYocxWQ0kC29d",
+  "scope": "https://www.googleapis.com/auth/bigquery.readonly",
+  "token_type": "Bearer"
+}
+
+AIzaSyBr2SK8Xm8VdaJmQe_sNwFi0LTTQormuYI
 
 curl -d client_id=1079133430628-rhbrhpfsoc59u3hqiv86tj9qe08piu3j.apps.googleusercontent.com -d client_secret=zRoQ6OQHJIVO_tbBN24Ctduz -d redirect_uri=http://localhost:8080 -d grant_type=authorization_code -d code=4/VwCZSeLrk4lyzJ1JQ4i0w-Uum6el5ki2FDe49bJuW1zNUQLWqWL9yxoKsFYVbXt_Yy9fppahaqjUo86rflAZ7r8# https://accounts.google.com/o/oauth2/token
 
 4/VwAl2M5xv5tVzV_3zjqdqChn8aooKDl_Upmb9kgTN4ePrd932qnq4w9_hFfwVVl--LFAW769aIK3tgRbBuk8fMM#
+
+-----------------------------------------
+
+
+  <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()">
+  </script>
+
+  <script type="text/javascript">
+    function signinCallback(authResult) {
+      if (authResult['access_token']) {
+        // 正常に承認されました
+        // ユーザーが認証されたのでログイン ボタンを非表示にします。例:
+        document.getElementById('signinButton').setAttribute('style', 'display: none');
+
+        //追加部分--------------
+        var info = document.getElementById('info');
+        var textNode = document.createTextNode("Google+にログインできた。");
+        info.appendChild(textNode);
+        //---------追加部分終わり
+
+
+      } else if (authResult['error']) {
+        // エラーが発生しました。
+        // 可能性のあるエラー コード:
+        //   「access_denied」 - ユーザーがアプリへのアクセスを拒否しました
+        //   「immediate_failed」 - ユーザーを自動的にログインできませんでした
+        // console.log（「There was an error: 」 + authResult[「エラー」]）;
+      }
+    }
+  </script>
+
+  <div id="signinButton">
+    <div class="g-signin" data-callback="signinCallback" data-width="230" data-height='50' data-clientid="1079133430628-rhbrhpfsoc59u3hqiv86tj9qe08piu3j.apps.googleusercontent.com" data-cookiepolicy="single_host_origin" data-requestvisibleactions="http://schemas.google.com/AddActivity" data-scope="https://www.googleapis.com/auth/plus.login" ></div>
+  </div>
+
+  <div id="info"></div>
+
+  <script type="text/javascript">
+    (function() {
+      var po = document.createElement('script');
+      po.type = 'text/javascript';
+      po.async = true;
+      po.src = 'https://apis.google.com/js/client:plusone.js?onload=start';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(po, s);
+    })();
+
+  </script>

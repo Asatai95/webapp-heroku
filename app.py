@@ -79,6 +79,11 @@ def login():
 
     return template('templates/text')
 
+@route("/new")
+def new():
+
+    return template('templates/new')
+
 @route("/img")
 def img():
 

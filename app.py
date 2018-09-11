@@ -60,20 +60,6 @@ def img(filepath):
 def js(filepath):
     return static_file(filepath, root="static/js")
 
-q = Queue(connection=conn)
-
-@route('/oauth2callback')
-def login_sub():
-
-    get = get_credentials()
-
-    result = q.enqueue(background_process , get)
-
-    return result
-
-def back(name):
-
-    return name * 20
 
 @route('/login_sub/oauth2callback')
 def login_sub():

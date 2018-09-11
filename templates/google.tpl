@@ -53,7 +53,7 @@
     <span
       class="g-signin"
       data-callback="signinCallback"
-      data-clientid="CLIENT_ID"
+      data-clientid="1079133430628-rhbrhpfsoc59u3hqiv86tj9qe08piu3j.apps.googleusercontent.com"
       data-cookiepolicy="single_host_origin"
       data-requestvisibleactions="http://schemas.google.com/AddActivity"
       data-scope="https://www.googleapis.com/auth/plus.login">

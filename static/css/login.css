@@ -1,0 +1,172 @@
+@charset "UTF-8";
+
+html {
+  background: url('../img/enpitu.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+body {
+  background-color: rgba(0, 0, 0, .1);
+
+}
+
+.title {
+  font-size: 25px;
+  font-weight: 800;
+  border-bottom: 2px solid black;
+  height: 80px;
+  margin-bottom: 20px;
+  opacity: .6;
+  position: fixed;
+  width: 350px;
+}
+
+p.title_text {
+  margin: 0;
+  padding: 20px;
+}
+
+.main_text {
+  width: 350px;
+  height: 550px;
+  margin: 0 auto;
+  text-align: center;
+  border: 2px solid black;
+  background-color: rgba(255, 255, 255);
+  box-shadow: 0 0 8px black;
+  margin-top: 100px;
+  overflow: scroll;
+}
+
+.main_content {
+  width: 100%;
+  height: 160px;
+  margin-top: 110px;
+}
+
+.ma {
+  font-size: 18px;
+  opacity: .5;
+  margin: 25px auto;
+}
+
+.login {
+  width: 100%;
+  height: 200px;
+}
+
+p.login_mail {
+  margin: 20px;
+}
+
+input[type=text] {
+  font-size: 15px;
+  padding: 0 10px 0 10px;
+  width: 200px;
+  height: 35px;
+  box-shadow: 0 0 1px grey;
+  -webkit-appearance: none;
+}
+
+input[type=password] {
+  font-size: 15px;
+  padding: 0 10px 0 10px;
+  width: 200px;
+  height: 35px;
+  box-shadow: 0 0 1px grey;
+}
+
+#form p.login_mail {
+  margin: 0 0 18px 0;
+	overflow: hidden;
+}
+
+#form p.login_pass {
+  margin: 0;
+	overflow: hidden;
+}
+
+#form p.error {
+  margin: 5px auto;
+}
+
+input[type=submit] {
+  width: 230px;
+  height: 50px;
+  border-style: none;
+  background-color: rgba(0, 163, 219, .8);
+  color: white;
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: rgba(0, 163, 219, .6);
+}
+
+input[type="submit"][disabled]:hover {
+  background-color: rgba(123, 128, 132, .3);
+
+}
+
+input[type="submit"][disabled] {
+		background-color: rgba(123, 128, 132, .3);
+		cursor: default;
+}
+
+span.sen img {
+  width: 100px;
+  height: 20px;
+  margin: 5px 10px 0 10px;
+}
+
+.submit {
+  margin-bottom: 0;
+}
+
+.fb-login-button {
+  margin: 0 0 20px 0;
+}
+
+.fb-login-button:hover {
+  box-shadow: 0 0 5px blue;
+  border-radius: 5px;
+  opacity: .9;
+}
+
+#my-signin2 {
+  margin: 10px auto;
+  width: 240px;
+}
+
+p.forgot {
+  margin: 2px auto;
+  width: 230px;
+  text-align: left;
+  font-size: 13px;
+  color: rgba(0,0,0,.4);
+}
+
+p.forgot a {
+  opacity: 1.0;
+  text-decoration: none;
+}
+
+p.new {
+  font-size: 13px;
+  margin: 30px auto;
+  color: rgba(0,0,0,.4);
+}
+
+p.new a {
+  opacity: 1.0;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+.error {
+  font-size: 15px;
+  color: rgba(240, 96, 96);
+}

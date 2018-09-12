@@ -77,7 +77,7 @@ def info():
 @route("/login")
 def login():
 
-    return template('templates/text')
+    return template('templates/login')
 
 @route("/new")
 def new():

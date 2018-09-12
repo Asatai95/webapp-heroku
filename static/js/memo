@@ -100,3 +100,53 @@ curl -d client_id=1079133430628-rhbrhpfsoc59u3hqiv86tj9qe08piu3j.apps.googleuser
     })();
 
   </script>
+
+
+
+  <div id="my-signin2"></div>
+  <script>
+    function onSuccess(googleUser) {
+      console.log('Googleにログイン : ' + googleUser.getBasicProfile().getName());
+    }
+
+    function onFailure(error) {
+      console.log(error);
+    }
+
+    function renderButton() {
+
+      gapi.signin2.render('my-signin2', {
+
+        'scope': 'profile email',
+        'width': 240,
+        'height': 40,
+        'longtitle': false,
+        'theme': 'dark',
+        'lang': 'JP',
+        'data-accesstype': "offline",
+        'onsuccess': onSuccess,
+        'onfailure': onFailure
+      });
+    }
+  </script>
+
+  function(googleUser) {
+    document.getElementById('name').innerText = "Signed in: " +
+        googleUser.getBasicProfile().getName();
+  },
+
+  <script src="https://apis.google.com/js/platform.js?onload=renderButton" async='async' defer='defer' ></script>
+
+
+  <script>
+    ! function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0],
+        p = /^http:/.test(d.location) ? 'http' : 'https';
+      if (!d.getElementById(id)) {
+        js = d.createElement(s);
+        js.id = id;
+        js.src = p + '://platform.twitter.com/widgets.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }
+    }(document, 'script', 'twitter-wjs');
+  </script>

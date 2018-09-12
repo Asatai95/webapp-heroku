@@ -8,16 +8,18 @@
   <meta name='keywords' content=''>
   <meta name='description' content="">
   <meta name='viewport' content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" media="screen" href="static/css/tatume.css">
+  <link rel="stylesheet" media="screen" href="static/css/login.css">
 
   <script src="static/js/jquery-3.1.1.min.js"></script>
-  <script type="text/javascript" src="static/js/tatume_top.js"></script>
+  <script type="text/javascript" src="static/js/login.js"></script>
   <link rel="stylesheet" type="text/css" href="static/js/slick-1.8.1/slick/slick.css" />
   <link rel="stylesheet" type="text/css" href="static/js/slick-1.8.1/slick/slick-theme.css" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-  <script type="text/javascript" src="static/js/slick-1.8.1/slick/slick.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <script type="text/javascript" src="static/js/slick-1.8.1/slick/slick.min.js"></script> -->
+
 
   <title>TATUME</title>
+
 
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
   <script src="https://apis.google.com/js/api:client.js"></script>
@@ -34,6 +36,7 @@
         attachSignin(document.getElementById('customBtn'));
       });
     };
+    
   </script>
   <style type="text/css">
     #customBtn {
@@ -91,39 +94,12 @@
     }(document, 'script', 'facebook-jssdk'));
   </script>
 
-
 </head>
 
 <body>
-    <div class='main'>
-      <div class='header'>
-        <div class='img'>
-          <img src="static/img/tatume.png" alt="">
-        </div>
-        <ul id='header' class='header_main'>
-          <a href="/info">
-            <li class='text'>TATUME</li>
-          </a>
-          <a href="#">
-            <li class='text'>イラスト</li>
-          </a>
-          <a href="#">
-           <li class='login_sub'>ログイン</li>
-          </a>
-        </ul>
-      </div>
-      <div class='content'>
-        <div class='content_sub'>
-          <p class='name'>TATUME</p>
-          <p class='main_text_sub'>大切な人への思いを代筆します。</p>
 
 
-        </div>
-      </div>
-    </div>
-
-  <div class='back'>
-   <div class='main_text'>
+  <div class='main_text'>
     <div class='title'>
       <p class='title_text'>ログイン</p>
     </div>
@@ -148,11 +124,11 @@
         <span class='sen'><img src="static/img/sen.jpeg" alt=""></span>
       </p>
       <div class='login'>
-        <form action="/" id='form' method="POST">
+        <form action="/" id='form' method="POST" >
           <p class='error'></p>
-          <p class='login_mail'><input type="text" name="log_id" id='text' maxlength="32" autocomplete="OFF" placeholder='メールアドレス' /></p>
+          <p class='login_mail'><input type="text" name="log_id" id='text' maxlength="32" autocomplete="OFF" placeholder='メールアドレス'/></p>
 
-          <p class='login_pass'><input type="password" name="passwd" id='passwd' maxlength="32" autocomplete="OFF" placeholder='パスワード' /></p>
+          <p class='login_pass'><input type="password" name="passwd" id='passwd' maxlength="32" autocomplete="OFF" placeholder='パスワード'/></p>
           <p class="submit"><input type="submit" id='submit' value="ログイン" /></p>
 
         </form>
@@ -163,7 +139,6 @@
       </div>
     </div>
   </div>
-</div>
 
 </body>
 

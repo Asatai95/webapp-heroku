@@ -83,14 +83,22 @@ def create():
     con = db.cursor()
 
     sql = 'insert into user(user_name, email, passwd) values(%s,%s,%s)'
-    new = con.execute(sql, [str(user_name), log_id_new, str(passwd_new)])
-    db.commit
-    print(new)
+    try:
+        new = con.execute(sql, [str(user_name), str(log_id_new), str(passwd_new)])
+        db.commit()
+        print(new)
+
+    except MySQLdb.IntegrityError:
+
+        error = 'すでに登録されているパスワードです。'
+
+        return dict(error=error)
 
     result = con.fetchall()
     print(result)
 
     return redirect('/')
+
 
 @route("/info")
 def info():

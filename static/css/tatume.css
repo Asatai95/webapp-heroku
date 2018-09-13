@@ -161,6 +161,11 @@ p.title_text {
   height: 735px;
 }
 
+.back_create {
+  width: 100%;
+  height: 735px;
+}
+
 .main_text {
   width: 350px;
   height: 550px;
@@ -169,14 +174,30 @@ p.title_text {
   border: 2px solid black;
   background-color: rgba(255, 255, 255);
   box-shadow: 0 0 8px black;
-  margin-top: 100px;
+  opacity: 0;
   overflow: scroll;
   position: absolute;
   top: 0;
   right: 0;
   left: 0;
   bottom: 0;
-  display: none;
+}
+
+.main_create {
+  width: 350px;
+  height: 510px;
+  margin: 0 auto;
+  text-align: center;
+  border: 2px solid black;
+  background-color: rgba(255, 255, 255);
+  box-shadow: 0 0 8px black;
+  overflow: scroll;
+  opacity: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
 }
 
 .main_content {
@@ -195,6 +216,12 @@ p.title_text {
 .login {
   width: 100%;
   height: 200px;
+}
+
+.login_create {
+  width: 100%;
+  height: 200px;
+  margin-top: 110px;
 }
 
 p.login_mail {
@@ -302,6 +329,30 @@ p.new {
 }
 
 p.new a {
+  opacity: 1.0;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+p.forgot_create {
+  margin: 35px 0 0 0 ;
+  text-align: center;
+  font-size: 15px;
+  color: rgba(0,0,0,.4);
+}
+
+p.forgot_create a {
+  opacity: 1.0;
+  text-decoration: none;
+}
+
+p.new_create {
+  font-size: 13px;
+  margin: 20px 0 0 0 ;
+  color: rgba(0,0,0,.4);
+}
+
+p.new_create a {
   opacity: 1.0;
   text-decoration: none;
   margin-left: 5px;

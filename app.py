@@ -69,6 +69,29 @@ def top():
 
     return template("templates/tatume")
 
+@route('/', method='POST')
+def create():
+
+    log_id_new = request.forms.log_id_new
+    passwd_new = request.forms.passwd_new
+    user_name = request.forms.user_name
+    print(log_id_new)
+    print(passwd_new)
+    print(user_name)
+
+    db = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
+    con = db.cursor()
+
+    sql = 'insert into user(user_name, email, passwd) values(%s,%s,%s)'
+    new = con.execute(sql, [str(user_name), log_id_new, str(passwd_new)])
+    db.commit
+    print(new)
+
+    result = con.fetchall()
+    print(result)
+
+    return redirect('/')
+
 @route("/info")
 def info():
 
@@ -103,6 +126,8 @@ def img():
     print(result)
 
     return template('templates/image', images=result)
+
+
 #
 # @route("/test")
 # @view("test")

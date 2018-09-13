@@ -95,75 +95,104 @@
 </head>
 
 <body>
-    <div class='main'>
-      <div class='header'>
-        <div class='img'>
-          <img src="static/img/tatume.png" alt="">
-        </div>
-        <ul id='header' class='header_main'>
-          <a href="/info">
-            <li class='text'>TATUME</li>
-          </a>
-          <a href="#">
-            <li class='text'>イラスト</li>
-          </a>
-          <a href="#">
-           <li class='login_sub'>ログイン</li>
-          </a>
-        </ul>
+  <div class='main'>
+    <div class='header'>
+      <div class='img'>
+        <img src="static/img/tatume.png" alt="">
       </div>
-      <div class='content'>
-        <div class='content_sub'>
-          <p class='name'>TATUME</p>
-          <p class='main_text_sub'>大切な人への思いを代筆します。</p>
-
-
-        </div>
-      </div>
+      <ul id='header' class='header_main'>
+        <a href="/info">
+          <li class='text'>TATUME</li>
+        </a>
+        <a href="/img">
+          <li class='text'>イラスト</li>
+        </a>
+        <a href="#">
+          <li class='login_sub'>ログイン</li>
+        </a>
+      </ul>
     </div>
-
-  <div class='back'>
-   <div class='main_text'>
-    <div class='title'>
-      <p class='title_text'>ログイン</p>
-    </div>
-    <div class='main_content'>
-
-      <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type='login_with' data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false" data-width="200" data-height='50'></div>
+    <div class='content'>
+      <div class='content_sub'>
+        <p class='name'>TATUME</p>
+        <p class='main_text_sub'>大切な人への思いを代筆します。</p>
 
 
-      <div id="gSignInWrapper">
-        <div id="customBtn" class="customGPlusSignIn">
-          <span class="icon"></span>
-          <span class="buttonText">Googleでログイン</span>
-        </div>
-      </div>
-      <!-- <div id="name"></div> -->
-      <script>
-        startApp();
-      </script>
-
-
-      <p class='ma'><span class='sen'><img src="static/img/sen.jpeg" alt=""></span> または
-        <span class='sen'><img src="static/img/sen.jpeg" alt=""></span>
-      </p>
-      <div class='login'>
-        <form action="/" id='form' method="POST">
-          <p class='error'></p>
-          <p class='login_mail'><input type="text" name="log_id" id='text' maxlength="32" autocomplete="OFF" placeholder='メールアドレス' /></p>
-
-          <p class='login_pass'><input type="password" name="passwd" id='passwd' maxlength="32" autocomplete="OFF" placeholder='パスワード' /></p>
-          <p class="submit"><input type="submit" id='submit' value="ログイン" /></p>
-
-        </form>
-
-
-        <p class='forgot'>パスワード忘れた方は<a href="#">こちら</a></p>
-        <p class='new'>アカウントをお持ちではないですか？<a href="#">新規登録</a></p>
       </div>
     </div>
   </div>
-</div>
+
+  <div class='back'>
+    <div class='main_text'>
+      <div class='title'>
+        <p class='title_text'>ログイン</p>
+      </div>
+      <div class='main_content'>
+
+        <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type='login_with' data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false" data-width="200" data-height='50'></div>
+
+
+        <div id="gSignInWrapper">
+          <div id="customBtn" class="customGPlusSignIn">
+            <span class="icon"></span>
+            <span class="buttonText">Googleでログイン</span>
+          </div>
+        </div>
+        <!-- <div id="name"></div> -->
+        <script>
+          startApp();
+        </script>
+
+
+        <p class='ma'><span class='sen'><img src="static/img/sen.jpeg" alt=""></span> または
+          <span class='sen'><img src="static/img/sen.jpeg" alt=""></span>
+        </p>
+        <div class='login'>
+          <form action="/" id='form' method="POST">
+            <p class='error'></p>
+            <p class='login_mail'><input type="text" name="log_id" id='text' maxlength="32" autocomplete="OFF" placeholder='メールアドレス' /></p>
+
+            <p class='login_pass'><input type="password" name="passwd" id='passwd' maxlength="32" autocomplete="OFF" placeholder='パスワード' /></p>
+            <p class="submit"><input type="submit" id='submit' value="ログイン" /></p>
+
+          </form>
+
+
+          <p class='forgot'>パスワード忘れた方は<a href="#">こちら</a></p>
+          <p class='new'>アカウントをお持ちではないですか？<a href="#" id='new'>新規登録</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class='back_create'>
+    <div class='main_create'>
+      <div class='title'>
+        <p class='title_text'>アカウント登録</p>
+      </div>
+
+        <div class='login_create'>
+          <form action="/" id='form_new' method="POST">
+            <p class='error'></p>
+
+            <p class='user_name'><input type="text" name="user_name" id='user_name' maxlength="32" autocomplete="OFF" placeholder='ユーザー名' /></p>
+            <p class='login_mail'><input type="text" name="log_id_new" id='text_new' maxlength="32" autocomplete="OFF" placeholder='メールアドレス' /></p>
+
+            <p class='login_pass'><input type="password" name="passwd_new" id='passwd_new' maxlength="32" autocomplete="OFF" placeholder='パスワード' /></p>
+            <p class="submit"><input type="submit" id='submit_new' value="新規登録" /></p>
+
+          </form>
+          <p class='ma'><span class='sen'><img src="static/img/sen.jpeg" alt=""></span> または
+            <span class='sen'><img src="static/img/sen.jpeg" alt=""></span>
+          </p>
+
+
+          <p class='forgot_create'><a href="#">SNSアカウントで登録</a></p>
+          <p class='new_create'>すでにアカウントをお持ちですか？<a href="#">ログイン</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 

@@ -34,6 +34,14 @@
         attachSignin(document.getElementById('customBtn'));
       });
     };
+    function attachSignin(element) {
+    console.log(element.id);
+    auth2.attachClickHandler(element, {},
+        function(googleUser) {
+          // document.getElementById('name').innerText = "Signed in: " +
+          //     googleUser.getBasicProfile().getName();
+        });
+      }
   </script>
   <style type="text/css">
     #customBtn {
@@ -138,7 +146,6 @@
             <span class="buttonText">Googleでログイン</span>
           </div>
         </div>
-        <!-- <div id="name"></div> -->
         <script>
           startApp();
         </script>
@@ -172,8 +179,8 @@
       </div>
 
         <div class='login_create'>
-          <form action="/" id='form_new' method="POST">
-            <p class='error'></p>
+          <form action="/" id='form_new' method="POST" onsubmit="doSomething();return false;">
+            <p id='error' class='error'></p>
 
             <p class='user_name'><input type="text" name="user_name" id='user_name' maxlength="32" autocomplete="OFF" placeholder='ユーザー名' /></p>
             <p class='login_mail'><input type="text" name="log_id_new" id='text_new' maxlength="32" autocomplete="OFF" placeholder='メールアドレス' /></p>
@@ -187,8 +194,8 @@
           </p>
 
 
-          <p class='forgot_create'><a href="#">SNSアカウントで登録</a></p>
-          <p class='new_create'>すでにアカウントをお持ちですか？<a href="#">ログイン</a></p>
+          <p class='forgot_create'><a href="#" id='forgot'>SNSアカウントで登録</a></p>
+          <p class='new_create'>すでにアカウントをお持ちですか？<a href="#" id='new_create'>ログイン</a></p>
         </div>
       </div>
     </div>

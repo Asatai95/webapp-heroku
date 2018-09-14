@@ -11,7 +11,7 @@
   <link rel="stylesheet" media="screen" href="static/css/create.css">
 
   <script src="static/js/jquery-3.1.1.min.js"></script>
-  <script type="text/javascript" src="static/js/create.js"></script>
+  <script type="text/javascript" src="static/js/tatume_top.js"></script>
   <link rel="stylesheet" type="text/css" href="static/js/slick-1.8.1/slick/slick.css" />
   <link rel="stylesheet" type="text/css" href="static/js/slick-1.8.1/slick/slick-theme.css" />
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
@@ -29,8 +29,8 @@
       </div>
 
         <div class='login'>
-          <form action="/" id='form_new' method="POST">
-            <p class='error'></p>
+          <form action="/new" id='form_new' method="POST">
+            <p id='error' class='error'>{{error}}</p>
 
             <p class='user_name'><input type="text" name="user_name" id='user_name' maxlength="32" autocomplete="OFF" placeholder='ユーザー名' /></p>
             <p class='login_mail'><input type="text" name="new_log_id" id='new_text' maxlength="32" autocomplete="OFF" placeholder='メールアドレス' /></p>

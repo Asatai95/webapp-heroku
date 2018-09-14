@@ -11,7 +11,7 @@
   <link rel="stylesheet" media="screen" href="static/css/login.css">
 
   <script src="static/js/jquery-3.1.1.min.js"></script>
-  <script type="text/javascript" src="static/js/login.js"></script>
+  <script type="text/javascript" src="static/js/tatume_top.js"></script>
   <link rel="stylesheet" type="text/css" href="static/js/slick-1.8.1/slick/slick.css" />
   <link rel="stylesheet" type="text/css" href="static/js/slick-1.8.1/slick/slick-theme.css" />
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
@@ -36,7 +36,7 @@
         attachSignin(document.getElementById('customBtn'));
       });
     };
-    
+
   </script>
   <style type="text/css">
     #customBtn {
@@ -104,6 +104,7 @@
       <p class='title_text'>ログイン</p>
     </div>
     <div class='main_content'>
+
 
       <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type='login_with' data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false" data-width="200" data-height='50'></div>
 

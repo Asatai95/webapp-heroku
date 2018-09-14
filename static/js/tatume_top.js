@@ -5,7 +5,7 @@ $(function(){
 
     if(!$(e.target).closest('.main_text').length && !$(e.target).closest('.login_sub').length) {
 
-      $('.main_text').animate({'opacity': '0'}, 500);
+      $('.main_text').animate({'opacity': '0'}, 800);
       $('div.back').css('position', 'inherit');
       $('.main_text').animate({'top': '0'}, 800);
 
@@ -69,7 +69,7 @@ $(function(){
 
     if(!$(e.target).closest('.main_create').length && !$(e.target).closest('#new').length) {
 
-      $('.main_create').animate({'opacity': '0'}, 500);
+      $('.main_create').fadeOut(500);
       $('div.back_create').css('position', 'inherit');
       $('.main_create').animate({'top': '0'}, 800);
       $('div.back_create').css('width', '0');
@@ -79,9 +79,9 @@ $(function(){
 
     } else if($(e.target).closest('#new').length){
 
-        if($('.main_create').css('opacity') == 0){
+        if($('.main_create').css('display') == 'none'){
           $('.main_create').animate({'top': '100px'},800);
-          $('.main_create').css('opacity', '1.0');
+          $('.main_create').fadeIn(500);
           $('div.back_create').css('background-color', 'rgba(0,0,0,.5)');
           $('div.back_create').css('position', 'relative');
           $('div.back_create').css('width', '100%');
@@ -93,7 +93,7 @@ $(function(){
           $('.main_text').animate({'top': '0'}, 800);
         }else{
           $('.main_create').animate({'top': '0'},800);
-          $('.main_create').animate({'opacity': '0'},500);
+          $('.main_create').fadeOut(500);
           $('div.back_create').css('position', 'inherit');
           $('div.back_create').css('width', '0');
           $('div.back_create').css('height', '0');
@@ -135,7 +135,7 @@ $(function() {
     }
   });
   $('#user_name').bind('keydown keyup keypress change', function() {
-    if ( $(this).val().length > 5 ) {
+    if ( $(this).val().length > 4 ) {
       $('#submit_new').attr('disabled', 'disabled');
       $('.error').text('');
     } else {
@@ -154,3 +154,25 @@ $(function() {
   });
 
 });
+
+// $(function(){
+//   $('#submit_new').on('submit', function(event){
+//     event.preventDefault();
+//   });
+// });
+
+$(function(){
+    $('form').submit(function(){
+
+      var msg = $('#new_passwd').val();
+      $.ajax({
+        type: 'POST',
+        url: '/new',
+        data: msg,
+        success: function(msg, msgType){
+          return false;
+        }
+      });
+
+    });
+  });

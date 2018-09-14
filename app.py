@@ -1,6 +1,7 @@
 # -*- coding: utf_8 -*-
 # coding: UTF-8
-import MySQLdb
+from setting import session
+from user import *
 from bottle import get, route, run, template, static_file, request, redirect, response, view, url
 from email.header import Header
 from email.mime.text import MIMEText
@@ -14,9 +15,6 @@ import os
 import stripe
 import sys
 import requests
-
-
-
 
 UPLOAD_FOLDER = './static/img/'
 ALLOWED_EXTENSIONS = set(['png', 'jpeg', 'gif'])
@@ -67,10 +65,12 @@ def callback():
 @route("/")
 def top():
 
+    error = ''
     return template("templates/tatume")
 
 @route('/', method='POST')
 def create():
+
 
     log_id_new = request.forms.log_id_new
     passwd_new = request.forms.passwd_new
@@ -79,25 +79,32 @@ def create():
     print(passwd_new)
     print(user_name)
 
-    db = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
-    con = db.cursor()
-
-    sql = 'insert into user(user_name, email, passwd) values(%s,%s,%s)'
     try:
-        new = con.execute(sql, [str(user_name), str(log_id_new), str(passwd_new)])
-        db.commit()
-        print(new)
+        user = User()
+        user.name = str(user_name)
+        user.passwd = str(passwd_new)
+        user.email = str(log_id_new)
+        print('test')
 
-    except MySQLdb.IntegrityError:
+        users = session.add(user)
+        session.commit()
+        print(users)
+        return redirect('/info')
+
+    except exc.InvalidRequestError :
 
         error = 'すでに登録されているパスワードです。'
+        print('test')
 
-        return dict(error=error)
+        return template('templates/create', error=error)
 
-    result = con.fetchall()
-    print(result)
+    except exc.IntegrityError:
 
-    return redirect('/')
+        error = 'すでに登録されているパスワードです。'
+        print('test')
+
+        return template('templates/create', error=error)
+
 
 
 @route("/info")
@@ -105,15 +112,54 @@ def info():
 
     return template('templates/info')
 
-@route("/login")
-def login():
 
-    return template('templates/login')
+@route('/new')
+def new_test():
 
-@route("/new")
-def new():
+    error= ''
+    return template('templates/create', error=error)
 
-    return template('templates/new')
+# @route("/new", method='POST')
+# def new():
+#
+#     user_name = request.forms.user_name
+#     passwd_new = request.forms.new_passwd
+#     log_id_new = request.forms.new_log_id
+#     print(log_id_new)
+#     print(passwd_new)
+#     print(user_name)
+#
+#     try:
+#         user = User()
+#         user.name = str(user_name)
+#         user.passwd = str(passwd_new)
+#         user.email = str(log_id_new)
+#         print('test')
+#
+#         users = session.add(user)
+#         session.commit()
+#         print(users)
+#
+#
+#         return redirect('/info')
+#
+#
+#     except exc.InvalidRequestError :
+#
+#         error = 'すでに登録されているパスワードです。'
+#         print('test')
+#
+#         return template('templates/create', error=error)
+#
+#     except exc.IntegrityError:
+#
+#         error = 'すでに登録されているパスワードです。'
+#         print('test')
+#
+#         return template('templates/create', error=error)
+
+
+
 
 @route("/img")
 def img():

@@ -1,17 +1,16 @@
-import webapp2
-from models.user import User
+from setting import session
 
-webapp2_config = {
-    'webapp2_extras.auth': {
-        'cookie_name': 'webapp2',
-        'user_model': User,
-    },
-    'webapp2_extras.sessions': {
-        'secret_key' : 'webapp2_test',
-        'session_max_age' : 60*60*24*30,
-    }
-}
-app = webapp2.WSGIApplication([
-    webapp2.Route('/test', TestHandler),
-    webapp2.Route('/delete', DeleteHandler),
-], debug=True, config=webapp2_config)
+from user import *
+
+
+user = User()
+user.name = '太郎'
+user.age = '20'
+user.email = 'tets@gmail.com'
+users = session.add(user)
+session.commit()
+
+
+users = session.query(User).all()
+for user in users :
+    print(user.name)

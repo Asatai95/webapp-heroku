@@ -1,7 +1,10 @@
 # -*- coding: utf_8 -*-
 # coding: UTF-8
+import sqlalchemy
+from sqlalchemy import exc
 from setting import session
 from user import *
+from img import *
 from bottle import get, route, run, template, static_file, request, redirect, response, view, url
 from email.header import Header
 from email.mime.text import MIMEText
@@ -65,12 +68,11 @@ def callback():
 @route("/")
 def top():
 
-    error = ''
-    return template("templates/tatume")
+    error = ""
+    return template("templates/tatume", error=error)
 
 @route('/', method='POST')
 def create():
-
 
     log_id_new = request.forms.log_id_new
     passwd_new = request.forms.passwd_new
@@ -79,38 +81,51 @@ def create():
     print(passwd_new)
     print(user_name)
 
-    try:
-        user = User()
-        user.name = str(user_name)
-        user.passwd = str(passwd_new)
-        user.email = str(log_id_new)
-        print('test')
 
+    user = User()
+    user.name = str(user_name)
+    user.passwd = str(passwd_new)
+    user.email = str(log_id_new)
+    print('test')
+
+
+    user = User()
+    users_sub = session.query(User.passwd).filter(User.passwd==passwd_new).all()
+    print(users_sub)
+
+    if users_sub == [ ]:
         users = session.add(user)
         session.commit()
         print(users)
-        return redirect('/info')
 
-    except exc.InvalidRequestError :
+    else:
 
-        error = 'すでに登録されているパスワードです。'
         print('test')
-
-        return template('templates/create', error=error)
-
-    except exc.IntegrityError:
-
-        error = 'すでに登録されているパスワードです。'
-        print('test')
-
-        return template('templates/create', error=error)
-
+        return template('templates/tatume')
+    return redirect('/info')
 
 
 @route("/info")
 def info():
 
     return template('templates/info')
+
+
+@route("/img")
+def img():
+
+    img = Img()
+
+    imgs = session.query(Img.image)
+
+    session.commit()
+
+
+    for img in imgs:
+        print(img)
+
+    return template('templates/image', imgs=imgs)
+
 
 
 @route('/new')
@@ -160,26 +175,6 @@ def new_test():
 
 
 
-
-@route("/img")
-def img():
-
-    db = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
-    con = db.cursor()
-
-    sql = 'select img from image'
-    image = con.execute(sql)
-    db.commit()
-    print(image)
-
-    result = []
-    for row in con.fetchall():
-        result.append({
-            "img": row[0]
-        })
-    print(result)
-
-    return template('templates/image', images=result)
 
 
 #
@@ -270,21 +265,17 @@ def text():
 
     message = 'データベースの中身を公開するよー！！'
 
-    db = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
+    db = sqlalchemy.connect(user='root', passwd='root', host='localhost', db='mamp', charset='utf8')
     con = db.cursor()
 
-    sql = 'select test from test where id = 1'
+    sql = 'select user from name where id = 1'
     test = con.execute(sql)
     db.commit()
-
 
     result = con.fetchall()
     result = result[0][0]
 
-    if request.urlparts.path == 'https://webapp2-heroku.herokuapp.com':
-        url = request.urlparts.path.replace('https://webapp2-heroku.herokuapp.com', 'https://www.webapp2.com', 1)
-
-    return template('message', message=message, main=result, url=url)
+    return template('message', message=message, main=result)
 
 @route('/text', method='POST')
 def text_db():

@@ -7,28 +7,23 @@ from setting import ENGINE
 from sqlalchemy import exc
 import sys
 
-class User(Base):
+
+class Img(Base):
     """
-    ユーザモデル
+    画像モデル
     """
-    __tablename__ = 'users'
+    __tablename__ = 'img'
     id = Column('id', Integer, primary_key = True)
-    name = Column('name', String(45))
-    passwd = Column('passwd', String(45))
-    email = Column('email', String(45))
+    image = Column('image', String(45))
+    date = Column('date', DateTime)
 
 def main(args):
     """
     メイン関数
     """
-    try:
-        Base.metadata.create_all(bind=ENGINE)
 
-    except exc.InvalidRequestError:
-         session.remove()
+    Base.metadata.create_all(bind=ENGINE)
 
-    except exc.IntegrityError:
-         session.remove()
 
 if __name__ == "__main__":
     main(sys.argv)

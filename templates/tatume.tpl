@@ -104,6 +104,7 @@
 
 <body>
   <div class='main'>
+   <p class='text'></p>
     <div class='header'>
       <div class='img'>
         <img src="static/img/tatume.png" alt="">
@@ -179,8 +180,9 @@
       </div>
 
         <div class='login_create'>
-          <form action="/" id='form_new' method="POST" onsubmit="doSomething();return false;">
-            <p id='error' class='error'></p>
+          <p id='error' class='error'></p>
+          <form action="/" id='form_new' method="POST"  onsubmit=“return validate();" ">
+
 
             <p class='user_name'><input type="text" name="user_name" id='user_name' maxlength="32" autocomplete="OFF" placeholder='ユーザー名' /></p>
             <p class='login_mail'><input type="text" name="log_id_new" id='text_new' maxlength="32" autocomplete="OFF" placeholder='メールアドレス' /></p>

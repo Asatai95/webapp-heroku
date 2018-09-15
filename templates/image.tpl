@@ -45,8 +45,8 @@
     </div>
 
     <ul id='img_main' class='img_main'>
-      %for image in images:
-      <li class='img_main_content'><a href="#"><img src="{{image['img']}}" alt=""></a></li>
+      %for img in imgs :
+      <li class='img_main_content'><a href="#"><img src="{{img[0]}}" alt=""></a></li>
       %end
     </ul>
 

@@ -5,20 +5,20 @@ $(function(){
 
     if(!$(e.target).closest('.main_text').length && !$(e.target).closest('.login_sub').length) {
 
-      $('.main_text').animate({'opacity': '0'}, 800);
+      $('.main_text').animate({'opacity': '0'}, 500);
       $('div.back').css('position', 'inherit');
-      $('.main_text').animate({'top': '0'}, 800);
+      $('.main_text').animate({'top': '0'}, 500);
 
 
     } else if($(e.target).closest('.login_sub').length){
 
         if($('.main_text').css('opacity') == 0){
-          $('.main_text').animate({'top': '100px'},800);
+          $('.main_text').animate({'top': '100px'},500);
           $('.main_text').css('opacity', '1.0');
           $('div.back').css('background-color', 'rgba(0,0,0,.5)');
           $('div.back').css('position', 'relative');
         }else{
-          $('.main_text').animate({'top': '0'},800);
+          $('.main_text').animate({'top': '0'},500);
           $('.main_text').animate({'opacity': '0'},500);
           $('div.back').css('position', 'inherit');
         }
@@ -71,7 +71,7 @@ $(function(){
 
       $('.main_create').fadeOut(500);
       $('div.back_create').css('position', 'inherit');
-      $('.main_create').animate({'top': '0'}, 800);
+      $('.main_create').animate({'top': '0'}, 500);
       $('div.back_create').css('width', '0');
       $('div.back_create').css('height', '0');
       $('div.back').css('width', '100%');
@@ -90,9 +90,9 @@ $(function(){
           $('div.back').css('height', '0');
           $('.main_text').animate({'opacity': '0'}, 500);
           $('div.back').css('position', 'inherit');
-          $('.main_text').animate({'top': '0'}, 800);
+          $('.main_text').animate({'top': '0'}, 500);
         }else{
-          $('.main_create').animate({'top': '0'},800);
+          $('.main_create').animate({'top': '0'},500);
           $('.main_create').fadeOut(500);
           $('div.back_create').css('position', 'inherit');
           $('div.back_create').css('width', '0');
@@ -162,14 +162,14 @@ $(function() {
 // });
 
 $(function(){
-    $('form').submit(function(){
 
-      var msg = $('#new_passwd').val();
+    $('form').submit(function(){
+      var url   = location.href;
+      $('.text').text(url);
       $.ajax({
-        type: 'POST',
-        url: '/new',
-        data: msg,
-        success: function(msg, msgType){
+        if ( url = 'http://localhost:8080/') {
+          $('.text').text(url);
+          
           return false;
         }
       });

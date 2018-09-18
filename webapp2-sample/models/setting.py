@@ -3,15 +3,12 @@ from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import declarative_base
 
 # mysqlのDBの設定
-# mysql://root@root:127.0.0.1:3306/webapp2test?charset=utf8mb4
-
 DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8mb4' % (
-    "root",
-    "root",
-    "127.0.0.1:3306",
-    "webapp2-sample",
+    "root", # user
+    "root", # password
+    "127.0.0.1:3306", # host+port
+    "webapp2_sample_development", # database name
 )
-
 ENGINE = create_engine(
     DATABASE,
     encoding = "utf8",

@@ -10,6 +10,8 @@
   <meta name='viewport' content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" media="screen" href="static/css/tatume.css">
 
+
+
   <script src="static/js/jquery-3.1.1.min.js"></script>
   <script type="text/javascript" src="static/js/tatume_top.js"></script>
   <link rel="stylesheet" type="text/css" href="static/js/slick-1.8.1/slick/slick.css" />
@@ -18,6 +20,8 @@
   <script type="text/javascript" src="static/js/slick-1.8.1/slick/slick.min.js"></script>
 
   <title>TATUME</title>
+
+
 
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
   <script src="https://apis.google.com/js/api:client.js"></script>
@@ -104,7 +108,10 @@
 
 <body>
   <div class='main'>
-   <p class='text'></p>
+
+    <p id='demo'> </p>
+    <p id='test' ></p>
+
     <div class='header'>
       <div class='img'>
         <img src="static/img/tatume.png" alt="">
@@ -174,21 +181,21 @@
   </div>
 
   <div class='back_create'>
+
     <div class='main_create'>
       <div class='title'>
         <p class='title_text'>アカウント登録</p>
       </div>
 
         <div class='login_create'>
-          <p id='error' class='error'></p>
-          <form action="/" id='form_new' method="POST"  onsubmit=“return validate();" ">
 
-
+          <form action="/" id='form_new' method="POST">
+            <p id='error' class='error'></p>
             <p class='user_name'><input type="text" name="user_name" id='user_name' maxlength="32" autocomplete="OFF" placeholder='ユーザー名' /></p>
             <p class='login_mail'><input type="text" name="log_id_new" id='text_new' maxlength="32" autocomplete="OFF" placeholder='メールアドレス' /></p>
 
             <p class='login_pass'><input type="password" name="passwd_new" id='passwd_new' maxlength="32" autocomplete="OFF" placeholder='パスワード' /></p>
-            <p class="submit"><input type="submit" id='submit_new' value="新規登録" /></p>
+            <p class="submit"><input type="submit" id='submit_new' value="新規登録"/></p>
 
           </form>
           <p class='ma'><span class='sen'><img src="static/img/sen.jpeg" alt=""></span> または

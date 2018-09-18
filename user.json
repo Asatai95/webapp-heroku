@@ -1,14 +1,1 @@
-[
-  {
-    "id": "1",
-    "name": "test",
-    "passwd": "testdes",
-    "email": "test@gmail.com"
-  },
-  {
-    "id": "2",
-    "name": "testdes",
-    "passwd": "testtt",
-    "email": "test@gmail.com"
-  }
-]
+{"password": {"text": "test\u3060\u3088", "test": "goodgood"}, "_default": {}}

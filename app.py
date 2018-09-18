@@ -1,5 +1,7 @@
 # -*- coding: utf_8 -*-
 # coding: UTF-8
+import json
+from collections import OrderedDict
 import sqlalchemy
 from sqlalchemy import exc
 from setting import session
@@ -68,8 +70,11 @@ def callback():
 @route("/")
 def top():
 
-    error = ""
-    return template("templates/tatume", error=error)
+    f = open('static/user.json', 'r')
+    test = json.load(f)
+    print(test)
+
+    return template("templates/tatume" )
 
 @route('/', method='POST')
 def create():
@@ -98,15 +103,19 @@ def create():
         session.commit()
         print(users)
 
+        return redirect('/info')
+
     else:
 
         print('test')
+        session.close()
+
         return template('templates/tatume')
-    return redirect('/info')
 
 
 @route("/info")
 def info():
+
 
     return template('templates/info')
 

@@ -187,3 +187,52 @@ SECRET_KEY=sk_test_jB0G4ZaY3Z7fa7P4jKiA0qEd PUBLISHABLE_KEY=pk_test_XUncGFOdNBiE
       });
     }
   </script>
+
+
+
+  ----------json python ----
+  name_list = ['password']
+    text = ['testだよ']
+    test = ['goodgood']
+
+    ys = OrderedDict()
+    for i in range(len(name_list)):
+        data = OrderedDict()
+        data["text"] = text[i]
+        data["test"] = test[i]
+
+        ys[name_list[i]] = data
+
+    fw = open('user.json', 'w')
+
+    json.dump(ys,fw, indent=1, ensure_ascii=False)
+
+
+
+
+    f = open('static/user.json', "w")
+
+      user["test"] =
+      json.dump(user, f, indent=2)
+
+
+      f = open('static/user.json', "a")
+      submit = json.dump(test, f,  indent=2)
+        print(submit)
+
+
+
+        <!-- <script>
+        $(function(){
+            $.getJSON("static/user.json",  function(data){
+              var test = $("#demo");
+              var len = data.length;
+
+              for(var i = 0; i < len; i++){
+                test.append($("<li>").attr({"id": data[i].id}).text(data[i].passwd));
+              }
+            });
+
+          // });
+        });
+        </script> -->

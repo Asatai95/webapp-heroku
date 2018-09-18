@@ -108,7 +108,6 @@ def create():
     else:
 
         print('test')
-        session.close()
 
         return template('templates/tatume')
 

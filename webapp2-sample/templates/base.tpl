@@ -15,12 +15,21 @@
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a href="#">Link1</a></li>
                 <li><a href="#">Link2</a></li>
-                <li><a href="/users/sign_up">登録</a></li>
+                %if current_user:
+                  <li><a href="/users/logout">ログインアウト</a></li>
+                %else:
+                  <li><a href="/users/sign_up">登録</a></li>
+                %end
+
             </ul>
             <ul id="slide-out" class="sidenav">
                 <li><a href="#">Link1</a></li>
                 <li><a href="#">Link2</a></li>
-                <li><a href="/users/sign_up">登録</a></li>
+                %if current_user:
+                  <li><a href="/users/logout">ログインアウト</a></li>
+                %else:
+                  <li><a href="/users/sign_up">登録</a></li>
+                %end
             </ul>
             <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         </div>

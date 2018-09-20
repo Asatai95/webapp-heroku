@@ -189,13 +189,13 @@
 
         <div class='login_create'>
 
-          <form action="/" id='form_new' method="POST">
+          <form action="/" id='form_new' method="POST" >
             <p id='error' class='error'></p>
             <p class='user_name'><input type="text" name="user_name" id='user_name' maxlength="32" autocomplete="OFF" placeholder='ユーザー名' /></p>
             <p class='login_mail'><input type="text" name="log_id_new" id='text_new' maxlength="32" autocomplete="OFF" placeholder='メールアドレス' /></p>
 
             <p class='login_pass'><input type="password" name="passwd_new" id='passwd_new' maxlength="32" autocomplete="OFF" placeholder='パスワード' /></p>
-            <p class="submit"><input type="submit" id='submit_new' value="新規登録"/></p>
+            <p class="submit"><input type="submit" id='submit_new' value="新規登録" /></p>
 
           </form>
           <p class='ma'><span class='sen'><img src="static/img/sen.jpeg" alt=""></span> または

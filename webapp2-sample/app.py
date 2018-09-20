@@ -13,7 +13,7 @@ def index():
 
     user_id = request.get_cookie(secret='test12345678')
     current_user = session.query(User).get(user_id)
-    return template('templates/index',url=url, current_user=current_user)
+    return template('templates/index',url=url, current_user=current_user, user_id=user_id)
 
 @route('/users/sign_up', method="GET")
 def users_new():

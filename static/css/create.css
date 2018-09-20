@@ -1,104 +1,114 @@
 @charset "UTF-8";
 
-.title {
-  font-size: 25px;
-  font-weight: 800;
-  border-bottom: 2px solid black;
-  height: 80px;
-  margin-bottom: 20px;
-  opacity: .6;
-  position: fixed;
-  width: 350px;
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 400;
+  font-family: "ヒラギノ明朝 ProN W6", "HiraMinProN-W6", "HG明朝E", "ＭＳ Ｐ明朝", "MS PMincho", "MS 明朝", serif;
 }
 
-p.title_text {
-  margin: 0;
-  padding: 20px;
+
+div.main {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(123, 128, 132, 0.3);
+  line-height: 1.4em;
+  position: absolute;
+  background-image: url('../img/enpitu.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.back_create {
+  width: 1064px;
+  height: 683px;
+  margin: 0 auto;
 }
 
 .main_create {
-  width: 350px;
-  height: 510px;
-  margin: 0 auto;
+  width: 1064px;
+  height: 660px;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  position: absolute;
+  margin: auto;
   text-align: center;
-  border: 2px solid black;
-  background-color: rgba(255, 255, 255);
-  box-shadow: 0 0 8px black;
-  margin-top: 100px;
-  overflow: scroll;
+  background-color: rgba(255, 255, 255, .6);
 }
 
-
-.ma {
-  font-size: 18px;
-  opacity: .5;
-  margin: 25px auto;
+.title {
+  text-align: center;
+  width: 1064px;
+  height: 80px;
+  margin-top: 50px;
+  font-size: 25px;
+  font-weight: 800;
 }
 
-.login {
-  width: 100%;
-  height: 200px;
-  margin-top: 110px;
+p.title_text {
+  font-size: 30px;
+  color: black;
+  padding: 20px;
 }
 
-p.login_mail {
+.create {
+  height: 490px;
+  width: 1064px;
+}
+
+.input--filled  {
+  -webkit-animation: anim-1 0.3s forwards;
+  animation: anim-1 0.3s forwards;
+}
+
+.input__field--hoshi {
+  font-size: 20px;
+  padding: 0.85em 0.6em !important;
+  color: black !important;
+}
+
+.input__label-content {
+  padding: 1.5em 0.5em !important;
+  font-size: 20px;
+  color: black !important;
+
+}
+
+.user_name {
   margin: 20px;
 }
 
-input[type=text] {
-  font-size: 15px;
-  padding: 0 10px 0 10px;
-  width: 200px;
-  height: 35px;
-  box-shadow: 0 0 1px grey;
-  -webkit-appearance: none;
-}
-
-input[type=password] {
-  font-size: 15px;
-  padding: 0 10px 0 10px;
-  width: 200px;
-  height: 35px;
-  box-shadow: 0 0 1px grey;
-}
-
-#form p.login_mail {
-  margin: 0 0 18px 0;
-	overflow: hidden;
-}
-
-#form p.login_pass {
-  margin: 0;
-	overflow: hidden;
-}
-
-#form p.error {
-  margin: 5px auto;
-}
-
-input[type=submit] {
-  width: 230px;
-  height: 50px;
-  border-style: none;
-  background-color: rgba(0, 163, 219, .8);
-  color: white;
-  font-size: 20px;
-
-  cursor: pointer;
-}
-
-input[type="submit"]:hover {
-  background-color: rgba(0, 163, 219, .6);
-}
-
-input[type="submit"][disabled]:hover {
-  background-color: rgba(123, 128, 132, .3);
-
+.submit {
+  margin-top: 30px;
+  margin-bottom: 0;
 }
 
 input[type="submit"][disabled] {
-		background-color: rgba(123, 128, 132, .3);
-		cursor: default;
+  background-color: rgba(0, 0, 0, .2);
+  cursor: default;
+}
+
+input[type=submit] {
+  width: 250px;
+  height: 50px;
+  border-style: none;
+  background-color: rgba(123,128, 132);
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.img_sen {
+  font-size: 20px;
+  opacity: .5;
+  margin: 20px auto;
 }
 
 span.sen img {
@@ -107,50 +117,34 @@ span.sen img {
   margin: 5px 10px 0 10px;
 }
 
-.submit {
-  margin: 30px 0 0 0;
-}
-
-.fb-login-button {
-  margin: 0 0 20px 0;
-}
-
-.fb-login-button:hover {
-  box-shadow: 0 0 5px blue;
-  border-radius: 5px;
-  opacity: .9;
-}
-
-#my-signin2 {
-  margin: 10px auto;
-  width: 240px;
-}
-
-p.forgot {
-  margin: 35px 0 0 0 ;
+p.sns {
+  margin: 28px 0 0 0;
   text-align: center;
-  font-size: 15px;
-  color: rgba(0,0,0,.4);
+  font-size: 18px;
+  color: rgba(0, 0, 0, .4);
 }
 
-p.forgot a {
-  opacity: 1.0;
+p.sen a {
   text-decoration: none;
+  opacity: 1.0;
 }
 
-p.new {
-  font-size: 13px;
-  margin: 20px 0 0 0 ;
-  color: rgba(0,0,0,.4);
+.login {
+  font-size: 18px;
+  margin: 20px 0 0 0;
+  color: rgba(0,0,0, .4);
 }
 
-p.new a {
+.login a {
   opacity: 1.0;
   text-decoration: none;
   margin-left: 5px;
+
 }
 
 .error {
-  font-size: 15px;
+  height: 25px;
+  font-size: 18px;
   color: rgba(240, 96, 96);
+  margin-top:0;
 }

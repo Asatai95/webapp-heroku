@@ -53,6 +53,10 @@ def test():
 def test(path):
     return static_file(path, root='static')
 
+@route("/TextInputEffects/:path#.+#", name='static')
+def test(path):
+    return static_file(path, root='TextInputEffects')
+
 @get("/static/img/<filepath:re:.*\.(jpg|png|gif|ico|svg)>")
 def img(filepath):
     return static_file(filepath, root="static/img")
@@ -70,36 +74,35 @@ def callback():
 @route("/")
 def top():
 
-    f = open('static/user.json', 'r')
-    test = json.load(f)
-    print(test)
+    # f = open('static/user.json', 'r')
+    # test = json.load(f)
+    # print(test)
 
     return template("templates/tatume" )
 
 @route('/', method='POST')
 def create():
 
-    log_id_new = request.forms.log_id_new
-    passwd_new = request.forms.passwd_new
-    user_name = request.forms.user_name
-    print(log_id_new)
-    print(passwd_new)
-    print(user_name)
+    email = request.forms.log_id_new
+    passwd = request.forms.passwd_new
+    name = request.forms.user_name
+    print(email)
+    print(passwd)
+    print(name)
 
 
-    user = User()
-    user.name = str(user_name)
-    user.passwd = str(passwd_new)
-    user.email = str(log_id_new)
+    user_main = User()
+    user_main.name = str(name)
+    user_main.passwd = str(passwd)
+    user_main.email = str(email)
     print('test')
 
-
     user = User()
-    users_sub = session.query(User.passwd).filter(User.passwd==passwd_new).all()
-    print(users_sub)
+    users_passwd = session.query(User.passwd).filter(User.passwd==passwd).all()
+    print(users_passwd)
 
-    if users_sub == [ ]:
-        users = session.add(user)
+    if users_passwd == []:
+        users = session.add(user_main)
         session.commit()
         print(users)
 
@@ -109,7 +112,7 @@ def create():
 
         print('test')
 
-        return template('templates/tatume')
+        return redirect('/')
 
 
 @route("/info")
@@ -141,6 +144,11 @@ def new_test():
 
     error= ''
     return template('templates/create', error=error)
+
+@route('/create')
+def create():
+
+    return template('templates/create')
 
 # @route("/new", method='POST')
 # def new():

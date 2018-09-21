@@ -39,7 +39,7 @@
 
         <div class='create'>
 
-          <form action="/" id='form_new' method="POST">
+          <form action="/create" id='form_new' method="POST">
             <p id='error' class='error'></p>
 
             <span class="input input--hoshi">

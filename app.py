@@ -1,12 +1,5 @@
 # -*- coding: utf_8 -*-
 # coding: UTF-8
-import json
-from collections import OrderedDict
-import sqlalchemy
-from sqlalchemy import exc
-from setting import session
-from user import *
-from img import *
 from bottle import get, route, run, template, static_file, request, redirect, response, view, url
 from email.header import Header
 from email.mime.text import MIMEText
@@ -19,7 +12,13 @@ import smtplib
 import os
 import stripe
 import sys
-import requests
+
+from models.setting import *
+from models.user import *
+
+from library import *
+
+import setting
 
 UPLOAD_FOLDER = './static/img/'
 ALLOWED_EXTENSIONS = set(['png', 'jpeg', 'gif'])
@@ -65,59 +64,33 @@ def img(filepath):
 def js(filepath):
     return static_file(filepath, root="static/js")
 
-
-@route('/oauth2callback')
-def callback():
-
-    return template('templates/google')
-
 @route("/")
 def top():
 
-    # f = open('static/user.json', 'r')
-    # test = json.load(f)
-    # print(test)
+    current_user = get_current_user()
 
-    return template("templates/tatume" )
+    return template("templates/tatume" , current_user=current_user)
 
-@route('/', method='POST')
+@route("create", method='GET')
+def create_get():
+
+    current_user = get_current_user()
+    is_logged_in_redirect(current_user)
+    duplicate_error = None
+
+    return template('templates/create', duplicate_error=duplicate_error, user=User(), current_user=current_user)
+
+@route('/create', method='POST')
 def create():
 
-    email = request.forms.log_id_new
-    passwd = request.forms.passwd_new
-    name = request.forms.user_name
-    print(email)
-    print(passwd)
-    print(name)
+    current_user = get_current_user()
+    is_logged_in_redirect(current_user)
+    user = create_user(request.POST)
 
-
-    user_main = User()
-    user_main.name = str(name)
-    user_main.passwd = str(passwd)
-    user_main.email = str(email)
-    print('test')
-
-    user = User()
-    users_passwd = session.query(User.passwd).filter(User.passwd==passwd).all()
-    print(users_passwd)
-
-    if users_passwd == []:
-        users = session.add(user_main)
-        session.commit()
-        print(users)
-
-        return redirect('/info')
-
-    else:
-
-        print('test')
-
-        return redirect('/')
-
+    return template('templates/tatume', user=user, current_user=current_user)
 
 @route("/info")
 def info():
-
 
     return template('templates/info')
 

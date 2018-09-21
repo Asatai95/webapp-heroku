@@ -173,35 +173,35 @@ $(function() {
 
 });
 
-$(function() {
-  var jqxhr;
-
-  $('form').submit(function(e) {
-      // if (!flag) {
-        // e.preventDefault();
-        var user = $('#user_name').val();
-        jqxhr = $.ajax({
-          type: "GET",
-          url: "static/user.json",
-          dataType: 'json',
-          success: function(json) {
-            var len = json.length;
-            $('#test').text(user);
-            var user = $('#user_name').val();
-            for (var i = 0; i < len; i++) {
-              if (json[i].user_name === user) {
-
-                $('.error').text('すでに登録されているユーザー名です。');
-                return false;
-
-              } else if (json[i].user_name != user) {
-                jqxhr.abort();
-
-                return true;
-              }
-            }
-          }
-        });
-       }
-      });
-});
+// $(function() {
+//   var jqxhr;
+//
+//   $('form').submit(function(e) {
+//       // if (!flag) {
+//         // e.preventDefault();
+//         var user = $('#user_name').val();
+//         jqxhr = $.ajax({
+//           type: "GET",
+//           url: "static/user.json",
+//           dataType: 'json',
+//           success: function(json) {
+//             var len = json.length;
+//             $('#test').text(user);
+//             var user = $('#user_name').val();
+//             for (var i = 0; i < len; i++) {
+//               if (json[i].user_name === user) {
+//
+//                 $('.error').text('すでに登録されているユーザー名です。');
+//                 return false;
+//
+//               } else if (json[i].user_name != user) {
+//                 jqxhr.abort();
+//
+//                 return true;
+//               }
+//             }
+//           }
+//         });
+//        }
+//       });
+// });

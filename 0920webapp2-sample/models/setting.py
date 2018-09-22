@@ -25,6 +25,8 @@ except:
         "127.0.0.1:3306", # host+port
         "webapp2_sample_development", # database name
     )
+#
+# DATABASE = os.environ['mysql://b292b90b1818e0:4346c8fc@us-cdbr-iron-east-01.cleardb.net/heroku_ae66112c0cf1b10']
 
 ENGINE = create_engine(
     DATABASE,

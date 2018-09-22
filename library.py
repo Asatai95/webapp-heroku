@@ -107,3 +107,11 @@ def authenticate(form):
 """
 def logout_user():
     response.delete_cookie('user_id', secret=setting.SECRET_KEY, path='/')
+
+
+def session_clear(exception):
+    if exception and Session.is_active:
+        session.rollback()
+    else:    
+        pass
+    session.close()

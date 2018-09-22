@@ -55,6 +55,8 @@ def is_duplicate_email(email):
         return False
     else:
         return True
+    session.close()
+
 
 """
 ログインしているユーザーを取得する
@@ -63,11 +65,14 @@ def is_duplicate_email(email):
 ログインしていない：None
 """
 def get_current_user():
+
     user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
     if user_id:
         return session.query(User).get(user_id)
     else:
         return None
+
+
 
 """
 ログインしていればルートパスにリダイレクトさせる
@@ -112,6 +117,6 @@ def logout_user():
 def session_clear(exception):
     if exception and Session.is_active:
         session.rollback()
-    else:    
+    else:
         pass
     session.close()

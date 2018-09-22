@@ -1,6 +1,7 @@
 from sqlalchemy import *
 from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.pool import Pool
 import os
 
 # mysqlのDBの設定
@@ -25,7 +26,7 @@ except:
         "127.0.0.1:3306", # host+port
         "webapp2_sample_development", # database name
     )
-    
+
 ENGINE = create_engine(
     DATABASE,
     encoding = "utf8",
@@ -40,6 +41,15 @@ session = scoped_session(
             bind = ENGINE
             )
         )
+
+def ping_connection(dbapi_connection, connection_record, connection_proxy):
+    cursor = dbapi_connection.cursor()
+    try:
+        cursor.execute("SELECT 1")
+    except:
+        
+        raise exc.DisconnectionError()
+    cursor.close()
 
 # modelで使用する
 Base = declarative_base()

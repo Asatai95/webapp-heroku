@@ -1,12 +1,23 @@
 from sqlalchemy import *
 from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import declarative_base
+import os
 
 # mysqlのDBの設定
-# mysql://root@root:127.0.0.1:3306/webapp2test?charset=utf8mb4
+"""
+LOCALとHEROKUで、データベースを切り替える
+HEROKUで clearDB をつくると CLEARDB_DATABASE_URL という環境変数がセットされる
+これはデータベースにアクセスするための情報になっている。
+Pythonのアプリケーションが動作する環境(LOCALlかHEROKU)によってデータベースの
+アクセス先を切り替える処理をしないといけない。今回は CLEARDB_DATABASE_URL という
+環境編素があるかないかで判定します。
+ただ、LOCALでは そのような環境変数が設定されていないのでエラーがでてしまいます。
+なので例外処理を用いて エラーが出たときは LOCAL にするという処理をしておきます。
+キーワード：例外処理
+"""
 try:
-    if os.environ['mysql://b292b90b1818e0:4346c8fc@us-cdbr-iron-east-01.cleardb.net/heroku_ae66112c0cf1b10']:
-        DATABASE = os.environ['mysql://b292b90b1818e0:4346c8fc@us-cdbr-iron-east-01.cleardb.net/heroku_ae66112c0cf1b10']
+    if os.environ['DATABASE_URL']:
+        DATABASE = os.environ['DATABASE_URL']
 except:
     DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8mb4' % (
         "root", # user

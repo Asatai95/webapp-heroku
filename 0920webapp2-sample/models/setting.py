@@ -16,8 +16,8 @@ Pythonのアプリケーションが動作する環境(LOCALlかHEROKU)によっ
 キーワード：例外処理
 """
 try:
-    if os.environ['CLEARDB_DATABASE_URL']:
-        DATABASE = os.environ['CLEARDB_DATABASE_URL']
+    if os.environ['DATABASE_URL']:
+        DATABASE = os.environ['DATABASE_URL']
 except:
     DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8mb4' % (
         "root", # user

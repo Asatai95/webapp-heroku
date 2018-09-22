@@ -26,11 +26,17 @@ SECRET_KEY
 ユーザーを作成する
 """
 def create_user(form):
+
+    try:
+        age = int(form.getunicode('age')) if form.getunicode('age') else None
+    except:
+        age  = None
+
     user = User(
         email= form.getunicode('email'),
         password= _encrypt_password(form.getunicode('password1')),
         name= form.getunicode('name'),
-        age= int(form.getunicode('age')) if form.getunicode('age') else None
+        age= age
     )
     session.add(user)
     session.commit()

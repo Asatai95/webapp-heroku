@@ -21,13 +21,6 @@ def create_user(form):
     session.commit()
     return user
 
-def check(form):
-    user_check = session.query(User).filter(
-                User.email == form.getunicode('email')
-    ).first()
-
-    return user_check
-
 def _encrypt_password(password):
     return hmac.new(
                 password.encode('UTF-8'),

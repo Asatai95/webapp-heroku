@@ -87,12 +87,11 @@ def login():
 @route("/create", method='GET')
 def create_get():
 
-    error=''
     current_user = get_current_user()
     is_logged_in_redirect(current_user)
     duplicate_error = ''
 
-    return template('templates/create', duplicate_error=duplicate_error, user=User(), current_user=current_user, error=error)
+    return template('templates/create', duplicate_error=duplicate_error, user=User(), current_user=current_user)
 
 @route('/check', method='POST')
 def users_new_confirm():
@@ -107,24 +106,18 @@ def users_new_confirm():
 
     if is_duplicate_email(user.email):
         duplicate_error = '既に登録されているメールアドレスです。'
-        return template('templates/users/new', url=url, user=user, current_user=current_user, duplicate_error=duplicate_error)
-
+        return template('templates/create', url=url, user=user, current_user=current_user, duplicate_error=duplicate_error)
 
     return template('templates/check', current_user=current_user, user=user)
 
 @route('/create', method='POST')
 def create():
-    error = ''
     current_user = get_current_user()
     is_logged_in_redirect(current_user)
     user = create_user(request.POST)
-    user_check = check(request.POST)
+    duplicate_error = '登録完了しました。'
 
-    if check is True:
-        error='すでに使用されているメールアドレスです。'
-        return redirect('/create')
-    else:
-        return template('templates/create', user=user, current_user=current_user, error=error)
+    return template('templates/create', user=user, current_user=current_user , duplicate_error=duplicate_error)
 
 @route("/info")
 def info():

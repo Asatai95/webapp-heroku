@@ -39,25 +39,24 @@
         <p class='content_text'>TATUME</p>
       </div>
       <div class='content_tatume'>
-        <p class='content_tatume_title'>TATUMEとは</p>
+        <p class='content_tatume_title'>つぶやきとは</p>
         <p class='content_tatume_img'><img src="static/img/text.png" alt=""></p>
         <p class='content_tatume_text'>
-          大切な人に伝えられない思いを手紙に書き記します。<br>
-          携帯電話が普及している世の中、大切な人のために手紙を残しませんか？<br>
-          照れ臭い気持ちを私たちが代筆致します。<br>
-          達筆な字であなたの思い(メッセージ)を書かせていただきます。
+          つぶやきは、日本語の文字数制限を200文字に設定しており、</br>
+          Twitterの140文字では自分の思いを表現できない方々のためのツールです。</br>
+          早速、つぶやいてみよう！！</br>
         </p>
       </div>
       <div class='content_tatume_last'>
         <div class='content_last_text'>
           <p class='content_tatume_text'>経歴</p>
-          <p class='content_tatume_text'>2018/09/10 沖縄県に創業</p>
+          <p class='content_tatume_text'>20XX/XX/XX サービス開始</p>
         </div>
       </div>
     </div>
     <div class='content_left'>
       <div class='content_title'>
-        <p class='text_right'>TATUME</p>
+        <p class='text_right'>つぶやき</p>
       </div>
       <div class='content_title_last'>
         <p class='text_right'>経歴</p>

@@ -19,7 +19,7 @@ class User(Base):
     __tablename__ = 'users'
     id = Column('id', Integer, primary_key = True)
     name = Column('name', String(10))
-    passwd = Column('passwd', String(8))
+    password = Column('password', String(45))
     email = Column('email', String(20))
     created_at = Column('created_at', DateTime, default=datetime.now())
 

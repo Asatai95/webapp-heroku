@@ -42,6 +42,14 @@ def _encrypt_password(password):
                 setting.SECRET_KEY.encode('UTF-8'),
                 hashlib.sha256
            ).hexdigest()
+
+def is_duplicate_email(email):
+    user = session.query(User).filter(User.email==email).first()
+    if user is None:
+        return False
+    else:
+        return True
+
 """
 ログインしているユーザーを取得する
 返り値

@@ -1,4 +1,4 @@
-from bottle import  request, redirect, response
+from bottle import  request, redirect, response, template
 
 from models.setting import *
 from models.user import *
@@ -12,15 +12,21 @@ import setting
 def create_user(form):
 
     user = User(
-           email = form.POST.getunicode('email'),
-           password = form.POST.getunicode('password'),
-           name = form.POST.getunicode('name')
+           email = form.getunicode('email'),
+           password=_encrypt_password(form.getunicode('password')),
+           name = form.getunicode('name')
     )
 
     session.add(user)
     session.commit()
-
     return user
+
+def check(form):
+    user_check = session.query(User).filter(
+                User.email == form.getunicode('email')
+    ).first()
+
+    return user_check
 
 def _encrypt_password(password):
     return hmac.new(
@@ -29,11 +35,18 @@ def _encrypt_password(password):
                 hashlib.sha256
            ).hexdigest()
 
+def is_duplicate_email(email):
+    user = session.query(User).filter(User.email==email).first()
+    if user is None:
+        return False
+    else:
+        return True
+
 def get_current_user():
 
     user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
     if user_id:
-        return session.query(User).get(user__id)
+        return session.query(User).get(user_id)
     else:
         return None
 

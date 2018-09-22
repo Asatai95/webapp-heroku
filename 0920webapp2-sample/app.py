@@ -24,7 +24,7 @@ def index():
 def users_new():
         current_user = get_current_user()
         is_logged_in_redirect(current_user)
-        duplicate_error = None
+        duplicate_error = ''
         return template('templates/users/new', url=url, current_user=current_user, duplicate_error=duplicate_error, user=User())
 
 @route('/users/sign_up_confirm', method='POST')
@@ -37,6 +37,10 @@ def users_new_confirm():
             name = request.POST.getunicode('name'),
             age = request.POST.getunicode('age')
     )
+
+    if is_duplicate_email(user.email):
+        duplicate_error = '既に登録されているメールアドレスです。'
+        return template('templates/users/new', url=url, user=user, current_user=current_user, duplicate_error=duplicate_error)
 
     return template('templates/users/new_confirm', url=url, current_user=current_user, user=user)
 

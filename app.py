@@ -64,35 +64,72 @@ def img(filepath):
 def js(filepath):
     return static_file(filepath, root="static/js")
 
-@route("/")
+@route("/", method='GET')
 def top():
 
     current_user = get_current_user()
+    is_logged_in_redirect(current_user)
 
-    return template("templates/tatume" , current_user=current_user)
+    return template("templates/tatume" , current_user=current_user, url=url)
 
-@route("create", method='GET')
+@route("/", method='POST')
+def login():
+    current_user = get_current_user()
+    is_logged_in_redirect(current_user)
+
+    if authenticate(request.POST):
+        print('test')
+        redirect('/info')
+    else:
+        print('test_text')
+        return template('templates/tatume', current_user=current_user)
+
+@route("/create", method='GET')
 def create_get():
+
+    error=''
+    current_user = get_current_user()
+    is_logged_in_redirect(current_user)
+    duplicate_error = ''
+
+    return template('templates/create', duplicate_error=duplicate_error, user=User(), current_user=current_user, error=error)
+
+@route('/check', method='POST')
+def users_new_confirm():
 
     current_user = get_current_user()
     is_logged_in_redirect(current_user)
-    duplicate_error = None
+    user = User(
+            email = request.POST.getunicode('email'),
+            password = request.POST.getunicode('password'),
+            name = request.POST.getunicode('name')
+    )
 
-    return template('templates/create', duplicate_error=duplicate_error, user=User(), current_user=current_user)
+    if is_duplicate_email(user.email):
+        duplicate_error = '既に登録されているメールアドレスです。'
+        return template('templates/users/new', url=url, user=user, current_user=current_user, duplicate_error=duplicate_error)
+
+
+    return template('templates/check', current_user=current_user, user=user)
 
 @route('/create', method='POST')
 def create():
-
+    error = ''
     current_user = get_current_user()
     is_logged_in_redirect(current_user)
     user = create_user(request.POST)
+    user_check = check(request.POST)
 
-    return template('templates/tatume', user=user, current_user=current_user)
+    if check is True:
+        error='すでに使用されているメールアドレスです。'
+        return redirect('/create')
+    else:
+        return template('templates/create', user=user, current_user=current_user, error=error)
 
 @route("/info")
 def info():
 
-    return template('templates/info')
+    return template('templates/info', url=url)
 
 
 @route("/img")
@@ -110,18 +147,10 @@ def img():
 
     return template('templates/image', imgs=imgs)
 
+@route('/tweet')
+def tweet():
 
-
-@route('/new')
-def new_test():
-
-    error= ''
-    return template('templates/create', error=error)
-
-@route('/create')
-def create():
-
-    return template('templates/create')
+    return template('templates/tweet')
 
 # @route("/new", method='POST')
 # def new():
@@ -333,4 +362,4 @@ def test_main():
     return template('templates/index', hello=hello_str)
 
 
-run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)), debug=True)

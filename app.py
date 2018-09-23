@@ -1,7 +1,7 @@
 import os
 from bottle import  (
     route, run, template, static_file, url, get, post,
-    request, response, redirect
+    request, response, redirect, hook,
 )
 
 # database

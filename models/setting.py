@@ -27,10 +27,19 @@ except:
         "webapp2_sample_development", # database name
     )
 
+# DATABASE = 'mysql://b292b90b1818e0:4346c8fc@us-cdbr-iron-east-01.cleardb.net/heroku_ae66112c0cf1b10?charset=utf8mb4'
+
 ENGINE = create_engine(
     DATABASE,
     encoding = "utf8",
     echo=True # Trueだと実行のたびにSQLが出力される
+)
+
+ENGINE = create_engine(
+    DATABASE,
+    encoding = "utf8",
+    echo=True, # Trueだと実行のたびにSQLが出力される
+    pool_pre_ping=True
 )
 
 # Sessionの作成
@@ -47,7 +56,7 @@ def ping_connection(dbapi_connection, connection_record, connection_proxy):
     try:
         cursor.execute("SELECT 1")
     except:
-        
+
         raise exc.DisconnectionError()
     cursor.close()
 

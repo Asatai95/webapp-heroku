@@ -11,8 +11,16 @@ from models.user import *
 # library
 from library import *
 
+import app_setting
+
 # setting
 import setting
+
+current_user = get_current_user()
+
+@hook('after_request')
+def close_db_session():
+        session.close()
 
 
 @route('/')

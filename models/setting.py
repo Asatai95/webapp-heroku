@@ -32,12 +32,6 @@ except:
 ENGINE = create_engine(
     DATABASE,
     encoding = "utf8",
-    echo=True # Trueだと実行のたびにSQLが出力される
-)
-
-ENGINE = create_engine(
-    DATABASE,
-    encoding = "utf8",
     echo=True, # Trueだと実行のたびにSQLが出力される
     pool_pre_ping=True
 )

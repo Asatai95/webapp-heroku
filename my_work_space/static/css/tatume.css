@@ -1,0 +1,370 @@
+@charset "UTF-8";
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 400;
+  font-family: "ヒラギノ明朝 ProN W6", "HiraMinProN-W6", "HG明朝E", "ＭＳ Ｐ明朝", "MS PMincho", "MS 明朝", serif;
+}
+
+
+div.main {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(123, 128, 132, 0.3);
+  line-height: 1.4em;
+  position: absolute;
+  background-image: url('../img/enpitu.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+div.header {
+  width: 100%;
+  height: 120px;
+}
+
+div.img img {
+  width: 150px;
+  height: 100px;
+  float: left;
+  margin: 30px;
+  margin-left: 50px;
+  margin-top: 50px;
+}
+
+ul.header_main {
+  float: right;
+  padding: 10px;
+  font-size: 25px;
+  font-weight: 800;
+  margin-top: 80px;
+}
+
+li.text {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
+}
+
+li.login_sub {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
+}
+
+li.text:hover {
+  border-radius: 50px;
+  border: 1px solid black;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px white;
+}
+
+li.login_sub:hover {
+  border-radius: 50px;
+  border: 1px solid black;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px white;
+}
+
+.content {
+  width: 100%;
+  height: 580px;
+
+}
+
+.content_sub {
+  width: 100%;
+  height: 200px;
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.7);
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
+  margin-top: 250px;
+}
+
+.name {
+  font-size: 30px;
+  font-weight: 800;
+  margin: 40px;
+}
+
+.main_text_sub {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 50px auto;
+}
+
+p.login_sub {
+  margin-bottom: 0;
+  margin-top: 45px;
+}
+
+p.button {
+  margin: 0 auto;
+  width: 100px;
+  height: 100px;
+  background-image: url('../img/tegami.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  cursor: pointer;
+}
+
+p.button:hover {
+  cursor: pointer;
+  margin: 0 auto;
+  width: 100px;
+  height: 100px;
+  background-image: url('../img/tori.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  transform: scale(1.3);
+
+}
+
+.title {
+  font-size: 25px;
+  font-weight: 800;
+  border-bottom: 2px solid black;
+  height: 80px;
+  margin-bottom: 20px;
+  color: rgba(0,0,0,.6);
+  position: fixed;
+  width: 350px;
+  background-color: white;
+  z-index: 3;
+}
+
+p.title_text {
+  margin: 0;
+  padding: 20px;
+  background-color: white;
+  z-index: 3;
+}
+
+.back {
+  width: 100%;
+  height: 735px;
+}
+
+.back_create {
+  width: 100%;
+  height: 735px;
+}
+
+.main_text {
+  width: 350px;
+  height: 550px;
+  margin: 0 auto;
+  text-align: center;
+  border: 2px solid black;
+  background-color: rgba(255, 255, 255);
+  box-shadow: 0 0 8px black;
+  opacity: 0;
+  overflow: scroll;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+.main_create {
+  width: 350px;
+  height: 510px;
+  margin: 0 auto;
+  text-align: center;
+  border: 2px solid black;
+  background-color: rgba(255, 255, 255);
+  box-shadow: 0 0 8px black;
+  overflow: scroll;
+  display: none;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+}
+
+.main_content {
+  width: 100%;
+  height: 450px;
+  margin-top: 110px;
+  z-index: 1;
+}
+
+.ma {
+  font-size: 18px;
+  opacity: .5;
+  margin: 25px auto;
+  margin-bottom: 15px;
+  
+}
+
+.login {
+  width: 100%;
+  height: 200px;
+}
+
+.login_create {
+  width: 100%;
+  height: 200px;
+  margin-top: 90px;
+}
+
+p.login_mail {
+  margin: 20px;
+}
+
+input[type=text] {
+  font-size: 15px;
+  padding: 0 10px 0 10px;
+  width: 200px;
+  height: 35px;
+  box-shadow: 0 0 1px grey;
+  -webkit-appearance: none;
+}
+
+input[type=password] {
+  font-size: 15px;
+  padding: 0 10px 0 10px;
+  width: 200px;
+  height: 35px;
+  box-shadow: 0 0 1px grey;
+}
+
+#form_new {
+  padding: 1px;
+}
+
+#form p.login_mail {
+  margin: 0 0 18px 0;
+	overflow: hidden;
+}
+
+#form p.login_pass {
+  margin: 0;
+	overflow: hidden;
+}
+
+#form p.error {
+  margin: 15px auto;
+}
+
+input[type=submit] {
+  width: 230px;
+  height: 50px;
+  border-style: none;
+  background-color: rgba(0, 163, 219, .8);
+  color: white;
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: rgba(0, 163, 219, .6);
+}
+
+input[type="submit"][disabled]:hover {
+  background-color: rgba(123, 128, 132, .3);
+
+}
+
+input[type="submit"][disabled] {
+		background-color: rgba(123, 128, 132, .3);
+		cursor: default;
+}
+
+span.sen img {
+  width: 100px;
+  height: 20px;
+  margin: 5px 10px 0 10px;
+}
+
+.submit {
+  margin-bottom: 0;
+}
+
+.fb-login-button {
+  margin: 0 0 20px 0;
+}
+
+.fb-login-button:hover {
+  box-shadow: 0 0 5px blue;
+  border-radius: 5px;
+  opacity: .9;
+}
+
+#my-signin2 {
+  margin: 10px auto;
+  width: 240px;
+}
+
+p.forgot {
+  margin: 2px auto;
+  width: 230px;
+  text-align: left;
+  font-size: 13px;
+  color: rgba(0,0,0,.4);
+}
+
+p.forgot a {
+  opacity: 1.0;
+  text-decoration: none;
+}
+
+p.new {
+  font-size: 13px;
+  margin: 30px auto;
+  color: rgba(0,0,0,.4);
+}
+
+p.new a {
+  opacity: 1.0;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+p.forgot_create {
+  margin: 35px 0 0 0 ;
+  text-align: center;
+  font-size: 15px;
+  color: rgba(0,0,0,.4);
+}
+
+p.forgot_create a {
+  opacity: 1.0;
+  text-decoration: none;
+}
+
+p.new_create {
+  font-size: 13px;
+  margin: 20px 0 0 0 ;
+  color: rgba(0,0,0,.4);
+}
+
+p.new_create a {
+  opacity: 1.0;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+.error {
+  font-size: 15px;
+  height: 20px;
+  color: rgba(240, 96, 96);
+}

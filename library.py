@@ -5,12 +5,15 @@ from bottle import (
 import hmac
 import hashlib
 
-
 from models.setting import *
 from models.user import *
 
+import app_setting
+
 import setting
 
+from email.mime.text import MIMEText
+import smtplib
 
 """
 import setting
@@ -113,6 +116,27 @@ def authenticate(form):
 def logout_user():
     response.delete_cookie('user_id', secret=setting.SECRET_KEY, path='/')
 
+
+def send_mail(to_email, send_type):
+
+    body = ''
+    subject = ''
+    if send_type == 'create':
+        body = '〇〇です。\n\n新規登録ありがとうございます。'
+        subject = '[新規登録完了] 〇〇〇〇〇〇'
+    # elif 'delete':
+    #     body = ''
+    #     subject =''
+
+    message = MIMEText(body)  # 本文
+    message['Subject'] = subject         # 件名
+    message['From'] = app_setting.HOST_EMAIL  # 送信元
+    message['To'] = to_email     # 送信先
+
+    sender = smtplib.SMTP_SSL(app_setting.HOST_SMTP)
+    sender.login(app_setting.HOST_EMAIL, app_setting.HOST_PASSWORD)
+    sender.sendmail(app_setting.HOST_EMAIL, to_email, message.as_string())
+    sender.quit()
 
 def session_clear(exception):
     if exception and Session.is_active:

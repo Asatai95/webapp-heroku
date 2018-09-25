@@ -13,10 +13,18 @@ from library import *
 
 import app_setting
 
-# setting
-import setting
 
 current_user = get_current_user()
+
+"""
+
+同調している要素が多い場合、まとめる手段が存在する可能性は高い
+フレームワークごとに調整する
+フレームワーク自体が持っているファイルに内容が記載されていることもある
+定数は大文字 変更しない どこかで定義されている要素
+変数は小文字 変更可能
+
+"""
 
 @hook('after_request')
 def close_db_session():
@@ -56,8 +64,9 @@ def users_new_confirm():
 def users_create():
         current_user = get_current_user()
         is_logged_in_redirect(current_user)
-
         user = create_user(request.POST)
+        send_mail(user.email, 'create')
+        
         return template('templates/users/create', url=url, user=user, current_user=current_user)
 
 @route('/users/login', method='GET')

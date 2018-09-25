@@ -1,0 +1,423 @@
+@charset "UTF-8";
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 400;
+  font-family: "ヒラギノ明朝 ProN W6", "HiraMinProN-W6", "HG明朝E", "ＭＳ Ｐ明朝", "MS PMincho", "MS 明朝", serif;
+}
+
+button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  transition: box-shadow .15s ease-in-out;
+  -webkit-appearance: button;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  margin: 0;
+  text-transform: none;
+  overflow: visible;
+}
+
+input {
+  transition: background .2s linear;
+  display: inline-block;
+  width: 210px;
+  padding: 4px;
+  margin: 0;
+  outline: 0;
+  background-color: #fff;
+  border: 1px solid #e6ecf0;
+  border-radius: 3px;
+  font-size: 14px;
+  line-height: 20px;
+  color: inherit;
+  font: inherit;
+}
+
+input[type='hidden'] {
+  -webkit-appearance: initial;
+  background-color: initial;
+  cursor: default;
+  padding: initial;
+  border: initial;
+}
+
+input[typr='file'] {
+  height: 30px;
+  line-height: 30px;
+  background-color: white;
+  padding: initial;
+  border: initial;
+  line-height: initial;
+  box-shadow: none;
+}
+
+.icon-btn {
+  color: #1DA1F2;
+}
+
+.btn {
+  background-color: #f5f8fa;
+  background-image: linear-gradient(#fff, #f5f8fa);
+}
+
+div.main_content {
+  background-color: rgba(123, 128, 132, .3);
+}
+
+div.main {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .2);
+  line-height: 1.4em;
+  position: absolute;
+  background-image: url('../img/enpitu.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  overflow: auto;
+  padding-bottom: 150px;
+
+}
+
+div.header {
+  width: 100%;
+  height: 200px;
+}
+
+div.img img {
+  width: 150px;
+  height: 100px;
+  float: left;
+  margin: 30px;
+  margin-left: 50px;
+  margin-top: 50px;
+}
+
+ul.header_main {
+  float: right;
+  padding: 10px;
+  font-size: 25px;
+  font-weight: 800;
+  margin-top: 80px;
+}
+
+li.text {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
+}
+
+li.login_sub {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
+}
+
+li.text:hover {
+  border-radius: 50px;
+  border: 1px solid black;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px white;
+}
+
+li.login_sub:hover {
+  border-radius: 50px;
+  border: 1px solid black;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px white;
+}
+
+.stream {
+  width: 35vw;
+  margin: 0 auto;
+}
+
+.content {
+  margin-top: 2vw;
+  background-color: #EEEEEE;
+}
+
+.stream-header {
+  display: flex;
+}
+
+.stream-header img {
+  margin: 1vw 1vw;
+  width: 6vw;
+  height: 6vw;
+}
+
+p .user-name {
+  display: inline-block;
+  font-size: 2vw;
+  margin: 0 0 0 0.5vw;
+}
+
+p .tweet-time {
+  font-size: 1.0vw;
+  float: right;
+  display: inline-block;
+  margin-left: 80px;
+  margin-top: 20px;
+}
+
+.inline {
+  display: flex;
+}
+
+.stream-content {
+  width: 85%;
+  padding-left: 20px;
+}
+
+.stream-content p {
+  text-align: center;
+  padding: 1vw 2vw 1vw 0.5vw;
+  font-weight: 400;
+  font-size: 25px;
+}
+
+.stream-footer {
+  width: 100%;
+}
+
+.favorite img {
+  margin: 1vw 1vw;
+  width: 6vw;
+  height: 6vw;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.favorite img :hover {
+  filter: brightness(40%);
+}
+
+.stream.fixed {
+  margin-top: 65px;
+}
+
+.tweet_main {
+  bottom: 0;
+  position: fixed;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: rgba(123, 128, 132, .2);
+  line-height: 2.0em;
+  display: none;
+}
+
+footer {
+  bottom: 0;
+  position: fixed;
+  right: 0;
+  left: 0;
+  margin: auto;
+  height: 150px;
+  background-color: rgba(123, 128, 132, .3);
+}
+
+#tweet_button {
+  width: 200px;
+  height: 30px;
+  font-size: 20px;
+  font-weight: 800;
+  border: none;
+  border-radius: 20px;
+  /*background-color: rgba(0, 195, 255);*/
+  cursor: pointer;
+  display: none;
+}
+
+#tweet_button:hover {
+  box-shadow: 0 0 8px blue;
+  transform: scale(1.1);
+}
+
+.box {
+  display: inline-block;
+}
+
+.img_pro {
+  display: inline-block;
+}
+
+div.tweet_content img {
+  width: 50px;
+  height: 50px;
+  border-radius: 35px;
+  margin-bottom: 40px;
+}
+
+div.tweet_content img.preview {
+  margin: 0;
+  width: 100px;
+  height: 100px;
+  border-radius: 0;
+
+}
+
+div.tweet_content textarea {
+  width: 320px;
+  height: 80px;
+  resize: none;
+  border-radius: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 10px;
+}
+
+.tweet_button {
+  width: 50px;
+  margin-left: 280px;
+  bottom: 1px;
+  position: absolute;
+}
+
+div.tweet_img {
+  height: 45px;
+
+}
+
+.file {
+  font-size: 18px;
+  border-radius: 30px;
+  display: inline-block;
+  overflow: hidden;
+  width: 120px;
+  text-align: right;
+  position: relative;
+  padding: 7px;
+  border: 1px solid blue;
+  background-color: rgba(0, 195, 255);
+  color: white;
+}
+
+.file input[type='file'] {
+  opacity: 0;
+  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 0;
+  font-size: 100px;
+  cursor: pointer;
+  width: 130px;
+  height: 30px;
+
+}
+
+div.tweet_img img.upload {
+  margin: 6px 6px!important;
+  width: 40px!important;
+  height: 30px!important;
+  display: inline-block;
+  position: absolute;
+  z-index: 5;
+  background-color: rgba(255, 255, 255);
+  border-radius: 20px;
+}
+
+.image-selector .img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  font-size: 50px;
+  cursor: pointer;
+  opacity: 0;
+  padding-top: 100px;
+}
+
+.button {
+  position: absolute;
+  bottom: 3px;
+  padding-left: 150px;
+}
+
+.button button {
+  width: 150px;
+  border-radius: 20px;
+  position: relative;
+}
+
+.button button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 3px blue;
+}
+
+.submit_text {
+  font-size: 20px;
+  padding: 2px;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
+  position: absolute;
+  font-family: 'fantasy';
+}
+
+#submit {
+  width: 150px;
+  height: 35px;
+  border-radius: 30px;
+  background-color: rgba(0, 195, 255, .8);
+
+}
+
+
+.square_btn {
+  position: relative;
+  display: inline-block;
+  padding: 0.25em 0.5em;
+  text-decoration: none;
+  color: #FFF;
+  background: #4646ff;
+  border-bottom: solid 2px #1e1eff;
+  border-radius: 4px;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.2), 0 2px 2px rgba(0, 0, 0, 0.19);
+  font-weight: bold;
+  font-size: 13px;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  float: right;
+  margin-top: 20px;
+}
+
+.square_btn:active {
+  border-bottom: solid 2px #4646ff;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.30);
+}
+
+
+#img {
+  opacity: 0;
+}
+
+span.text {
+  cursor: pointer;
+  display: inline-block;
+  background-color: #000;
+  color: white;
+  padding: 15px 30px;
+  margin: 0 10px 0 0;
+}

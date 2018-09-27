@@ -1,4 +1,11 @@
 $(function(){
+  $('#tweet_button').on('click', function(){
+    $('.tweet_content').fadeIn(800);
+    $('.tweet_main').fadeOut(500);
+  });
+});
+
+$(function(){
   //画像ファイルプレビュー表示のイベント追加 fileを選択時に発火するイベントを登録
   $('form').on('change', 'input[type="file"]', function(e) {
     var file = e.target.files[0],

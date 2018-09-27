@@ -11,17 +11,22 @@ import base64
 import smtplib
 import os
 import stripe
-import sys
 
 from models.setting import *
 from models.user import *
 from models.tweet import *
 from models.tweet_comment import *
 from models.img import *
+from models.follow import *
+from models.fab import *
 
 from library import *
 
 import setting
+
+import sys
+
+from urllib.parse import urljoin
 
 
 current_user = get_current_user()
@@ -30,18 +35,6 @@ current_user = get_current_user()
 def close_db_session():
         session.close()
 
-# UPLOAD_FOLDER = './static/img/'
-# ALLOWED_EXTENSIONS = set(['png', 'jpeg', 'gif'])
-# path = './static/img/*.ALLOWED_EXTENSIONS'
-#
-# def allowed_file(filename):
-#
-#     return '.' in filename and \
-#            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
-charset.add_charset('utf-8', charset.SHORTEST, None, 'utf-8')
-cset = 'utf-8'
-sys.setrecursionlimit(30000)
 #
 # stripe_keys = {
 #   'secret_key': os.environ['SECRET_KEY'],
@@ -80,7 +73,7 @@ def top():
     current_user = get_current_user()
     is_logged_in_redirect(current_user)
 
-    return template("templates/tatume" , current_user=current_user, url=url)
+    return template("templates/tatume" , current_user=current_user)
 
 @route("/", method='POST')
 def login():
@@ -91,6 +84,13 @@ def login():
         redirect('/tweet')
     else:
         return template('templates/tatume', current_user=current_user)
+
+@route("/logout")
+def logout():
+
+    current_user = get_current_user()
+
+    return template('templates/logout', current_user=current_user)
 
 @route("/create", method='GET')
 def create_get():
@@ -135,18 +135,56 @@ def info():
 @route('/tweet', method='GET')
 def tweet():
 
+    current_user = get_current_user()
+    check_db = None
     tweets = tweet_view()
 
-    return template('templates/tweet', tweets=tweets)
+    return template('templates/tweet', tweets=tweets, current_user=current_user, check_db=check_db)
 
 @route('/tweet', method='POST')
 def tweer_db():
 
     tweet_comment = tweet_create(request.POST)
+    img = img_table(request.POST)
+    tweet = tweet_table(request.POST)
     tweets = tweet_view()
 
-    return template('templates/tweet', tweet_comment=tweet_comment, tweets=tweets)
+    return template('templates/tweet', tweet_comment=tweet_comment, tweets=tweets, tweet=tweet_table, img=img_table)
 
+@route('/follow/<user_follow:int>')
+def follow(user_follow):
+
+    current_user = get_current_user()
+    # follow_user = follow_table(user_follow)
+    check_db = check_follow(user_follow)
+    tweets = tweet_view()
+
+
+    return template('templates/follow', tweets=tweets, user_follow=user_follow, current_user=current_user, check_db=check_db)
+
+@route('/fab/<fab_id:int>')
+def fab(fab_id):
+
+    current_user = get_current_user()
+    fab_db = fab_table(fab_id)
+    tweets = tweet_view()
+
+    return template('templates/tweet', tweets=tweets, fab_db=fab_db, fab_id=fab_id, current_user=current_user)
+
+
+# @route('/follow/<follow_user_id:int>')
+# def follow(follow_user_id):
+#
+#     return redirect('/tweet')
+
+# @route('/follow/<follow_id_test:int>')
+# def follow(follow_id_test):
+#
+#
+# @route('/follow/<follow_id:int>')
+# def follow_back(follow_id):
+#
+#     return redirect('/tweet')
 # @route("/new", method='POST')
 # def new():
 #

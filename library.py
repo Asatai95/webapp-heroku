@@ -5,41 +5,23 @@ from bottle import (
 import hmac
 import hashlib
 
-from models.setting import *
-from models.user import *
+from app_setting import session
+from models.user import User
 
 import app_setting
-
-import setting
 
 from email.mime.text import MIMEText
 import smtplib
 
 """
-import setting
-setting.SECRET_KEY
-
-from setting import *
-SECRET_KEY
-
-ディレクトリの数によって判断する
-"""
-
-"""
 ユーザーを作成する
 """
 def create_user(form):
-
-    try:
-        age = int(form.getunicode('age')) if form.getunicode('age') else None
-    except:
-        age  = None
-
     user = User(
-        email= form.getunicode('email'),
-        password= _encrypt_password(form.getunicode('password1')),
-        name= form.getunicode('name'),
-        age= age
+        email=form.getunicode('email'),
+        password=_encrypt_password(form.getunicode('password1')),
+        name=form.getunicode('name'),
+        age=int(form.getunicode('age')) if form.getunicode('age') else None
     )
     session.add(user)
     session.commit()
@@ -47,10 +29,10 @@ def create_user(form):
 
 def _encrypt_password(password):
     return hmac.new(
-                password.encode('UTF-8'),
-                setting.SECRET_KEY.encode('UTF-8'),
-                hashlib.sha256
-           ).hexdigest()
+                msg=password.encode('UTF-8'),
+                key=app_setting.SECRET_KEY.encode('UTF-8'),
+                digestmod=hashlib.sha256
+            ).hexdigest()
 
 def is_duplicate_email(email):
     user = session.query(User).filter(User.email==email).first()
@@ -58,8 +40,6 @@ def is_duplicate_email(email):
         return False
     else:
         return True
-    session.close()
-
 
 """
 ログインしているユーザーを取得する
@@ -68,14 +48,11 @@ def is_duplicate_email(email):
 ログインしていない：None
 """
 def get_current_user():
-
-    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+    user_id = request.get_cookie('user_id', secret=app_setting.SECRET_KEY)
     if user_id:
         return session.query(User).get(user_id)
     else:
         return None
-
-
 
 """
 ログインしていればルートパスにリダイレクトさせる
@@ -102,7 +79,7 @@ def authenticate(form):
         response.set_cookie(
             'user_id',
             auth_user.id,
-            secret=setting.SECRET_KEY,
+            secret=app_setting.SECRET_KEY,
             max_age=2678400, # 31日間有効
             path='/'
         )
@@ -114,7 +91,7 @@ def authenticate(form):
 ログアウト
 """
 def logout_user():
-    response.delete_cookie('user_id', secret=setting.SECRET_KEY, path='/')
+    response.delete_cookie('user_id', secret=app_setting.SECRET_KEY, path='/')
 
 
 def send_mail(to_email, send_type):

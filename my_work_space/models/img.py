@@ -18,6 +18,7 @@ class Img(Base):
     id = Column('id', Integer, primary_key = True)
     img_url = Column('img_url', String(200))
     tweet_id = Column('tweet_id', Integer)
+    user_id = Column('user_id', Integer)
     created_at = Column('created_at', DateTime, default=datetime.now())
 
 def main(args):

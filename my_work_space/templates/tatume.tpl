@@ -1,4 +1,4 @@
-% rebase('templates/base_top')
+% rebase('templates/base/base_top')
 
 <body>
   <div class='main'>
@@ -20,7 +20,7 @@
       <div class='content_sub'>
         <p class='name'>TUBUYAKI</p>
         <p class='main_text_sub'>世界中のユーザーとつぶやこう！！</p>
-        
+
 
 
       </div>

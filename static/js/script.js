@@ -1,8 +1,7 @@
-// 戻るボタン
-// $(function goBack() {
-//   window.onload = initialize;
-//   window.history.back();
-// });
+// // 戻るボタン
+// function goBack() {
+//     window.history.back();
+// }
 
 $(function(){
 

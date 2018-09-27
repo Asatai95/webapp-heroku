@@ -1,22 +1,62 @@
+from sqlalchemy import *
+from sqlalchemy.orm import *
+from sqlalchemy.ext.declarative import declarative_base
 import os
 
-# try:
-#     if os.environ['APP_ENVIRONMENT'] == 'production':
-#         SECRET_KEY = os.environ['SECRET_KEY']
-#         DATABASE = os.environ['DATABASE_URL']
-# except:
-#     SECRET_KEY = '2fsKgOLaAHbJUbi6kJsyboVLPchUjL88iZ7sM3A1'
-#     DATABASE = 'ローカル環境かく'
-
 try:
-    if os.environ['SECRET_KEY']:
+    # for HEROKU
+    if os.environ['APP_ENVIRONMENT'] == 'production':
         SECRET_KEY = os.environ['SECRET_KEY']
-    if os.environ['HOST_PASSWORD']:
         HOST_PASSWORD = os.environ['HOST_PASSWORD']
-    if os.environ['HOST_SMTP']:
-        HOST_SMTP = os.environ['HOST_SMTP']
+        DATABASE = os.environ['DATABASE_URL']
 except:
     # for development
     SECRET_KEY = '2fsKgOLaAHbJUbi6kJsyboVLPchUjL88iZ7sM3A1'
+    HOST_PASSWORD = 'PassWord'
+    DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8mb4' % (
+        "root", # user
+        "root", # password
+        "127.0.0.1:3306", # host+port
+        "webapp2_sample_development", # database name
+    ) # mysql://ユーザー名:パスワード@ホスト/データベース名
+
+# mysqlのDBの設定
+"""
+LOCALとHEROKUで、データベースを切り替える
+HEROKUで clearDB をつくると CLEARDB_DATABASE_URL という環境変数がセットされる
+これはデータベースにアクセスするための情報になっている。
+Pythonのアプリケーションが動作する環境(LOCALlかHEROKU)によってデータベースの
+アクセス先を切り替える処理をしないといけない。今回は CLEARDB_DATABASE_URL という
+環境変数があるかないかで判定します。
+ただ、LOCALでは そのような環境変数が設定されていないのでエラーがでてしまいます。
+なので例外処理を用いて エラーが出たときは LOCAL にするという処理をしておきます。
+キーワード：例外処理
+"""
+
+"""
+変数 中身が変わるかもしれない
+定数 中身は上書きしないもの(上書きは可能)
+"""
 
 HOST_EMAIL = 'official@webapp2.com'
+HOST_SMTP = 'smtp.muumuu-mail.com'
+
+ENGINE = create_engine(
+    DATABASE,
+    encoding = "utf8",
+    echo=True, # Trueだと実行のたびにSQLが出力される
+    pool_pre_ping=True
+)
+
+# Sessionの作成
+session = scoped_session(
+        sessionmaker( # ORM実行時の設定。自動コミットするか、自動反映するなど。
+            autocommit = False,
+            autoflush = False,
+            bind = ENGINE
+            )
+        )
+
+# modelで使用する
+Base = declarative_base()
+Base.query = session.query_property()

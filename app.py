@@ -5,79 +5,67 @@ from bottle import  (
 )
 
 # database
-from models.setting import *
-from models.user import *
+from app_setting import session
+from models.user import User
 
 # library
 from library import *
 
+# setting
 import app_setting
 
+# 各ルートのメソッドの実行前に実行される
+@hook('before_request')
+def before_action():
+        global current_user
+        current_user = get_current_user()
 
-current_user = get_current_user()
-
-"""
-
-同調している要素が多い場合、まとめる手段が存在する可能性は高い
-フレームワークごとに調整する
-フレームワーク自体が持っているファイルに内容が記載されていることもある
-定数は大文字 変更しない どこかで定義されている要素
-変数は小文字 変更可能
-
-"""
-
+# 各ルートのメソッドreturnの後に実行される
 @hook('after_request')
-def close_db_session():
+def after_action():
         session.close()
-
 
 @route('/')
 def index():
-        current_user = get_current_user()
         return template('templates/index',url=url, current_user=current_user)
 
 @route('/users/sign_up', method="GET")
 def users_new():
-        current_user = get_current_user()
         is_logged_in_redirect(current_user)
-        duplicate_error = ''
-        return template('templates/users/new', url=url, current_user=current_user, duplicate_error=duplicate_error, user=User())
+        duplicate_error = None
+        return template('templates/users/new',url=url, current_user=current_user, user=User(), duplicate_error=duplicate_error)
 
-@route('/users/sign_up_confirm', method='POST')
+@route('/users/sign_up_confirm', method="POST")
 def users_new_confirm():
-    current_user = get_current_user()
-    is_logged_in_redirect(current_user)
-    user = User(
-            email = request.POST.getunicode('email'),
-            password = request.POST.getunicode('password1'),
-            name = request.POST.getunicode('name'),
-            age = request.POST.getunicode('age')
-    )
+        is_logged_in_redirect(current_user)
+        user = User(
+                email=request.POST.getunicode("email"),
+                password=request.POST.getunicode("password1"),
+                name=request.POST.getunicode("name"),
+                age=request.POST.getunicode("age"),
+        )
 
-    if is_duplicate_email(user.email):
-        duplicate_error = '既に登録されているメールアドレスです。'
-        return template('templates/users/new', url=url, user=user, current_user=current_user, duplicate_error=duplicate_error)
+        if is_duplicate_email(user.email):
+                duplicate_error = '既に登録されているメールアドレスです'
+                return template('templates/users/new', url=url, current_user=current_user, user=user, duplicate_error=duplicate_error)
 
-    return template('templates/users/new_confirm', url=url, current_user=current_user, user=user)
+        return template('templates/users/new_confirm', url=url, current_user=current_user, user=user )
 
 @route('/users/sign_up', method="POST")
 def users_create():
-        current_user = get_current_user()
         is_logged_in_redirect(current_user)
+
         user = create_user(request.POST)
         send_mail(user.email, 'create')
-        
         return template('templates/users/create', url=url, user=user, current_user=current_user)
 
 @route('/users/login', method='GET')
 def login_get():
-        current_user = get_current_user()
         is_logged_in_redirect(current_user)
         return template('templates/users/login', url=url, current_user=current_user)
 
 @route('/users/login', method='POST')
 def login_post():
-        current_user = get_current_user()
         is_logged_in_redirect(current_user)
 
         if authenticate(request.POST):

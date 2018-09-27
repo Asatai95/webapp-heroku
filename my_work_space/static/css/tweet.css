@@ -111,11 +111,14 @@ ul.header_main {
 
 li.text {
   list-style: none;
-  text-decoration: none;
   font-family: serif;
   float: left;
   padding: 10px;
+}
+
+.text a {
   color: black;
+  text-decoration: none;
 }
 
 li.login_sub {
@@ -125,6 +128,39 @@ li.login_sub {
   float: left;
   padding: 10px;
   color: black;
+}
+
+.login_sub a {
+  color: black;
+  text-decoration: none;
+}
+
+li.new {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
+}
+
+.new a {
+  color: black;
+  text-decoration: none;
+}
+
+li.login_account {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
+}
+
+.login_account a {
+  color: black;
+  text-decoration: none;
 }
 
 li.text:hover {
@@ -139,6 +175,22 @@ li.login_sub:hover {
   border: 1px solid black;
   transform: scale(1.1);
   box-shadow: 0 0 15px white;
+}
+
+li.new:hover {
+  border-radius: 50px;
+  border: 1px solid black;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px white;
+}
+
+li.login_account:hover {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
 }
 
 .stream {
@@ -191,6 +243,17 @@ p .tweet-time {
   font-size: 25px;
 }
 
+.inline_img {
+  width: 100px;
+  height: 100px;
+  margin: 0 80px 10px 70px;
+}
+
+.inline_img img {
+  width: 100px;
+  height: 100px;
+}
+
 .stream-footer {
   width: 100%;
 }
@@ -211,18 +274,6 @@ p .tweet-time {
   margin-top: 65px;
 }
 
-.tweet_main {
-  bottom: 0;
-  position: fixed;
-  margin: 0 auto;
-  left: 0;
-  right: 0;
-  height: 60px;
-  background-color: rgba(123, 128, 132, .2);
-  line-height: 2.0em;
-  display: none;
-}
-
 footer {
   bottom: 0;
   position: fixed;
@@ -233,16 +284,32 @@ footer {
   background-color: rgba(123, 128, 132, .3);
 }
 
+.tweet_main {
+  bottom: 0;
+  position: fixed;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  height: 150px;
+  display: block;
+}
+
 #tweet_button {
-  width: 200px;
-  height: 30px;
-  font-size: 20px;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
+  position: absolute;
+  width: 300px;
+  height: 50px;
+  font-size: 28px;
   font-weight: 800;
   border: none;
-  border-radius: 20px;
-  /*background-color: rgba(0, 195, 255);*/
+  border-radius: 30px;
+  background-color: rgba(0, 195, 255);
   cursor: pointer;
-  display: none;
+
 }
 
 #tweet_button:hover {
@@ -256,6 +323,10 @@ footer {
 
 .img_pro {
   display: inline-block;
+}
+
+div.tweet_content {
+  display: none;
 }
 
 div.tweet_content img {

@@ -27,6 +27,30 @@ def create_user(form):
     session.commit()
     return user
 
+def create_user_sns(form):
+    user = User(
+          name = form['name'],
+          email = form['email'],
+          age = None,
+          password = None
+    )
+
+    session.add(user)
+    session.commit()
+
+    return user
+
+def user_sns_login(form):
+
+    sns_user = session.query(User).filter(
+                  User.email ==  form['email']
+               )
+    if sns_user is not None:
+        return True
+    else:
+        return False
+
+
 def _encrypt_password(password):
     return hmac.new(
                 msg=password.encode('UTF-8'),

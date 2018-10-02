@@ -16,7 +16,7 @@ else:
 class Tweet_comment(Base):
     __tablename__ = 'tweet_comment'
     id = Column('id', Integer, primary_key = True)
-    tweet_comment = Column('tweet_comment', String(200))
+    tweet_text = Column('tweet_text', String(200))
     created_at = Column('created_at', DateTime, default=datetime.now())
 
 def main(args):

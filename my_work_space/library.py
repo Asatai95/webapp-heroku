@@ -7,6 +7,7 @@ from models.tweet_comment import *
 from models.img import *
 from models.follow import *
 from models.fab import *
+from models.pro_comment import *
 
 import hmac
 import hashlib
@@ -65,7 +66,7 @@ def get_current_user():
 
 def is_logged_in_redirect(user):
     if user is not None:
-        redirect('/tweet')
+        redirect('/')
 
 def authenticate(form):
     auth_user = session.query(User).filter(
@@ -87,21 +88,50 @@ def authenticate(form):
 
 def tweet_view():
 
-    tweet_view = session.query(Tweet.created_at, Tweet_comment.tweet_comment, Tweet_comment.id, User.id, User.name, Img.img_url).join(
+    cookie_id = request.get_cookie('user_id' ,secret=setting.SECRET_KEY)
+
+    tweet_view = session.query(Tweet.created_at, Tweet_comment.tweet_text, Tweet_comment.id, User.id, User.name, Img.img_url, User.pro_img, Tweet.tweet_id).join(
                       User, User.id == Tweet.user_id
                   ).join(
                       Tweet_comment, Tweet_comment.id == Tweet.tweet_id
                   ).join(
-                      Img, Img.tweet_id == Tweet_comment.id
+                      Img, Img.id == Tweet.img_id
+                  ).filter(
+                      Tweet.user_id != cookie_id
                   ).all()
-
+    
     return tweet_view
 
+def follow_id_view():
+
+    cookie_id = request.get_cookie('user_id' ,secret=setting.SECRET_KEY)
+
+    follow_view = session.query(Follow.to_user_id).filter(
+                     Follow.from_user_id == cookie_id,
+                     Follow.follow_id == 1
+                  ).all()
+
+    return follow_view
+
+def follower_check():
+
+    cookie_id = request.get_cookie('user_id' ,secret=setting.SECRET_KEY)
+
+    tweet_view =session.query(User.id).join(
+                      Tweet, User.id == Tweet.user_id
+                  ).join(
+                      Tweet_comment, Tweet_comment.id == Tweet.tweet_id
+                  ).join(
+                      Img, Img.id == Tweet.img_id
+                  ).filter(
+                      Tweet.user_id != cookie_id
+                  ).all()
+    return tweet_view
 
 def tweet_create(form):
 
     tweet_text = Tweet_comment(
-                       tweet_comment = form.getunicode('tweet')
+                       tweet_text = form['tweet']
                     )
     session.add(tweet_text)
     session.commit()
@@ -110,48 +140,59 @@ def tweet_create(form):
 
 def img_table(form):
 
-    tweet = session.query(Tweet_comment).filter(
-               Tweet_comment.tweet_comment == form.getunicode('tweet')
+
+    tweet = session.query(Tweet_comment.id).filter(
+               Tweet_comment.tweet_text == form['tweet']
             ).order_by(
-               desc(Tweet_comment.tweet_comment)
+               desc(Tweet_comment.tweet_text)
             ).first()
+
+    print(tweet)
 
     data = request.get_cookie('user_id', secret=setting.SECRET_KEY)
 
     img = Img(
-           img_url = form.getunicode('img'),
-           tweet_id = tweet.id,
+           img_url = request.POST.getunicode('img'),
+           tweet_id = tweet,
            user_id = data
           )
 
     img_file = img.img_url
 
-    if img_file and allowed_file(img_file.filename):
-        filename = img_file.filename
-        path = UPLOAD_FOLDER + filename
+    if img_file == '':
 
-        try:
-            img_file.save(os.path.join(UPLOAD_FOLDER, filename))
-            img.img_url = path
-            session.add(img)
-            session.commit()
-            return img
-        except OSError:
+        img_file = None
+        img.img_url = img_file
+        session.add(img)
+        session.commit()
+        return img
+    else:
 
-            img_file.save(os.path.join('./static/trash', "無題" ) )
+        if img_file and allowed_file(img_file.filename):
+            filename = img_file.filename
             path = UPLOAD_FOLDER + filename
 
-            img.img_url = path
-            session.add(img)
-            session.commit()
-            return img
+            try:
+                img_file.save(os.path.join(UPLOAD_FOLDER, filename))
+                img.img_url = path
+                session.add(img)
+                session.commit()
+                return img
+            except OSError:
+
+                os.remove(path)
+                img_file.save(os.path.join(UPLOAD_FOLDER, filename))
+                img.img_url = path
+                session.add(img)
+                session.commit()
+                return img
 
 def tweet_table(form):
 
     content = session.query(Tweet_comment.id).filter(
-                    Tweet_comment.tweet_comment == form.getunicode('tweet')
+                    Tweet_comment.tweet_text == form['tweet']
               ).order_by(
-                    desc(Tweet_comment.tweet_comment)
+                    desc(Tweet_comment.tweet_text)
               ).first()
 
     data = request.get_cookie('user_id', secret=setting.SECRET_KEY)
@@ -213,20 +254,215 @@ def fab_table(form):
 
     return fab
 
-def check_follow(form):
+# def check_follow(form):
+#
+#     user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+#
+#     check = session.query(Follow.follow_id).filter(
+#                   Follow.from_user_id == user_id,
+#                   Follow.to_user_id == form
+#             ).first()
+#
+#     print(check[0])
+#     if check is not None:
+#         return check[0]
+#     else:
+#         return False
+
+def tweet_search(form):
 
     user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
 
-    check = session.query(Follow.follow_id).filter(
-                  Follow.from_user_id == user_id,
-                  Follow.to_user_id == form
-            ).first()
-
-    if check is not None:
-        return check[0]
-    else:
+    if form.getunicode('search') == '':
         return False
+    else:
 
+        search = session.query(Tweet.created_at, Tweet_comment.tweet_text, Tweet_comment.id, User.id, User.name, Img.img_url, User.pro_img).join(
+                      User, User.id == Tweet.user_id
+                 ).join(
+                      Tweet_comment, Tweet_comment.id == Tweet.tweet_id
+                 ).join(
+                      Img, Img.id == Tweet.img_id
+                 ).filter(
+                       Tweet.user_id != user_id,
+                       Tweet_comment.tweet_text.like("%\\" +form.getunicode('search') + "%")
+                 ).all()
+
+    return search
+
+def my_tweet():
+
+    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+
+
+    profile = session.query(Tweet.created_at, Tweet_comment.tweet_text, Tweet.tweet_id, User.id, User.name, Img.img_url, User.pro_img).join(
+                  User, User.id == Tweet.user_id
+             ).join(
+                  Tweet_comment, Tweet_comment.id == Tweet.tweet_id
+             ).join(
+                  Img, Img.id == Tweet.img_id
+             ).filter(
+                  Tweet.user_id == user_id,
+             ).all()
+
+    return profile
+
+def my_tweet_img():
+
+    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+
+    profile = session.query(User.pro_img).filter(
+                   User.id == user_id
+
+             ).all()
+
+    return profile
+
+
+def comment():
+
+    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+
+    profile = session.query(User.id, User.name, User.email, User.pro_img, User.comment).filter(
+                   User.id == user_id
+              ).all()
+
+    return profile
+
+def test_user(form):
+
+    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+
+    profile_edit = session.query(User).filter(
+                      User.id == user_id
+                   ).first()
+
+    profile_edit.comment = form['user_intro']
+    print(profile_edit.comment)
+
+    session.commit()
+
+    return profile_edit
+
+def profile_edit(form):
+
+    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+
+    profile_edit = session.query(User).filter(
+                      User.id == user_id
+                   ).first()
+    profile_edit.name = form.getunicode('user_name')
+    profile_edit.email = form.getunicode('email')
+    profile_edit.pro_img = form.getunicode('img_file')
+
+    img_file = profile_edit.pro_img
+
+    if img_file == '' :
+        try:
+            img_file = './static/img/ninwanko.png'
+            profile_edit.pro_img = img_file
+            session.commit()
+            return profile_edit
+
+        except OSError:
+
+            session.commit()
+
+            return profile_edit
+
+    else:
+
+        if img_file and allowed_file(img_file.filename):
+            filename = img_file.filename
+            path = UPLOAD_FOLDER + filename
+            try:
+                img_file.save(os.path.join(UPLOAD_FOLDER, filename))
+                profile_edit.pro_img = path
+                session.commit()
+                return profile_edit
+            except OSError:
+
+                os.remove(path)
+                img_file.save(os.path.join(UPLOAD_FOLDER, filename))
+                profile_edit.pro_img = path
+                session.commit()
+                return profile_edit
+
+def commit():
+
+    text = '正しく内容を変更致しました。'
+
+    return text
+
+def delete(form):
+
+    delete = session.query(Tweet_comment).filter(
+                Tweet_comment.id == form
+             ).delete()
+    session.commit()
+    return delete
+
+def my_tweet_edit(form):
+
+    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+
+    tweet_edit = session.query(Tweet_comment.tweet_text).join(
+                  Tweet, Tweet.tweet_id == Tweet_comment.id
+             ).filter(
+                  Tweet.user_id == user_id,
+                  Tweet_comment.id == form
+             ).all()
+
+    return tweet_edit
+
+def my_tweet_edit_input(form):
+
+    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+
+    tweet_edit = session.query(Tweet_comment).join(
+                  Tweet, Tweet.tweet_id == Tweet_comment.id
+             ).filter(
+                  Tweet.user_id == user_id,
+                  Tweet_comment.id == form
+             ).first()
+
+    tweet_edit.tweet_text = request.POST.getunicode('tweet')
+    print(tweet_edit.tweet_text)
+    session.commit()
+
+    return tweet_edit
+
+def follower_view():
+
+    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+
+    follower = session.query(Follow.to_user_id, User.name, User.comment, User.pro_img).join(
+                    User, User.id == Follow.to_user_id
+               ).filter(
+                    Follow.from_user_id == user_id,
+                    Follow.to_user_id == User.id,
+                    Follow.to_user_id != user_id,
+                    Follow.follow_id == 1
+               ).all()
+
+    return follower
+
+def delete_follower(form):
+
+    delete = session.query(Follow).filter(
+               Follow.to_user_id == form,
+               Follow.follow_id == 1
+             ).delete()
+    session.commit()
+
+    return delete
 
 def logout_user():
     response.delete_cookie('user_id', secret=setting.SECRET_KEY, path='/')
+
+
+def tweet_view_test():
+
+    view = session.query(Tweet_comment.tweet_text).all()
+
+    return view

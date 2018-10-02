@@ -14,6 +14,9 @@ from library import *
 # setting
 import app_setting
 
+#api
+import requests
+
 # 各ルートのメソッドの実行前に実行される
 @hook('before_request')
 def before_action():
@@ -26,6 +29,10 @@ def after_action():
         session.close()
 
 @route('/')
+def index():
+        return template('templates/index',url=url, current_user=current_user)
+
+@route('/top')
 def index():
         return template('templates/index',url=url, current_user=current_user)
 
@@ -72,6 +79,89 @@ def login_post():
             redirect('/')
         else:
             return template('templates/users/login', url=url, current_user=current_user)
+@route('/users/sns')
+def sns():
+
+    redirect('/')
+
+"""
+passはスルー
+"""
+
+@route('/facebook/login')
+def facebook_login():
+
+    url = 'https://www.facebook.com/dialog/oauth'
+    params = {
+        'response_type': 'code',
+        'redirect_uri': app_setting.FACEBOOK_CALLBACK_URL,
+        'client_id': app_setting.FACEBOOK_ID
+    }
+
+    redirect_url = requests.get(url, params=params).url
+    # print('r.url:', r.url)
+    # print('r: ', vars(r))
+    # return r.url
+    # redirect_url = r.url
+
+    redirect(redirect_url)
+
+@route('/facebook/callback')
+def facebook_callback():
+
+    try: # 予期せぬエラーがでたらログイン画面にリダイレクトする
+        if request.GET.getunicode('code'):
+            """
+            リダイレクトと同時に送られてきたcodeを用いてアクセストークンを取得
+            """
+            url = 'https://graph.facebook.com/v3.1/oauth/access_token'
+            params = {
+                    'redirect_uri': app_setting.FACEBOOK_CALLBACK_URL,
+                    'client_id': app_setting.FACEBOOK_ID,
+                    'client_secret': app_setting.FACEBOOK_SECRET,
+                    'code': request.GET.getunicode('code'),
+            }
+            r = requests.get(url, params=params)
+            access_token = r.json()['access_token']
+
+            """
+            取得したアクセストークンが不正じゃないか確認する
+            """
+            url = 'https://graph.facebook.com/debug_token'
+            params = {
+                'input_token': access_token,
+                'access_token': '%s|%s' % (app_setting.FACEBOOK_ID, app_setting.FACEBOOK_SECRET)
+            }
+            r = requests.get(url, params=params)
+            print(r.json())
+
+            if r.json()['data']['is_valid']:
+                """
+				アクセストークンが不正じゃないことがわかったら
+				アクセストークンをもとにユーザーの情報を取得する
+				"""
+                url = 'https://graph.facebook.com/%s' % (r.json()['data']['user_id'])
+                params = {
+                    'fields': 'name, email',
+                    'access_token': access_token,
+                }
+
+                r = requests.get(url, params=params)
+
+                login_sns = user_sns_login(r.json())
+                if login_sns == True:
+                    print(r.json())
+                    redirect('/users/check')
+                else:
+                    print(r.json())
+                    user = create_user_sns(r.json())
+                    redirect('/users/check_account')
+            else:
+    			# アクセストークンが不正なものだったらログイン画面にリダイレクトする
+                redirect('/users/login')
+
+    except:
+        redirect('/users/login')
 
 @route('/users/logout')
 def logout():

@@ -19,6 +19,7 @@ from models.tweet_comment import *
 from models.img import *
 from models.follow import *
 from models.fab import *
+from models.pro_comment import *
 
 from library import *
 
@@ -89,8 +90,9 @@ def login():
 def logout():
 
     current_user = get_current_user()
+    logout = logout_user()
 
-    return template('templates/logout', current_user=current_user)
+    return template('templates/logout', current_user=current_user, logout=logout)
 
 @route("/create", method='GET')
 def create_get():
@@ -136,31 +138,54 @@ def info():
 def tweet():
 
     current_user = get_current_user()
-    check_db = None
     tweets = tweet_view()
+    check = follow_id_view()
+    follow_check = follower_check()
+    print(follow_check)
+    for tweet in tweets:
+        if check in tweet:
+            print('test')
+        else:
+            print('testdes')
 
-    return template('templates/tweet', tweets=tweets, current_user=current_user, check_db=check_db)
+
+    return template('templates/tweet', tweets=tweets, current_user=current_user, check=check, follow_check=follow_check)
 
 @route('/tweet', method='POST')
 def tweer_db():
 
-    tweet_comment = tweet_create(request.POST)
-    img = img_table(request.POST)
-    tweet = tweet_table(request.POST)
+    current_user = get_current_user()
+    tweet_comment = tweet_create(request.forms)
+    img = img_table(request.forms)
+    tweet_db = tweet_table(request.forms)
     tweets = tweet_view()
 
-    return template('templates/tweet', tweet_comment=tweet_comment, tweets=tweets, tweet=tweet_table, img=img_table)
+    return template('templates/tweet', tweet_comment=tweet_comment, tweets=tweets, tweet=tweet_db, img=img_table, current_user=current_user)
 
 @route('/follow/<user_follow:int>')
 def follow(user_follow):
 
     current_user = get_current_user()
-    # follow_user = follow_table(user_follow)
-    check_db = check_follow(user_follow)
+    follow_user = follow_table(user_follow)
     tweets = tweet_view()
 
+    return redirect('/follower')
 
-    return template('templates/follow', tweets=tweets, user_follow=user_follow, current_user=current_user, check_db=check_db)
+@route('/follower')
+def follower():
+
+    current_user = get_current_user()
+    follower_view_table = follower_view()
+
+    return template('templates/follower', current_user=current_user, follower_view_table=follower_view_table)
+
+@route('/follower/delete/<delete_follower_id>')
+def delete_follower_id(delete_follower_id):
+
+    current_user = get_current_user()
+    delete = delete_follower(delete_follower_id)
+
+    return redirect('/follower')
 
 @route('/fab/<fab_id:int>')
 def fab(fab_id):
@@ -169,7 +194,98 @@ def fab(fab_id):
     fab_db = fab_table(fab_id)
     tweets = tweet_view()
 
-    return template('templates/tweet', tweets=tweets, fab_db=fab_db, fab_id=fab_id, current_user=current_user)
+    return template('templates/fab', tweets=tweets, fab_db=fab_db, fab_id=fab_id, current_user=current_user)
+
+@route('/search')
+def view():
+
+    tweets = tweet_view()
+    current_user = get_current_user()
+    follow_check_view = follow_id_view()
+    test = ''
+
+    return template('templates/search', tweets=tweets, test=test, current_user=current_user,follow_check_view=follow_check_view)
+
+@route('/search', method='POST')
+def search():
+
+    search = tweet_search(request.POST)
+    follow_check_view = follow_id_view()
+    current_user = get_current_user()
+    print(search)
+
+    if search is not False:
+        test=''
+        tweets = search
+        return template("templates/search", follow_check_view=follow_check_view, search=search, test=test, current_user=current_user, tweets=tweets)
+    else:
+        test = 'キーワードを入力してください。'
+        tweets = tweet_view()
+        return template("templates/search", follow_check_view=follow_check_view, tweets=tweets, test=test, current_user=current_user)
+
+@route('/mypage')
+def profile():
+
+    current_user = get_current_user()
+    pro=None
+    my_tweets = my_tweet()
+    mytweet_img = my_tweet_img()
+    mytweet_img = mytweet_img[0][0]
+
+    return template('templates/mypage', my_tweets=my_tweets, current_user=current_user, pro=pro, mytweet_img=mytweet_img)
+
+@route('/edit')
+def edit():
+
+    current_user = get_current_user()
+    profile_view = comment()
+    error = ''
+
+    return template('templates/profile_remake', current_user=current_user, profile_view=profile_view, error=error)
+
+@route('/edit', method='POST')
+def edit_post():
+
+    current_user = get_current_user()
+    test_edit = test_user(request.forms)
+    edit = profile_edit(request.POST)
+
+    profile_view = comment()
+    commit_text = commit()
+
+    return template('templates/profile_remake', current_user=current_user, edit=edit, profile_view=profile_view, error=commit_text, test_edit=test_edit)
+
+@route('/mypage/delete/<delete_id>')
+def delete_tweet(delete_id):
+
+    current_user = get_current_user()
+    delete_tweet = delete(delete_id)
+
+    return redirect('/mypage')
+
+@route('/mypage/edit/<tweet_edit_id>')
+def tweet_edit(tweet_edit_id):
+
+    current_user = get_current_user()
+    mytweet_edit = my_tweet_edit(tweet_edit_id)
+    mytweet_edit = mytweet_edit[0][0]
+
+    return template('templates/mytweet_edit', current_user=current_user, tweet_edit_id=tweet_edit_id, mytweet_edit=mytweet_edit)
+
+@route('/mypage/edit/<tweet_edit_id>', method='POST')
+def tweet_edit_input(tweet_edit_id):
+
+    current_user = get_current_user()
+    tweet_input = my_tweet_edit_input(tweet_edit_id)
+
+    return redirect('/mypage')
+
+@route('/test')
+def test_view():
+
+    tweets = tweet_view_test()
+
+    return template('templates/test_sub', tweets=tweets)
 
 
 # @route('/follow/<follow_user_id:int>')
@@ -310,106 +426,6 @@ def fab(fab_id):
 #         print('test')
 #
 #         return template("top", amount=amount)
-
-
-@route("/img")
-def img():
-
-    img = Img()
-
-    imgs = session.query(Img.image)
-
-    session.commit()
-
-
-    for img in imgs:
-        print(img)
-
-    return template('templates/image', imgs=imgs)
-
-
-@route('/text')
-def text():
-
-    message = 'データベースの中身を公開するよー！！'
-
-    db = sqlalchemy.connect(user='root', passwd='root', host='localhost', db='mamp', charset='utf8')
-    con = db.cursor()
-
-    sql = 'select user from name where id = 1'
-    test = con.execute(sql)
-    db.commit()
-
-    result = con.fetchall()
-    result = result[0][0]
-
-    return template('message', message=message, main=result)
-
-@route('/text', method='POST')
-def text_db():
-
-    message = 'データベースの中身を公開するよー！！'
-
-    form = request.forms.form
-    print(form)
-
-    db = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
-    con = db.cursor()
-    print('???')
-
-    sql = 'insert into test(test) values(%s)'
-    text = con.execute(sql, [str(form)])
-    db.commit()
-    print(text)
-
-    result = con.fetchall()
-    print(result)
-
-    return template('message', main=form, message=message)
-
-@route('/text_sub')
-def text_db():
-
-    img_sub = 'static/img/ninwanko.png'
-
-    return template('img', img_sub=img_sub)
-
-@route('/text_sub', method='POST')
-def text_db():
-
-    img_file = request.files.img_file
-    print(img_file)
-
-    if img_file and allowed_file(img_file.filename):
-        filename = img_file.filename
-        img_file.save(os.path.join(UPLOAD_FOLDER, filename))
-        path = UPLOAD_FOLDER + filename
-        print(path)
-
-        db = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
-        con = db.cursor()
-        print('???')
-
-        sql = 'insert into test(img) values(%s)'
-        test = con.execute(sql, [path])
-        db.commit()
-        print(test)
-
-        result = con.fetchall()
-        print(result)
-
-        return template('img', img_sub=path)
-
-@route('/view')
-def view():
-
-    return template('singlepage_template_sample')
-
-@route('/test_main')
-def test_main():
-
-    hello_str = hello()
-    return template('templates/index', hello=hello_str)
 
 
 run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)

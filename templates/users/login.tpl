@@ -15,8 +15,15 @@
 				<label for="password">Password</label>
 			</div>
 			<div class=" container center-align">
-				<button class="container center-align btn waves-effect waves-light" type="submit" name="action">登録する</button>
+				<button class="container center-align btn waves-effect waves-light" type="submit" name="action">ログインする</button>
 			</div>
 		</div>
 	</form>
+	<div class="col l10 offset-l1 s12 facebook-login">
+		<div class="container">
+			<div class=" container center-align">
+				<a class="container center-align btn waves-effect #1565c0 blue darken-3" href="/facebook/login">Facebookでログインする</a>
+			</div>
+		</div>
+	</div>
 </div>

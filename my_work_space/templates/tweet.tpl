@@ -13,6 +13,7 @@
         <li class='login_account'><a href="#">{{current_user.name}}</a></li>
         % end
         <li class='text'><a href="/info">TUBUYAKI</a></li>
+        <li class='text'><a href="/search">つぶやき一覧</a></li>
         % if current_user:
         <li class='login_sub'><a href="/logout">ログアウト</a></li>
         % else:
@@ -26,7 +27,7 @@
       <div class="stream">
         <div class="content">
           <div class="stream-header">
-            <a href="#"><img src="" alt=""></a>
+            <a href="#"><img src="{{view[6]}}" alt=""></a>
             <p>
               <span class="tweet-time">{{view[0]}}</span>
               <span class="user-name">{{view[4]}}</span>
@@ -40,14 +41,16 @@
               <div class='inline_img'>
                 <img src="{{view[5]}}" alt="">
               </div>
+
               <div class="stream-footer">
                 <div class="favorite" name='oki'>
                   <a href="/fab/{{view[2]}}"><img src="static/img/logo-pic.png" alt=""></a>
-                  %if check_db is True:
-                   <a href="/follow/delete/{{view[3]}}" class="square_btn">フォロー外す</a>
-                  %else:
+                   %if check in view:
+                   
+                   <a href="/follow/{{view[3]}}" class="square_btn">フォロ-外す</a>
+                   %else:
                    <a href="/follow/{{view[3]}}" class="square_btn">フォロ-する</a>
-                  %end
+                   %end
                 </div>
 
               </div>

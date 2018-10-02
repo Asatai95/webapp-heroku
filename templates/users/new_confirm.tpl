@@ -53,7 +53,7 @@
     <div class="col l10 offset-l1 s12">
         <div class="container">
             <div class=" container center-align"><br>
-                <button class="container center-align btn waves-effect #80cbc4 teal lighten-3" onclick="window.history.back();" >戻る</button>
+                <button class="container center-align btn waves-effect #80cbc4 teal lighten-3" onclick="goBack()" >戻る</button>
             </div>
         </div>
     </div>

@@ -21,6 +21,8 @@ class User(Base):
     name = Column('name', String(45))
     password = Column('password', String(200))
     email = Column('email', String(45))
+    pro_img = Column('pro_img', String(45))
+    comment = Column('comment', String(45))
     created_at = Column('created_at', DateTime, default=datetime.now())
 
 def main(args):

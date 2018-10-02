@@ -8,16 +8,22 @@ try:
     if os.environ['APP_ENVIRONMENT'] == 'production':
         SECRET_KEY = os.environ['SECRET_KEY']
         HOST_PASSWORD = os.environ['HOST_PASSWORD']
+        FACEBOOK_ID = os.environ['FACEBOOK_ID']
+        FACEBOOK_SECRET = os.environ['FACEBOOK_SECRET']
+        FACEBOOK_CALLBACK_URL = os.environ['FACEBOOK_CALLBACK_URL']
         DATABASE = os.environ['DATABASE_URL']
 except:
     # for development
     SECRET_KEY = '2fsKgOLaAHbJUbi6kJsyboVLPchUjL88iZ7sM3A1'
     HOST_PASSWORD = 'PassWord'
+    FACEBOOK_ID = '2165553107045876'
+    FACEBOOK_SECRET = '2b3f9337bb73847b0a63846a74cb5bf7'
+    FACEBOOK_CALLBACK_URL = 'http://localhost:5000/facebook/callback'
     DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8mb4' % (
-        "root", # user
-        "root", # password
-        "127.0.0.1:3306", # host+port
-        "webapp2_sample_development", # database name
+       "root", # user
+       "root", # password
+       "127.0.0.1:3306", # host+port
+       "webapp2_sample_development", # database name
     ) # mysql://ユーザー名:パスワード@ホスト/データベース名
 
 # mysqlのDBの設定

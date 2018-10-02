@@ -50,4 +50,11 @@
 			</div>
 		</div>
 	</form>
+	<div class="col l10 offset-l1 s12 facebook-login">
+		<div class="container">
+			<div class=" container center-align">
+				<a class="container center-align btn waves-effect #1565c0 blue darken-3" href="/facebook/login">Facebookで登録する</a>
+			</div>
+		</div>
+	</div>
 </div>

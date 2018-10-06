@@ -15,7 +15,7 @@ from datetime import datetime
 """
 import os, sys
 sys.path.append(os.getcwd()) # コマンド実行ディレクトリを設定
-from app_setting import Base, ENGINE
+from app_setting import ENGINE, Base
 
 
 

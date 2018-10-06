@@ -1,0 +1,218 @@
+@charset "UTF-8";
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 400;
+  font-family: "ヒラギノ明朝 ProN W6", "HiraMinProN-W6", "HG明朝E", "ＭＳ Ｐ明朝", "MS PMincho", "MS 明朝", serif;
+}
+
+div.main_content {
+  background-color: rgba(123, 128, 132, .3);
+}
+
+div.main {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .2);
+  line-height: 1.4em;
+  position: absolute;
+  background-image: url('../img/enpitu.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  overflow: auto;
+}
+
+div.header {
+  width: 100%;
+  height: 200px;
+}
+
+div.img img {
+  width: 150px;
+  height: 150px;
+  float: left;
+  margin: 30px;
+  margin-left: 50px;
+  margin-top: 40px;
+}
+
+ul.header_main {
+  float: right;
+  padding: 10px;
+  font-size: 25px;
+  font-weight: 800;
+  margin-top: 80px;
+}
+
+li.text {
+  list-style: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+}
+
+.text a {
+  color: black;
+  text-decoration: none;
+}
+
+li.login_sub {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
+}
+
+.login_sub a {
+  color: black;
+  text-decoration: none;
+}
+
+li.new {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
+}
+
+.new a {
+  color: black;
+  text-decoration: none;
+}
+
+li.login_account {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
+}
+
+.login_account a {
+  color: black;
+  text-decoration: none;
+}
+
+li.text:hover {
+  border-radius: 50px;
+  border: 1px solid black;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px white;
+}
+
+li.login_sub:hover {
+  border-radius: 50px;
+  border: 1px solid black;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px white;
+}
+
+li.new:hover {
+  border-radius: 50px;
+  border: 1px solid black;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px white;
+}
+
+li.login_account:hover {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
+}
+
+
+
+.tweet_box {
+  padding: 0.5em 1em;
+  margin: 2em 0;
+  font-weight: bold;
+  color: #6091d3;
+  background: #FFF;
+  border: solid 5px #6091d3;
+  border-radius: 10px;
+  width: 300px;
+  height: 390px;
+  text-align: center;
+  background:#EEEEEE;
+  background-image: -webkit-linear-gradient(top, #EEEEEE, Courier New);
+  background-image: -moz-linear-gradient(top, #EEEEEE, Courier New);
+  background-image: -ms-linear-gradient(top, #EEEEEE, Courier New);
+  background-image: -o-linear-gradient(top, #EEEEEE, Courier New);
+  background-image: linear-gradient(to bottom, #EEEEEE, Courier New);
+  -webkit-border-radius: 6;
+  -moz-border-radius: 6;
+}
+
+.tweet_box {
+  margin: 20px auto;
+  padding: 0;
+}
+
+textarea {
+
+  resize: none;
+
+  padding: 10px;
+  width: 210px;
+  height: 240px;
+  font-size: 1.3em;
+  margin: 10px auto;
+  margin-top: 20px;
+}
+
+.submit {
+  text-align: center;
+}
+
+.submit input {
+  background: #fff;
+  background-image: -webkit-linear-gradient(top, #fff, #fff);
+  background-image: -moz-linear-gradient(top, #fff, #fff);
+  background-image: -ms-linear-gradient(top, #fff, #fff);
+  background-image: -o-linear-gradient(top, #fff, #fff);
+  background-image: linear-gradient(to bottom, #fff, #fff);
+  -webkit-border-radius: 8;
+  -moz-border-radius: 8;
+  border-radius: 8px;
+  -webkit-box-shadow: 1px 1px 3px #666666;
+  -moz-box-shadow: 1px 1px 3px #666666;
+  box-shadow: 1px 1px 3px #666666;
+  font-family: Courier New;
+  color: #4169E1;
+  font-weight: 800;
+  font-size: 25px;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.submit input:hover {
+  background: #E6E6FA;
+  background-image: -webkit-linear-gradient(top, #E6E6FA, #E6E6FA);
+  background-image: -moz-linear-gradient(top, #E6E6FA, #E6E6FA);
+  background-image: -ms-linear-gradient(top, #E6E6FA, #E6E6FA);
+  background-image: -o-linear-gradient(top, #E6E6FA, #E6E6FA);
+  background-image: linear-gradient(to bottom, #E6E6FA, #E6E6FA);
+  text-decoration: none;
+  cursor: pointer;
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(0, 195, 255, .8);
+}
+
+.error {
+  height: 25px;
+}

@@ -45,6 +45,7 @@ Pythonのアプリケーションが動作する環境(LOCALlかHEROKU)によっ
 """
 
 HOST_EMAIL = 'official@webapp2.com'
+HOST_PASSWORD = 'asatai951156'
 HOST_SMTP = 'smtp.muumuu-mail.com'
 
 ENGINE = create_engine(

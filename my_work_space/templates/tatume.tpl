@@ -5,7 +5,7 @@
 
     <div class='header'>
       <div class='img'>
-        <img src="static/img/twitter.png" alt="">
+        <img src="static/img/nin_img.png" alt="">
       </div>
       <ul id='header' class='header_main'>
         <a href="/info">
@@ -33,9 +33,13 @@
         <p class='title_text'>ログイン</p>
       </div>
       <div class='main_content'>
-
-        <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type='login_with' data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false" data-width="200" data-height='50'></div>
-
+        <div class="col l10 offset-l1 s12 facebook-login">
+          <div class="container">
+            <div class=" container center-align">
+              <a class="container center-align btn waves-effect #1565c0 blue darken-3" href="/facebook/login">Facebookでログインする</a>
+            </div>
+          </div>
+        </div>
 
         <div id="gSignInWrapper">
           <div id="customBtn" class="customGPlusSignIn">

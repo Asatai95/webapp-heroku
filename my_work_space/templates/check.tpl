@@ -1,4 +1,4 @@
-% rebase('templates/base')
+% rebase('templates/base/base')
 <body>
 <div class="container center">
 	<h3>会員登録（確認画面）</h3>

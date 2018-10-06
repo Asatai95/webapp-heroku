@@ -17,7 +17,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
   <script type="text/javascript" src="static/js/slick-1.8.1/slick/slick.min.js"></script>
 
-  <title>TATUME</title>
+  <title>TUBUYAKI</title>
 
 </head>
 <body>
@@ -25,18 +25,27 @@
     <div class='header'>
      <div class='header_sub'>
       <div class='img'>
-        <a href="/"><img src="static/img/twitter.png" alt=""></a>
+        <a href="/"><img src="static/img/nin_img.png" alt=""></a>
       </div>
       <ul id='header' class='header_main'>
-        <a href="/info"><li class='text_now'>TATUME</li></a>
-        <a href="/img"><li class='text'>イラスト</li></a>
-        <a href="/tweet"><li class='login'>つぶやく</li></a>
+        % if current_user is None:
+        <li class='login_account'><a href="/">{{current_user}}</a></li>
+        % else:
+        <li class='login_account'><a href="/mypage">{{current_user.name}}</a></li>
+        % end
+        <li class='text'><a href="/info">TUBUYAKI</a></li>
+        <li class='text'><a href="/tweet">つぶやく</a></li>
+        % if current_user:
+        <li class='login_sub'><a href="/logout">ログアウト</a></li>
+        % else:
+        <li class='new'><a href="/create">登録</a></li>
+        %end
       </ul>
      </div>
     </div>
     <div class='content'>
       <div class='content_sub'>
-        <p class='content_text'>TATUME</p>
+        <p class='content_text'>TUBUYAKI</p>
       </div>
       <div class='content_tatume'>
         <p class='content_tatume_title'>つぶやきとは</p>

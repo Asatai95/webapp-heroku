@@ -1,4 +1,4 @@
-% rebase('templates/base')
+% rebase('templates/base/base')
 <body>
   <div class='main'>
     <div class='back_create'>

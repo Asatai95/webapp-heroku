@@ -1,6 +1,6 @@
 from bottle import  request, redirect, response, template
 
-from models.setting import *
+from models.app_setting import session
 from models.user import *
 from models.tweet import *
 from models.tweet_comment import *
@@ -8,11 +8,16 @@ from models.img import *
 from models.follow import *
 from models.fab import *
 from models.pro_comment import *
+from models.social import *
+from models.follow_comment import *
 
 import hmac
 import hashlib
 
-import setting
+import models.app_setting
+
+from email.mime.text import MIMEText
+import smtplib
 
 import os
 import random
@@ -41,10 +46,76 @@ def create_user(form):
     session.commit()
     return user
 
+def create_facebook_user():
+    user = User()
+    session.add(user)
+    session.commit()
+    print('test')
+    return user
+
+def create_socials(user, data, provider):
+    if provider == 'facebook':
+        social = Social(
+            user_id = user.id,
+            provider = provider,
+            provider_id = data['id'],
+        )
+
+    print('test_sub')
+    # elif provider == 'twitter':
+
+    session.add(social)
+    session.commit()
+
+def check_socials(data, provider):
+    if provider == 'facebook':
+        social = session.query(Social).filter(
+                        Social.provider == 'facebook',
+                        Social.provider_id == data['id']
+                    ).first()
+    print('test_test')
+    if social is None:
+        return False
+    else:
+        login_user(social.user_id)
+        return True
+
+def get_facebook_access_token(code):
+    url = 'https://graph.facebook.com/v3.1/oauth/access_token'
+    params = {
+            'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
+            'client_id': models.app_setting.FACEBOOK_ID,
+            'client_secret': models.app_setting.FACEBOOK_SECRET,
+            'code': code,
+    }
+
+    print(params)
+
+    r = requests.get(url, params=params)
+    print(r.json())
+    return r.json()['access_token']
+
+def check_facebook_access_tokn(access_token):
+    url = 'https://graph.facebook.com/debug_token'
+    params = {
+        'input_token': access_token,
+        'access_token': '%s|%s' % (models.app_setting.FACEBOOK_ID, models.app_setting.FACEBOOK_SECRET)
+    }
+    r = requests.get(url, params=params)
+    return r.json()['data']
+
+def get_facebook_user_info(access_token, user_id):
+    url = 'https://graph.facebook.com/%s' % (user_id)
+    params = {
+        'fields': 'name,email',
+        'access_token': access_token,
+    }
+    return requests.get(url, params=params).json()
+
 def _encrypt_password(password):
     return hmac.new(
                 password.encode('UTF-8'),
-                setting.SECRET_KEY.encode('UTF-8'),
+                models.app_setting.SECRET_KEY.encode('UTF-8'),
                 hashlib.sha256
            ).hexdigest()
 
@@ -57,7 +128,7 @@ def is_duplicate_email(email):
 
 def get_current_user():
 
-    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
     if user_id:
         return session.query(User).get(user_id)
     else:
@@ -75,22 +146,26 @@ def authenticate(form):
     ).first()
 
     if auth_user is not None:
-         response.set_cookie(
-              'user_id',
-              auth_user.id,
-              secret=setting.SECRET_KEY,
-              max_age=2678400,
-              path='/'
-         )
-         return True
+        login_user(auth_user.id)
+        return True
     else:
-         return False
+        return False
+
+def login_user(user_id):
+
+    response.set_cookie(
+         'user_id',
+         user_id,
+         secret=models.app_setting.SECRET_KEY,
+         max_age=2678400,
+         path='/'
+    )
 
 def tweet_view():
 
-    cookie_id = request.get_cookie('user_id' ,secret=setting.SECRET_KEY)
+    cookie_id = request.get_cookie('user_id' ,secret=models.app_setting.SECRET_KEY)
 
-    tweet_view = session.query(Tweet.created_at, Tweet_comment.tweet_text, Tweet_comment.id, User.id, User.name, Img.img_url, User.pro_img, Tweet.tweet_id).join(
+    tweet_view = session.query(Tweet.created_at, Tweet_comment.tweet_text, Tweet_comment.id, User.id, User.name, Img.img_url, User.pro_img, Tweet.tweet_id, Tweet.id).join(
                       User, User.id == Tweet.user_id
                   ).join(
                       Tweet_comment, Tweet_comment.id == Tweet.tweet_id
@@ -99,12 +174,12 @@ def tweet_view():
                   ).filter(
                       Tweet.user_id != cookie_id
                   ).all()
-    
+
     return tweet_view
 
 def follow_id_view():
 
-    cookie_id = request.get_cookie('user_id' ,secret=setting.SECRET_KEY)
+    cookie_id = request.get_cookie('user_id' ,secret=models.app_setting.SECRET_KEY)
 
     follow_view = session.query(Follow.to_user_id).filter(
                      Follow.from_user_id == cookie_id,
@@ -113,20 +188,11 @@ def follow_id_view():
 
     return follow_view
 
-def follower_check():
+def follow_comment():
 
-    cookie_id = request.get_cookie('user_id' ,secret=setting.SECRET_KEY)
+    comment = session.query(Follow_comment.comment).all()
 
-    tweet_view =session.query(User.id).join(
-                      Tweet, User.id == Tweet.user_id
-                  ).join(
-                      Tweet_comment, Tweet_comment.id == Tweet.tweet_id
-                  ).join(
-                      Img, Img.id == Tweet.img_id
-                  ).filter(
-                      Tweet.user_id != cookie_id
-                  ).all()
-    return tweet_view
+    return comment
 
 def tweet_create(form):
 
@@ -149,7 +215,7 @@ def img_table(form):
 
     print(tweet)
 
-    data = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+    data = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
 
     img = Img(
            img_url = request.POST.getunicode('img'),
@@ -195,7 +261,7 @@ def tweet_table(form):
                     desc(Tweet_comment.tweet_text)
               ).first()
 
-    data = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+    data = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
 
     img_db = session.query(Img).filter(
                     Img.user_id == data
@@ -222,56 +288,83 @@ def img_view(form):
 
 def follow_table(form):
 
-    from_id = request.get_cookie('user_id' ,secret=setting.SECRET_KEY)
+    from_id = request.get_cookie('user_id' ,secret=models.app_setting.SECRET_KEY)
     follow_id = 1
 
-    print(from_id)
+    follow_user = session.query(Follow.to_user_id).filter(Follow.to_user_id==form).all()
+    print(follow_user)
 
-    follow = Follow(
-               from_user_id = from_id,
-               to_user_id = form,
-               follow_id = follow_id
-             )
+    if follow_user == []:
+        follow = Follow(
+                  from_user_id = from_id,
+                  to_user_id = form,
+                  follow_id = follow_id
+                )
+        session.add(follow)
+        session.commit()
+        return redirect('/follower')
+    else:
+        return redirect('/follower')
 
-    session.add(follow)
-    session.commit()
+def fab_view():
 
-    return follow
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
+    flag = 1
+
+    fabs = session.query(Tweet.id ,Tweet.tweet_id, Tweet.img_id, Tweet.created_at, Fab.user_id, Tweet_comment.tweet_text, User.id, User.name, User.pro_img, Img.img_url, Fab.id).join(
+                    User, User.id == Tweet.user_id
+               ).join(
+                    Fab, Fab.tweet_id == Tweet.id
+               ).join(
+                    Tweet_comment, Tweet_comment.id == Tweet.tweet_id
+               ).join(
+                    Img, Img.id == Tweet.img_id
+               ).filter(
+                    Fab.user_id == user_id,
+                    Fab.fab_id == flag
+               ).all()
+    print(fabs)
+    return fabs
 
 def fab_table(form):
 
-    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
-    fab_id = 1
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
 
-    fab = Fab(
+    fab_view = session.query(Fab.tweet_id).filter(Fab.tweet_id == user_id).all()
+    if fab_view == user_id:
+        return redirect('/fab')
+    else:
+        fab = Fab(
                user_id = user_id,
                tweet_id = form,
-               fab_id = fab_id
+               fab_id = 1
           )
+        session.add(fab)
+        session.commit()
+        return redirect('/fab')
 
-    session.add(fab)
+def fab_delete(form):
+
+    delete = session.query(Fab).filter(
+                Fab.tweet_id == form
+             ).delete()
     session.commit()
+    return redirect('/fab')
 
-    return fab
+def fab_check_view():
 
-# def check_follow(form):
-#
-#     user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
-#
-#     check = session.query(Follow.follow_id).filter(
-#                   Follow.from_user_id == user_id,
-#                   Follow.to_user_id == form
-#             ).first()
-#
-#     print(check[0])
-#     if check is not None:
-#         return check[0]
-#     else:
-#         return False
+    user_id = request.get_cookie('user_id' ,secret=models.app_setting.SECRET_KEY)
+
+    check = session.query(Fab.tweet_id).filter(
+                Fab.user_id == user_id,
+                Fab.fab_id == 1
+           ).all()
+    return check
+
 
 def tweet_search(form):
 
-    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
 
     if form.getunicode('search') == '':
         return False
@@ -292,7 +385,7 @@ def tweet_search(form):
 
 def my_tweet():
 
-    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
 
 
     profile = session.query(Tweet.created_at, Tweet_comment.tweet_text, Tweet.tweet_id, User.id, User.name, Img.img_url, User.pro_img).join(
@@ -307,9 +400,18 @@ def my_tweet():
 
     return profile
 
+def my_profile():
+
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
+
+    profile = session.query(User.name, User.comment, User.pro_img).filter(
+                  User.id == user_id
+              ).all()
+    return profile
+
 def my_tweet_img():
 
-    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
 
     profile = session.query(User.pro_img).filter(
                    User.id == user_id
@@ -321,7 +423,7 @@ def my_tweet_img():
 
 def comment():
 
-    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
 
     profile = session.query(User.id, User.name, User.email, User.pro_img, User.comment).filter(
                    User.id == user_id
@@ -331,7 +433,7 @@ def comment():
 
 def test_user(form):
 
-    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
 
     profile_edit = session.query(User).filter(
                       User.id == user_id
@@ -346,7 +448,7 @@ def test_user(form):
 
 def profile_edit(form):
 
-    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
 
     profile_edit = session.query(User).filter(
                       User.id == user_id
@@ -404,7 +506,7 @@ def delete(form):
 
 def my_tweet_edit(form):
 
-    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
 
     tweet_edit = session.query(Tweet_comment.tweet_text).join(
                   Tweet, Tweet.tweet_id == Tweet_comment.id
@@ -417,7 +519,7 @@ def my_tweet_edit(form):
 
 def my_tweet_edit_input(form):
 
-    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
 
     tweet_edit = session.query(Tweet_comment).join(
                   Tweet, Tweet.tweet_id == Tweet_comment.id
@@ -434,8 +536,7 @@ def my_tweet_edit_input(form):
 
 def follower_view():
 
-    user_id = request.get_cookie('user_id', secret=setting.SECRET_KEY)
-
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
     follower = session.query(Follow.to_user_id, User.name, User.comment, User.pro_img).join(
                     User, User.id == Follow.to_user_id
                ).filter(
@@ -455,10 +556,31 @@ def delete_follower(form):
              ).delete()
     session.commit()
 
-    return delete
+    return redirect('/follower')
+
+def user_profile(form):
+
+    profile = session.query(User.name, User.pro_img, User.comment, User.id).filter(
+                 User.id == form
+              ).all()
+
+    return profile
+
+def users_tweet(form):
+
+    user_tweet = session.query(Tweet.created_at, Tweet_comment.tweet_text, Tweet.tweet_id, User.id, User.name, Img.img_url, User.pro_img, Tweet.id).join(
+                    User, User.id == Tweet.user_id
+               ).join(
+                    Tweet_comment, Tweet_comment.id == Tweet.tweet_id
+               ).join(
+                    Img, Img.id == Tweet.img_id
+               ).filter(
+                    Tweet.user_id == form
+               ).all()
+    return user_tweet
 
 def logout_user():
-    response.delete_cookie('user_id', secret=setting.SECRET_KEY, path='/')
+    response.delete_cookie('user_id', secret=models.app_setting.SECRET_KEY, path='/')
 
 
 def tweet_view_test():

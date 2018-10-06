@@ -12,7 +12,7 @@ import smtplib
 import os
 import stripe
 
-from models.setting import *
+from models.app_setting import session
 from models.user import *
 from models.tweet import *
 from models.tweet_comment import *
@@ -20,17 +20,21 @@ from models.img import *
 from models.follow import *
 from models.fab import *
 from models.pro_comment import *
+from models.social import *
+from models.follow_comment import *
 
 from library import *
 
-import setting
+import models.app_setting
+
+import requests
 
 import sys
 
-from urllib.parse import urljoin
-
-
-current_user = get_current_user()
+@hook('before_request')
+def before_action():
+        global current_user
+        current_user = get_current_user()
 
 @hook('after_request')
 def close_db_session():
@@ -86,6 +90,114 @@ def login():
     else:
         return template('templates/tatume', current_user=current_user)
 
+
+# @route('/facebook/login', method='GET')
+# def facebok_login():
+#         """
+#         ユーザーにFacebookアプリに情報取得許可のログインをしてもらう
+#         ログイン成功後 code というデータとともにリダイレクトされる
+#         """
+#         url = 'https://www.facebook.com/dialog/oauth'
+#         params = {
+#                 'response_type': 'code',
+#                 'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
+#                 'client_id': models.app_setting.FACEBOOK_ID,
+#         }
+#         redirect_url = requests.get(url, params=params).url
+#         redirect(redirect_url)
+#
+#
+# @route('/test/facebook/callback')
+# def facebook_callback():
+#     try: # 予期せぬエラーがでたらログイン画面にリダイレクトする
+#         if request.GET.getunicode('code'):
+#             """
+#             リダイレクトと同時に送られてきたcodeを用いてアクセストークンを取得
+#             """
+#             url = 'https://graph.facebook.com/v3.1/oauth/access_token'
+#             params = {
+#                     'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
+#                     'client_id': models.app_setting.FACEBOOK_ID,
+#                     'client_secret': models.app_setting.FACEBOOK_SECRET,
+#                     'code': request.GET.getunicode('code'),
+#             }
+#             r = requests.get(url, params=params)
+#             access_token = r.json()['access_token']
+#             print(access_token)
+#
+#             """
+#             取得したアクセストークンが不正じゃないか確認する
+#             """
+#             url = 'https://graph.facebook.com/debug_token'
+#             params = {
+#                 'input_token': access_token,
+#                 'access_token': '%s|%s' % (models.app_setting.FACEBOOK_ID, models.app_setting.FACEBOOK_SECRET)
+#             }
+#             r = requests.get(url, params=params)
+#
+#             if r.json()['data']['is_valid']:
+#                 """
+# 				アクセストークンが不正じゃないことがわかったら
+# 				アクセストークンをもとにユーザーの情報を取得する
+# 				"""
+#                 url = 'https://graph.facebook.com/%s' % (r.json()['data']['user_id'])
+#                 params = {
+#                     'fields': 'name,email',
+#                     'access_token': access_token,
+#                 }
+#                 r = requests.get(url, params=params)
+#                 return r.json()
+#             else:
+#     			# アクセストークンが不正なものだったらログイン画面にリダイレクトする
+#                 redirect('/')
+#
+#     except:
+#         redirect('/')
+
+@route('/facebook/login')
+def facebook_login():
+
+    url = 'https://www.facebook.com/dialog/oauth'
+    params = {
+        'response_type': 'code',
+        'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
+        'client_id': models.app_setting.FACEBOOK_ID
+    }
+
+    redirect_url = requests.get(url, params=params).url
+    # print('r.url:', r.url)
+    # print('r: ', vars(r))
+    # return r.url
+    # redirect_url = r.url
+
+    redirect(redirect_url)
+
+@route('/facebook/callback')
+def facebook_callback():
+    try: # 予期せぬエラーがでたらログイン画面にリダイレクトする
+        print('test')
+        if request.GET.getunicode('code'):
+
+            access_token = get_facebook_access_token(request.GET.getunicode('code'))
+            print(access_token)
+            data = check_facebook_access_tokn(access_token)
+
+            if data['is_valid']:
+                data = get_facebook_user_info(access_token, data['user_id'])
+                if check_socials(data, 'facebook'):
+                    redirect('/tweet')
+                else:
+                    user = create_facebook_user()
+                    create_socials(user, data, 'facebook')
+                    login_user(user.id)
+                    redirect('/tweet')
+            else:
+        		# アクセストークンが不正なものだったらログイン画面にリダイレクトする
+                redirect('/')
+
+    except:
+        redirect('/')
+
 @route("/logout")
 def logout():
 
@@ -127,29 +239,24 @@ def create():
     user = create_user(request.POST)
     duplicate_error = '登録完了しました。'
 
-    return template('templates/create', user=user, current_user=current_user , duplicate_error=duplicate_error)
+    return template('templates/create_after', user=user, current_user=current_user , duplicate_error=duplicate_error)
 
 @route("/info")
 def info():
 
-    return template('templates/info', url=url)
+    current_user = get_current_user()
+
+    return template('templates/info', url=url, current_user=current_user)
 
 @route('/tweet', method='GET')
 def tweet():
 
     current_user = get_current_user()
     tweets = tweet_view()
-    check = follow_id_view()
-    follow_check = follower_check()
-    print(follow_check)
-    for tweet in tweets:
-        if check in tweet:
-            print('test')
-        else:
-            print('testdes')
+    follow_check = follow_id_view()
+    fab_check = fab_check_view()
 
-
-    return template('templates/tweet', tweets=tweets, current_user=current_user, check=check, follow_check=follow_check)
+    return template('templates/tweet', follow_view=follow_check, fab_check=fab_check, tweets=tweets, current_user=current_user)
 
 @route('/tweet', method='POST')
 def tweer_db():
@@ -159,17 +266,9 @@ def tweer_db():
     img = img_table(request.forms)
     tweet_db = tweet_table(request.forms)
     tweets = tweet_view()
+    comment = 'フォローする'
 
-    return template('templates/tweet', tweet_comment=tweet_comment, tweets=tweets, tweet=tweet_db, img=img_table, current_user=current_user)
-
-@route('/follow/<user_follow:int>')
-def follow(user_follow):
-
-    current_user = get_current_user()
-    follow_user = follow_table(user_follow)
-    tweets = tweet_view()
-
-    return redirect('/follower')
+    return template('templates/tweet', tweet_comment=tweet_comment, tweets=tweets, tweet=tweet_db, img=img_table, current_user=current_user, comment=comment)
 
 @route('/follower')
 def follower():
@@ -179,22 +278,43 @@ def follower():
 
     return template('templates/follower', current_user=current_user, follower_view_table=follower_view_table)
 
-@route('/follower/delete/<delete_follower_id>')
+@route('/follow/<user_follow:int>')
+def follow(user_follow):
+
+    follow_user = follow_table(user_follow)
+
+    return follow_user
+
+@route('/follow/delete/<delete_follower_id:int>')
 def delete_follower_id(delete_follower_id):
 
-    current_user = get_current_user()
     delete = delete_follower(delete_follower_id)
 
-    return redirect('/follower')
+    return delete
+
+@route('/fab')
+def fab_test():
+
+    current_user = get_current_user()
+    tweets = fab_view()
+    follow_check = follow_id_view()
+    fab_check = fab_check_view()
+
+    return template('templates/fab', current_user=current_user, tweets=tweets, fab_check=fab_check, follow_check=follow_check)
 
 @route('/fab/<fab_id:int>')
 def fab(fab_id):
 
-    current_user = get_current_user()
-    fab_db = fab_table(fab_id)
-    tweets = tweet_view()
+    fab = fab_table(fab_id)
 
-    return template('templates/fab', tweets=tweets, fab_db=fab_db, fab_id=fab_id, current_user=current_user)
+    return fab
+
+@route('/fab/delete/<fab_id:int>')
+def fab(fab_id):
+
+    delete = fab_delete(fab_id)
+
+    return delete
 
 @route('/search')
 def view():
@@ -229,10 +349,9 @@ def profile():
     current_user = get_current_user()
     pro=None
     my_tweets = my_tweet()
-    mytweet_img = my_tweet_img()
-    mytweet_img = mytweet_img[0][0]
+    profile = my_profile()
 
-    return template('templates/mypage', my_tweets=my_tweets, current_user=current_user, pro=pro, mytweet_img=mytweet_img)
+    return template('templates/mypage', my_tweets=my_tweets, current_user=current_user, pro=pro, profile=profile)
 
 @route('/edit')
 def edit():
@@ -280,12 +399,16 @@ def tweet_edit_input(tweet_edit_id):
 
     return redirect('/mypage')
 
-@route('/test')
-def test_view():
+@route('/users/profile/<user_id_number>')
+def users_profile(user_id_number):
 
-    tweets = tweet_view_test()
+    current_user = get_current_user()
+    tweet = users_tweet(user_id_number)
+    profile = user_profile(user_id_number)
+    fab_check = fab_check_view()
+    follow_check = follow_id_view()
 
-    return template('templates/test_sub', tweets=tweets)
+    return template('templates/users/profile', follow_check=follow_check, fab_check=fab_check, user_id_number=user_id_number, current_user=current_user, user_profile=profile, user_tweets=tweet)
 
 
 # @route('/follow/<follow_user_id:int>')

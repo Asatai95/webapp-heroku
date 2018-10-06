@@ -7,11 +7,14 @@ import hashlib
 
 from app_setting import session
 from models.user import User
+from models.social import Social
 
 import app_setting
 
 from email.mime.text import MIMEText
 import smtplib
+
+import requests
 
 """
 ユーザーを作成する
@@ -27,30 +30,100 @@ def create_user(form):
     session.commit()
     return user
 
-def create_user_sns(form):
-    user = User(
-          name = form['name'],
-          email = form['email'],
-          age = None,
-          password = None
-    )
-
+"""
+Facebookログインしたユーザのモデルを生成する
+今回はデータの入力はしない
+個々の処理は、APIの取得情報追加申請などで変えると良い
+"""
+def create_facebook_user():
+    user = User()
     session.add(user)
     session.commit()
-
     return user
 
-def user_sns_login(form):
 
-    sns_user = session.query(User).filter(
-                  User.email ==  form['email']
-               )
-    if sns_user is not None:
-        return True
-    else:
+"""
+APIで受け取った情報をもとにソーシャルレコードを作成
+"""
+def create_socials(user, data, provider):
+    if provider == 'facebook':
+        social = Social(
+            user_id = user.id,
+            provider = provider,
+            provider_id = data['id'],
+        )
+    # elif provider == 'twitter':
+
+    session.add(social)
+    session.commit()
+
+
+"""
+APIで受け取ったユーザー情報でDB照合
+返り値
+照合失敗：False
+照合成功：True
+照合成功後はログイン処理を行う
+"""
+def check_socials(data, provider):
+    if provider == 'facebook':
+        social = session.query(Social).filter(
+                        Social.provider == 'facebook',
+                        Social.provider_id == data['id']
+                    ).first()
+
+    if social is None:
         return False
+    else:
+        login_user(social.user_id)
+        return True
 
 
+"""
+リダイレクトと同時に送られてきたcodeを用いてアクセストークンを取得
+"""
+def get_facebook_access_token(code):
+    url = 'https://graph.facebook.com/v3.1/oauth/access_token'
+    params = {
+            'redirect_uri': app_setting.FACEBOOK_CALLBACK_URL,
+            'client_id': app_setting.FACEBOOK_ID,
+            'client_secret': app_setting.FACEBOOK_SECRET,
+            'code': code,
+    }
+    print(params)
+    r = requests.get(url, params=params)
+    print(r.json())
+    return r.json()['access_token']
+
+
+"""
+取得したアクセストークンが不正じゃないか確認する
+"""
+def check_facebook_access_tokn(access_token):
+    url = 'https://graph.facebook.com/debug_token'
+    params = {
+        'input_token': access_token,
+        'access_token': '%s|%s' % (app_setting.FACEBOOK_ID, app_setting.FACEBOOK_SECRET)
+    }
+    r = requests.get(url, params=params)
+    return r.json()['data']
+
+"""
+アクセストークンが不正じゃないことがわかったら
+アクセストークンをもとにユーザーの情報を取得する
+"""
+def get_facebook_user_info(access_token, user_id):
+    url = 'https://graph.facebook.com/%s' % (user_id)
+    params = {
+        'fields': 'name,email',
+        'access_token': access_token,
+    }
+    return requests.get(url, params=params).json()
+
+
+"""
+パスワードの暗号化
+"""
 def _encrypt_password(password):
     return hmac.new(
                 msg=password.encode('UTF-8'),
@@ -65,6 +138,7 @@ def is_duplicate_email(email):
     else:
         return True
 
+
 """
 ログインしているユーザーを取得する
 返り値
@@ -77,6 +151,7 @@ def get_current_user():
         return session.query(User).get(user_id)
     else:
         return None
+
 
 """
 ログインしていればルートパスにリダイレクトさせる
@@ -100,16 +175,23 @@ def authenticate(form):
                 ).first()
 
     if auth_user is not None:
-        response.set_cookie(
-            'user_id',
-            auth_user.id,
-            secret=app_setting.SECRET_KEY,
-            max_age=2678400, # 31日間有効
-            path='/'
-        )
+        login_user(auth_user.id)
         return True
     else:
         return False
+
+
+"""
+引数で受け取った ユーザーIDでクッキーをセットする
+"""
+def login_user(user_id):
+    response.set_cookie(
+        'user_id',
+        user_id,
+        secret=app_setting.SECRET_KEY,
+        max_age=2678400, # 31日間有効
+        path='/'
+    )
 
 """
 ログアウト
@@ -118,30 +200,31 @@ def logout_user():
     response.delete_cookie('user_id', secret=app_setting.SECRET_KEY, path='/')
 
 
+"""
+メール送信
+引数1つ目：送り先のメール
+引数2つ目：メールの種類
+例
+ send_mail(user.email, 'create')
+ send_mail(user.email, 'delete')
+"""
+# send_mail(user.email, 'create')
 def send_mail(to_email, send_type):
-
-    body = ''
+    body=''
     subject = ''
     if send_type == 'create':
-        body = '〇〇です。\n\n新規登録ありがとうございます。'
-        subject = '[新規登録完了] 〇〇〇〇〇〇'
+        body = '〇〇です。 \n\n新規登録ありがとうございます。'
+        subject = '【新規登録完了】〇〇〇〇〇'
     # elif 'delete':
-    #     body = ''
-    #     subject =''
+    #     body = '〇〇です。\n\n新規登録ありがとうございます。'
+    #     subject = '【新規登録完了】〇〇〇〇〇'
 
     message = MIMEText(body)  # 本文
     message['Subject'] = subject         # 件名
     message['From'] = app_setting.HOST_EMAIL  # 送信元
-    message['To'] = to_email     # 送信先
+    message['To'] = to_email      # 送信先
 
     sender = smtplib.SMTP_SSL(app_setting.HOST_SMTP)
     sender.login(app_setting.HOST_EMAIL, app_setting.HOST_PASSWORD)
     sender.sendmail(app_setting.HOST_EMAIL, to_email, message.as_string())
     sender.quit()
-
-def session_clear(exception):
-    if exception and Session.is_active:
-        session.rollback()
-    else:
-        pass
-    session.close()

@@ -211,7 +211,7 @@ p.title_text {
   opacity: .5;
   margin: 25px auto;
   margin-bottom: 15px;
-  
+
 }
 
 .login {
@@ -299,14 +299,8 @@ span.sen img {
   margin-bottom: 0;
 }
 
-.fb-login-button {
-  margin: 0 0 20px 0;
-}
-
-.fb-login-button:hover {
-  box-shadow: 0 0 5px blue;
-  border-radius: 5px;
-  opacity: .9;
+.facebook-login{
+  margin: 10px auto;
 }
 
 #my-signin2 {

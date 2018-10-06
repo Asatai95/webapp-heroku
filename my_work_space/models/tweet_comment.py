@@ -3,15 +3,10 @@ from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Float, DateTime
 from datetime import datetime
-import sys
 
-if __name__ == "__main__":
-    from setting import Base
-    from setting import ENGINE
-else:
-    from .setting import Base
-    from .setting import ENGINE
-
+import os, sys
+sys.path.append(os.getcwd()) # コマンド実行ディレクトリを設定
+from models.app_setting import ENGINE, Base
 
 class Tweet_comment(Base):
     __tablename__ = 'tweet_comment'

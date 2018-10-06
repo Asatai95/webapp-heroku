@@ -25,20 +25,13 @@ div.header {
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
-
-div.header_sub {
-  width: 100%;
-  height: 120px;
-  position: block;
-}
-
 div.img img {
   width: 150px;
-  height: 100px;
+  height: 150px;
   float: left;
   margin: 30px;
   margin-left: 50px;
-  margin-top: 80px;
+  margin-top: 40px;
 }
 
 ul.header_main {
@@ -51,6 +44,18 @@ ul.header_main {
 
 li.text {
   list-style: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+}
+
+.text a {
+  color: black;
+  text-decoration: none;
+}
+
+li.login_sub {
+  list-style: none;
   text-decoration: none;
   font-family: serif;
   float: left;
@@ -58,23 +63,37 @@ li.text {
   color: black;
 }
 
-li.text_now {
-  list-style: none;
-  text-decoration: none;
-  font-family: serif;
-  float: left;
-  padding: 10px;
+.login_sub a {
   color: black;
-  border-bottom: 1px solid black;
+  text-decoration: none;
 }
 
-li.login {
+li.new {
   list-style: none;
   text-decoration: none;
   font-family: serif;
   float: left;
   padding: 10px;
   color: black;
+}
+
+.new a {
+  color: black;
+  text-decoration: none;
+}
+
+li.login_account {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
+}
+
+.login_account a {
+  color: black;
+  text-decoration: none;
 }
 
 li.text:hover {
@@ -84,18 +103,27 @@ li.text:hover {
   box-shadow: 0 0 15px white;
 }
 
-li.text_now:hover {
+li.login_sub:hover {
   border-radius: 50px;
   border: 1px solid black;
   transform: scale(1.1);
   box-shadow: 0 0 15px white;
 }
 
-li.login:hover {
+li.new:hover {
   border-radius: 50px;
   border: 1px solid black;
   transform: scale(1.1);
   box-shadow: 0 0 15px white;
+}
+
+li.login_account:hover {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
 }
 
 .content {

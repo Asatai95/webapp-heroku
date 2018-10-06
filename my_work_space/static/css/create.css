@@ -46,7 +46,7 @@ div.main {
 .title {
   text-align: center;
   width: 1064px;
-  height: 80px;
+  height: 100px;
   margin-top: 50px;
   font-size: 25px;
   font-weight: 800;
@@ -55,7 +55,6 @@ div.main {
 p.title_text {
   font-size: 30px;
   color: black;
-  padding: 20px;
 }
 
 .create {
@@ -140,6 +139,54 @@ p.sen a {
   text-decoration: none;
   margin-left: 5px;
 
+}
+
+.top {
+  margin-top: 2px;
+}
+
+.top li {
+  display: inline-block;
+  list-style: none;
+}
+
+.top li a{
+  text-decoration: none;
+  padding-bottom: 3px;
+  display: block;
+  position: relative;
+  font-size: 25px;
+  color: black;
+  cursor: pointer;
+}
+
+.top li a:before {
+	content: '';
+	width: 0;
+	left: 50%;
+	bottom: 0;
+	transition: all 0.3s ease;
+	border-bottom: 3px solid grey;
+	position: absolute;
+	display: block;
+}
+.top li a:hover:before {
+	width: 50%;
+	border-bottom: 3px solid grey;
+}
+.top li a:after {
+	content: '';
+	width: 0;
+	right: 50%;
+	bottom: 0;
+	transition: all 0.3s ease;
+	border-bottom: 3px solid grey;
+	position: absolute;
+	display: block;
+}
+.top li a:hover:after {
+	width: 50%;
+	border-bottom: 3px solid grey;
 }
 
 .error {

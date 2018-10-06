@@ -67,32 +67,16 @@ def create_socials(user, data, provider):
     session.add(social)
     session.commit()
 
-def check_socials(data, provider):
-    if provider == 'facebook':
-        social = session.query(Social).filter(
-                        Social.provider == 'facebook',
-                        Social.provider_id == data['id']
-                    ).first()
-    print('test_test')
-    if social is None:
-        return False
-    else:
-        login_user(social.user_id)
-        return True
-
 def get_facebook_access_token(code):
     url = 'https://graph.facebook.com/v3.1/oauth/access_token'
     params = {
             'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
             'client_id': models.app_setting.FACEBOOK_ID,
             'client_secret': models.app_setting.FACEBOOK_SECRET,
-            'code': code,
+            'code': code
     }
 
-    print(params)
-
     r = requests.get(url, params=params)
-    print(r.json())
     return r.json()['access_token']
 
 def check_facebook_access_tokn(access_token):
@@ -111,6 +95,20 @@ def get_facebook_user_info(access_token, user_id):
         'access_token': access_token,
     }
     return requests.get(url, params=params).json()
+
+
+def check_socials(data, provider):
+    if provider == 'facebook':
+        social = session.query(Social).filter(
+                        Social.provider == 'facebook',
+                        Social.provider_id == data['id']
+                    ).first()
+    print('test_test')
+    if social is None:
+        return False
+    else:
+        login_user(social.user_id)
+        return True
 
 def _encrypt_password(password):
     return hmac.new(

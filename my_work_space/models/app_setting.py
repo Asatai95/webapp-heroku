@@ -15,9 +15,9 @@ try:
 except:
     # for development
     SECRET_KEY = '2fsKgOLaAHbJUbi6kJsyboVLPchUjL88iZ7sM3A1'
-    HOST_PASSWORD = 'asatai951156'
-    FACEBOOK_ID = '2165553107045876'
-    FACEBOOK_SECRET = '2b3f9337bb73847b0a63846a74cb5bf7'
+    HOST_PASSWORD = 'PassWord'
+    FACEBOOK_ID = '469722980181511'
+    FACEBOOK_SECRET = '67fcea638494b27eeb9e46756d195e75'
     FACEBOOK_CALLBACK_URL = 'http://localhost:5000/facebook/callback'
     DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8mb4' % (
        "root", # user
@@ -27,7 +27,7 @@ except:
     ) # mysql://ユーザー名:パスワード@ホスト/データベース名
 
 HOST_EMAIL = 'official@webapp2.com'
-HOST_PASSWORD = 'asatai951156'
+
 HOST_SMTP = 'smtp.muumuu-mail.com'
 
 ENGINE = create_engine(

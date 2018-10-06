@@ -91,112 +91,111 @@ def login():
         return template('templates/tatume', current_user=current_user)
 
 
-# @route('/facebook/login', method='GET')
-# def facebok_login():
-#         """
-#         ユーザーにFacebookアプリに情報取得許可のログインをしてもらう
-#         ログイン成功後 code というデータとともにリダイレクトされる
-#         """
-#         url = 'https://www.facebook.com/dialog/oauth'
-#         params = {
-#                 'response_type': 'code',
-#                 'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
-#                 'client_id': models.app_setting.FACEBOOK_ID,
-#         }
-#         redirect_url = requests.get(url, params=params).url
-#         redirect(redirect_url)
-#
-#
-# @route('/test/facebook/callback')
-# def facebook_callback():
-#     try: # 予期せぬエラーがでたらログイン画面にリダイレクトする
-#         if request.GET.getunicode('code'):
-#             """
-#             リダイレクトと同時に送られてきたcodeを用いてアクセストークンを取得
-#             """
-#             url = 'https://graph.facebook.com/v3.1/oauth/access_token'
-#             params = {
-#                     'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
-#                     'client_id': models.app_setting.FACEBOOK_ID,
-#                     'client_secret': models.app_setting.FACEBOOK_SECRET,
-#                     'code': request.GET.getunicode('code'),
-#             }
-#             r = requests.get(url, params=params)
-#             access_token = r.json()['access_token']
-#             print(access_token)
-#
-#             """
-#             取得したアクセストークンが不正じゃないか確認する
-#             """
-#             url = 'https://graph.facebook.com/debug_token'
-#             params = {
-#                 'input_token': access_token,
-#                 'access_token': '%s|%s' % (models.app_setting.FACEBOOK_ID, models.app_setting.FACEBOOK_SECRET)
-#             }
-#             r = requests.get(url, params=params)
-#
-#             if r.json()['data']['is_valid']:
-#                 """
-# 				アクセストークンが不正じゃないことがわかったら
-# 				アクセストークンをもとにユーザーの情報を取得する
-# 				"""
-#                 url = 'https://graph.facebook.com/%s' % (r.json()['data']['user_id'])
-#                 params = {
-#                     'fields': 'name,email',
-#                     'access_token': access_token,
-#                 }
-#                 r = requests.get(url, params=params)
-#                 return r.json()
-#             else:
-#     			# アクセストークンが不正なものだったらログイン画面にリダイレクトする
-#                 redirect('/')
-#
-#     except:
-#         redirect('/')
+@route('/facebook/login', method='GET')
+def facebok_login():
+        """
+        ユーザーにFacebookアプリに情報取得許可のログインをしてもらう
+        ログイン成功後 code というデータとともにリダイレクトされる
+        """
+        url = 'https://www.facebook.com/dialog/oauth'
+        params = {
+                'response_type': 'code',
+                'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
+                'client_id': models.app_setting.FACEBOOK_ID,
+        }
+        redirect_url = requests.get(url, params=params).url
+        redirect(redirect_url)
 
-@route('/facebook/login')
-def facebook_login():
-
-    url = 'https://www.facebook.com/dialog/oauth'
-    params = {
-        'response_type': 'code',
-        'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
-        'client_id': models.app_setting.FACEBOOK_ID
-    }
-
-    redirect_url = requests.get(url, params=params).url
-    # print('r.url:', r.url)
-    # print('r: ', vars(r))
-    # return r.url
-    # redirect_url = r.url
-
-    redirect(redirect_url)
 
 @route('/facebook/callback')
 def facebook_callback():
     try: # 予期せぬエラーがでたらログイン画面にリダイレクトする
-        print('test')
         if request.GET.getunicode('code'):
-
-            access_token = get_facebook_access_token(request.GET.getunicode('code'))
+            """
+            リダイレクトと同時に送られてきたcodeを用いてアクセストークンを取得
+            """
+            url = 'https://graph.facebook.com/v3.1/oauth/access_token'
+            params = {
+                    'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
+                    'client_id': models.app_setting.FACEBOOK_ID,
+                    'client_secret': models.app_setting.FACEBOOK_SECRET,
+                    'code': request.GET.getunicode('code'),
+            }
+            r = requests.get(url, params=params)
+            access_token = r.json()['access_token']
             print(access_token)
-            data = check_facebook_access_tokn(access_token)
 
-            if data['is_valid']:
-                data = get_facebook_user_info(access_token, data['user_id'])
-                if check_socials(data, 'facebook'):
-                    redirect('/tweet')
-                else:
-                    user = create_facebook_user()
-                    create_socials(user, data, 'facebook')
-                    login_user(user.id)
-                    redirect('/tweet')
+            """
+            取得したアクセストークンが不正じゃないか確認する
+            """
+            url = 'https://graph.facebook.com/debug_token'
+            params = {
+                'input_token': access_token,
+                'access_token': '%s|%s' % (models.app_setting.FACEBOOK_ID, models.app_setting.FACEBOOK_SECRET)
+            }
+            r = requests.get(url, params=params)
+
+            if r.json()['data']['is_valid']:
+                """
+				アクセストークンが不正じゃないことがわかったら
+				アクセストークンをもとにユーザーの情報を取得する
+				"""
+                url = 'https://graph.facebook.com/%s' % (r.json()['data']['user_id'])
+                params = {
+                    'fields': 'name,email',
+                    'access_token': access_token,
+                }
+                r = requests.get(url, params=params)
+                return r.json()
             else:
-        		# アクセストークンが不正なものだったらログイン画面にリダイレクトする
+    			# アクセストークンが不正なものだったらログイン画面にリダイレクトする
                 redirect('/')
 
     except:
         redirect('/')
+
+# @route('/facebook/login')
+# def facebook_login():
+#
+#     url = 'https://www.facebook.com/dialog/oauth'
+#     params = {
+#         'response_type': 'code',
+#         'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
+#         'client_id': models.app_setting.FACEBOOK_ID
+#     }
+#
+#     redirect_url = requests.get(url, params=params).url
+#     # print('r.url:', r.url)
+#     # print('r: ', vars(r))
+#     # return r.url
+#     # redirect_url = r.url
+#
+#     redirect(redirect_url)
+#
+# @route('/facebook/callback')
+# def facebook_callback():
+#     try: # 予期せぬエラーがでたらログイン画面にリダイレクトする
+#         if request.GET.getunicode('code'):
+#
+#             access_token = get_facebook_access_token(request.GET.getunicode('code'))
+#             print(access_token)
+#             data = check_facebook_access_tokn(access_token)
+#
+#             if data['is_valid']:
+#                 data = get_facebook_user_info(access_token, data['user_id'])
+#                 if check_socials(data, 'facebook'):
+#                     redirect('/tweet')
+#                 else:
+#                     user = create_facebook_user()
+#                     create_socials(user, data, 'facebook')
+#                     login_user(user.id)
+#                     redirect('/tweet')
+#             else:
+#         		# アクセストークンが不正なものだったらログイン画面にリダイレクトする
+#                 redirect('/')
+#
+#     except:
+#         redirect('/')
 
 @route("/logout")
 def logout():
@@ -409,64 +408,6 @@ def users_profile(user_id_number):
     follow_check = follow_id_view()
 
     return template('templates/users/profile', follow_check=follow_check, fab_check=fab_check, user_id_number=user_id_number, current_user=current_user, user_profile=profile, user_tweets=tweet)
-
-
-# @route('/follow/<follow_user_id:int>')
-# def follow(follow_user_id):
-#
-#     return redirect('/tweet')
-
-# @route('/follow/<follow_id_test:int>')
-# def follow(follow_id_test):
-#
-#
-# @route('/follow/<follow_id:int>')
-# def follow_back(follow_id):
-#
-#     return redirect('/tweet')
-# @route("/new", method='POST')
-# def new():
-#
-#     user_name = request.forms.user_name
-#     passwd_new = request.forms.new_passwd
-#     log_id_new = request.forms.new_log_id
-#     print(log_id_new)
-#     print(passwd_new)
-#     print(user_name)
-#
-#     try:
-#         user = User()
-#         user.name = str(user_name)
-#         user.passwd = str(passwd_new)
-#         user.email = str(log_id_new)
-#         print('test')
-#
-#         users = session.add(user)
-#         session.commit()
-#         print(users)
-#
-#
-#         return redirect('/info')
-#
-#
-#     except exc.InvalidRequestError :
-#
-#         error = 'すでに登録されているパスワードです。'
-#         print('test')
-#
-#         return template('templates/create', error=error)
-#
-#     except exc.IntegrityError:
-#
-#         error = 'すでに登録されているパスワードです。'
-#         print('test')
-#
-#         return template('templates/create', error=error)
-
-
-
-
-
 #
 # @route("/test")
 # @view("test")

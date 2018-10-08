@@ -36,3 +36,28 @@ $(function(){
     reader.readAsDataURL(file);
   });
 });
+//
+// $(function(){
+//   var pageTop1 = $("#page-top1");
+//   $(window).scroll(function () {
+//
+//         if($('body, html').scrollTop() >= 50) {
+//           pageTop1.css( "bottom", "30px" );
+//         } else {
+//           pageTop1.css( "bottom", "-85px" );
+//         }
+//       });
+//     $("a[href^='#']").click(function(){
+//
+//         //data-box属性がない場合は通常のスムーズスクロール
+//             $("body,html").stop().animate({
+//                 scrollTop:$('.main').offset().top
+//               });
+//         //data-box属性がある場合はdata-box内をスムーズスクロー
+//             var dist = $('.main').position().top - $('.header').position().top;
+//             $('.header').stop().animate({
+//                 scrollTop: $('.header').scrollTop() + dist
+//             });
+//         return false;
+//     });
+// });

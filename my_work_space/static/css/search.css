@@ -107,33 +107,23 @@ li.login_account {
 }
 
 li.text:hover {
-  border-radius: 50px;
-  border: 1px solid black;
   transform: scale(1.1);
   box-shadow: 0 0 15px white;
 }
 
 li.login_sub:hover {
-  border-radius: 50px;
-  border: 1px solid black;
   transform: scale(1.1);
   box-shadow: 0 0 15px white;
 }
 
 li.new:hover {
-  border-radius: 50px;
-  border: 1px solid black;
   transform: scale(1.1);
   box-shadow: 0 0 15px white;
 }
 
 li.login_account:hover {
-  list-style: none;
-  text-decoration: none;
-  font-family: serif;
-  float: left;
-  padding: 10px;
-  color: black;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px white;
 }
 
 dl.search_box{

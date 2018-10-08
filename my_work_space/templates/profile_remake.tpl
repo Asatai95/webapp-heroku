@@ -4,7 +4,7 @@
 
   <div class='header'>
     <div class='img'>
-      <img src="../static/img/nin_img.png" alt="">
+      <a href="/tweet"><img src="../static/img/nin_img.png" alt=""></a>
     </div>
     <ul id='header' class='header_main'>
       % if current_user is None:

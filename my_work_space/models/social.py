@@ -8,6 +8,8 @@ import os, sys
 sys.path.append(os.getcwd()) # コマンド実行ディレクトリを設定
 from models.app_setting import ENGINE, Base
 
+from models.user import User
+
 class Social(Base):
 
     __tablename__ = 'social'

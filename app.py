@@ -126,7 +126,7 @@ def facebook_callback():
                     redirect('/')
             else:
         		# アクセストークンが不正なものだったらログイン画面にリダイレクトする
-                redirect('users/login')
+                redirect('/users/login')
 
     except:
         redirect('/users/login')

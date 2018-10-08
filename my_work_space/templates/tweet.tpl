@@ -4,7 +4,7 @@
   <div class='main'>
     <div class='header'>
       <div class='img'>
-        <img src="static/img/nin_img.png" alt="">
+        <a href="/tweet"><img src="static/img/nin_img.png" alt=""></a>
       </div>
       <ul id='header' class='header_main'>
         % if current_user is None:
@@ -18,7 +18,6 @@
         % if current_user:
         <li class='login_sub'><a href="/logout">ログアウト</a></li>
         % else:
-
         <li class='new'><a href="/create">登録</a></li>
         %end
       </ul>
@@ -60,6 +59,11 @@
         </div>
       </div>
       %end
+      <!-- <div class='top'>
+        <div id="top_scroll">
+          <a href="#" id="page-top1"><img src="static/img/logo.png" alt="ページトップスクロール"></a>
+        </div>
+      </div> -->
     </div>
     <footer>
       <div class='tweet_main'>

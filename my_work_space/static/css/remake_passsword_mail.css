@@ -31,7 +31,7 @@ div.main {
 
 .main_create {
   width: 1064px;
-  height: 660px;
+  height: 500px;
   top: 0;
   right: 0;
   left: 0;
@@ -45,8 +45,8 @@ div.main {
 .title {
   text-align: center;
   width: 1064px;
-  height: 100px;
-  margin-top: 50px;
+  height: 50px;
+  margin-top: 90px;
   font-size: 25px;
   font-weight: 800;
 }
@@ -57,7 +57,6 @@ p.title_text {
 }
 
 .create {
-  height: 490px;
   width: 1064px;
 }
 
@@ -84,12 +83,18 @@ p.title_text {
 }
 
 .submit {
-  margin-top: 30px;
+  margin-top: 60px;
   margin-bottom: 0;
 }
 
 input[type="submit"][disabled] {
-  background-color: rgba(0, 0, 0, .2);
+  background-color: rgba(0, 0, 0, .3);
+  cursor: default;
+}
+
+input[type="submit"][disabled]:hover {
+  box-shadow: 0 0 0 white;
+  transform: scale(1.0);
   cursor: default;
 }
 
@@ -103,92 +108,11 @@ input[type=submit] {
   cursor: pointer;
 }
 
-.img_sen {
-  font-size: 20px;
-  opacity: .5;
-  margin: 20px auto;
-}
-
-span.sen img {
-  width: 100px;
-  height: 20px;
-  margin: 5px 10px 0 10px;
-}
-
-p.sns {
-  margin: 28px 0 0 0;
-  text-align: center;
-  font-size: 18px;
-  color: rgba(0, 0, 0, .4);
-}
-
-p.sen a {
-  text-decoration: none;
-  opacity: 1.0;
-}
-
-.login {
-  font-size: 18px;
-  margin: 20px 0 0 0;
-  color: rgba(0,0,0, .4);
-}
-
-.login a {
-  opacity: 1.0;
-  text-decoration: none;
-  margin-left: 5px;
-
-}
-
-.top {
-  margin-top: 2px;
-  padding: 0;
-}
-
-.top li {
-  display: inline-block;
-  list-style: none;
-}
-
-.top li a{
-  text-decoration: none;
-  padding-bottom: 3px;
-  display: block;
-  position: relative;
-  font-size: 25px;
-  color: black;
+input[type=submit]:hover {
+  box-shadow: 0 0 8px grey;
+  transform: scale(1.1);
   cursor: pointer;
 }
-
-.top li a:before {
-	content: '';
-	width: 0;
-	left: 50%;
-	bottom: 0;
-	transition: all 0.3s ease;
-	border-bottom: 3px solid grey;
-	position: absolute;
-	display: block;
-}
-.top li a:hover:before {
-	width: 50%;
-	border-bottom: 3px solid grey;
-}
-.top li a:after {
-	content: '';
-	width: 0;
-	right: 50%;
-	bottom: 0;
-	transition: all 0.3s ease;
-	border-bottom: 3px solid grey;
-	position: absolute;
-	display: block;
-}
-.top li a:hover:after {
-	width: 50%;
-	border-bottom: 3px solid grey;
-}
-
 
 .error {
   height: 25px;

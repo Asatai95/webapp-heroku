@@ -25,7 +25,11 @@
     <div class='header'>
      <div class='header_sub'>
       <div class='img'>
-        <a href="/"><img src="static/img/nin_img.png" alt=""></a>
+        %if current_user is None:
+         <a href="/"><img src="static/img/nin_img.png" alt=""></a>
+        %else:
+          <a href="/tweet"><img src="static/img/nin_img.png" alt=""></a>
+        %end
       </div>
       <ul id='header' class='header_main'>
         % if current_user is None:

@@ -240,7 +240,7 @@ p .tweet-time {
 }
 
 .inline_img img {
-  width: 100px;
+  width: 150px;
   height: 100px;
 }
 
@@ -481,4 +481,40 @@ span.text {
   color: white;
   padding: 15px 30px;
   margin: 0 10px 0 0;
+}
+
+#top_scroll{
+    position: relative;
+    z-index: 100;
+    margin: 0;
+    padding: 0;
+}
+
+#page-top1{
+    display: block;
+    position: fixed;
+    z-index: 9999;
+    bottom: -250px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    color: #222;
+    text-align: center;
+    text-decoration: none;
+    transition: 1s;
+    -webkit-transition: 1s;
+}
+
+#page-top1:hover{
+    background: ;
+    transform: translateY(-10px);
+}
+
+#page-top1 img {
+  width: 50px;
+}
+
+#top_scroll:hover{
+    background: #fff;
 }

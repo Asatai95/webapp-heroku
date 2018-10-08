@@ -25,6 +25,10 @@ div.header {
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
+div.header_sub {
+  width: 100%;
+}
+
 div.img img {
   width: 150px;
   height: 150px;
@@ -97,33 +101,23 @@ li.login_account {
 }
 
 li.text:hover {
-  border-radius: 50px;
-  border: 1px solid black;
   transform: scale(1.1);
   box-shadow: 0 0 15px white;
 }
 
 li.login_sub:hover {
-  border-radius: 50px;
-  border: 1px solid black;
   transform: scale(1.1);
   box-shadow: 0 0 15px white;
 }
 
 li.new:hover {
-  border-radius: 50px;
-  border: 1px solid black;
   transform: scale(1.1);
   box-shadow: 0 0 15px white;
 }
 
 li.login_account:hover {
-  list-style: none;
-  text-decoration: none;
-  font-family: serif;
-  float: left;
-  padding: 10px;
-  color: black;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px white;
 }
 
 .content {

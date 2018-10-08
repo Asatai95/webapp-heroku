@@ -4,7 +4,7 @@
   <div class='main'>
     <div class='header'>
       <div class='img'>
-        <img src="../static/img/nin_img.png" alt="">
+        <a href="/"><img src="../static/img/nin_img.png" alt=""></a>
       </div>
       <ul id='header' class='header_main'>
         % if current_user is None:
@@ -22,6 +22,42 @@
         %end
       </ul>
     </div>
+    <div class='check_main'>
+      <div class='check_box'>
+        <form action='/user/delete/{{user_account}}'>
+          <p class='title'>アカウント削除確認</p>
+          <ul class='error'>
+            <li class='error_text'></li>
+          </ul>
+          <p class='email'>
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email" maxlength="32" autocomplete="OFF" placeholder='Email' />
+          </p>
+          <p class='password'>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" maxlength="32" autocomplete="OFF" placeholder='Password' />
+          </p>
+          <div class='check_button'>
+            <p class='button_tag'>
+              <button class='button' id='button' name='submit' type='submit'><a href="/user/delete/{{user_account}}">削除</a></button>
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- <div class='box'>
+     <form action="/user/delete/{{user_account}}">
+      <div class='check_comment'>
+        <p class='comment'>本当にアカウントを削除しますか？</p>
+        <p class='check_button_delete'>
+          <button class='button' id='button' type='submit'><a href="/users/delete/{{user_account}}">削除</a></button>
+        </p>
+      </div>
+    </form>
+    </div> -->
+    <div class='delete_error'>
+      <p class='delete_error_text'>{{error}}</p>
+    </div>
     %for profiles in profile:
     <div class="profilecard">
       <div class="profile-header">
@@ -32,6 +68,7 @@
         <p>{{profiles[1]}}</p>
       </div>
       <a href="/follower" class="square_btn">フォロワー</a>
+      <a href="#" class="square_btn button_delete">アカウント削除</a>
     </div>
     %end
     <div class='main_content'>
@@ -48,13 +85,13 @@
           </div>
           <div class="inline">
 
-          <div class="stream-content">
+            <div class="stream-content">
 
-            <p name="comment">{{view[1]}}</p>
-            <div class='inline_img'>
-              <img src="{{view[5]}}" alt="">
+              <p name="comment">{{view[1]}}</p>
+              <div class='inline_img'>
+                <img src="{{view[5]}}" alt="">
+              </div>
             </div>
-          </div>
           </div>
           <div class='outline'>
             <div class='stream-delete'>

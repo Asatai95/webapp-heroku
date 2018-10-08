@@ -1,6 +1,6 @@
 # -*- coding: utf_8 -*-
 # coding: UTF-8
-from bottle import get, route, run, template, static_file, request, redirect, response, view, url, hook
+from bottle import get, route, run, template, static_file, request, redirect, response, view, url, hook, post
 from email.header import Header
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -13,15 +13,15 @@ import os
 import stripe
 
 from models.app_setting import session
-from models.user import *
-from models.tweet import *
-from models.tweet_comment import *
-from models.img import *
-from models.follow import *
-from models.fab import *
-from models.pro_comment import *
-from models.social import *
-from models.follow_comment import *
+from models.user import User
+from models.tweet import Tweet
+from models.tweet_comment import Tweet_comment
+from models.img import Img
+from models.follow import Follow
+from models.fab import Fab
+from models.pro_comment import Comment
+from models.social import Social
+from models.follow_comment import Follow_comment
 
 from library import *
 
@@ -39,21 +39,6 @@ def before_action():
 @hook('after_request')
 def close_db_session():
         session.close()
-
-#
-# stripe_keys = {
-#   'secret_key': os.environ['SECRET_KEY'],
-#   'publishable_key': os.environ['PUBLISHABLE_KEY']
-# }
-#
-# stripe.api_key = stripe_keys['secret_key']
-
-def test():
-
-    if request.urlparts.path == 'https://webapp2-heroku.herokuapp.com':
-        url = request.urlparts.path.replace('https://webapp2-heroku.herokuapp.com', 'https://www.webapp2.com', 1)
-        code = 301
-        return redirect(url, code=code)
 
 
 @route("/static/:path#.+#", name='static')
@@ -76,126 +61,103 @@ def js(filepath):
 def top():
 
     current_user = get_current_user()
-    is_logged_in_redirect(current_user)
 
     return template("templates/tatume" , current_user=current_user)
 
 @route("/", method='POST')
 def login():
+
     current_user = get_current_user()
-    is_logged_in_redirect(current_user)
 
     if authenticate(request.POST):
         redirect('/tweet')
     else:
-        return template('templates/tatume', current_user=current_user)
+        redirect('/')
 
+@route('/facebook/login')
+def facebook_login():
 
-@route('/facebook/login', method='GET')
-def facebok_login():
-        """
-        ユーザーにFacebookアプリに情報取得許可のログインをしてもらう
-        ログイン成功後 code というデータとともにリダイレクトされる
-        """
-        url = 'https://www.facebook.com/dialog/oauth'
-        params = {
-                'response_type': 'code',
-                'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
-                'client_id': models.app_setting.FACEBOOK_ID,
-        }
-        redirect_url = requests.get(url, params=params).url
-        redirect(redirect_url)
+    url = 'https://www.facebook.com/dialog/oauth'
+    params = {
+        'response_type': 'code',
+        'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
+        'client_id': models.app_setting.FACEBOOK_ID
+    }
 
+    redirect_url = requests.get(url, params=params).url
+    redirect(redirect_url)
 
 @route('/facebook/callback')
 def facebook_callback():
     try: # 予期せぬエラーがでたらログイン画面にリダイレクトする
         if request.GET.getunicode('code'):
-            """
-            リダイレクトと同時に送られてきたcodeを用いてアクセストークンを取得
-            """
-            url = 'https://graph.facebook.com/v3.1/oauth/access_token'
-            params = {
-                    'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
-                    'client_id': models.app_setting.FACEBOOK_ID,
-                    'client_secret': models.app_setting.FACEBOOK_SECRET,
-                    'code': request.GET.getunicode('code'),
-            }
-            r = requests.get(url, params=params)
-            access_token = r.json()['access_token']
-            print(access_token)
-
-            """
-            取得したアクセストークンが不正じゃないか確認する
-            """
-            url = 'https://graph.facebook.com/debug_token'
-            params = {
-                'input_token': access_token,
-                'access_token': '%s|%s' % (models.app_setting.FACEBOOK_ID, models.app_setting.FACEBOOK_SECRET)
-            }
-            r = requests.get(url, params=params)
-
-            if r.json()['data']['is_valid']:
-                """
-				アクセストークンが不正じゃないことがわかったら
-				アクセストークンをもとにユーザーの情報を取得する
-				"""
-                url = 'https://graph.facebook.com/%s' % (r.json()['data']['user_id'])
-                params = {
-                    'fields': 'name,email',
-                    'access_token': access_token,
-                }
-                r = requests.get(url, params=params)
-                return r.json()
+            access_token = get_facebook_access_token(request.GET.getunicode('code'))
+            data = check_facebook_access_tokn(access_token)
+            if data['is_valid']:
+                data = get_facebook_user_info(access_token, data['user_id'])
+                if check_socials(data, 'facebook'):
+                    redirect('/tweet')
+                else:
+                    user = create_facebook_user(data)
+                    create_socials(user, data, 'facebook')
+                    login_user(user.id)
+                    send_mail(data['email'], 'create')
+                    redirect('/tweet')
             else:
-    			# アクセストークンが不正なものだったらログイン画面にリダイレクトする
+        		# アクセストークンが不正なものだったらログイン画面にリダイレクトする
                 redirect('/')
-
     except:
-        redirect('/')
+        redirect('/tweet')
 
-# @route('/facebook/login')
-# def facebook_login():
-#
-#     url = 'https://www.facebook.com/dialog/oauth'
-#     params = {
-#         'response_type': 'code',
-#         'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
-#         'client_id': models.app_setting.FACEBOOK_ID
-#     }
-#
-#     redirect_url = requests.get(url, params=params).url
-#     # print('r.url:', r.url)
-#     # print('r: ', vars(r))
-#     # return r.url
-#     # redirect_url = r.url
-#
-#     redirect(redirect_url)
-#
-# @route('/facebook/callback')
-# def facebook_callback():
-#     try: # 予期せぬエラーがでたらログイン画面にリダイレクトする
-#         if request.GET.getunicode('code'):
-#
-#             access_token = get_facebook_access_token(request.GET.getunicode('code'))
-#             print(access_token)
-#             data = check_facebook_access_tokn(access_token)
-#
-#             if data['is_valid']:
-#                 data = get_facebook_user_info(access_token, data['user_id'])
-#                 if check_socials(data, 'facebook'):
-#                     redirect('/tweet')
-#                 else:
-#                     user = create_facebook_user()
-#                     create_socials(user, data, 'facebook')
-#                     login_user(user.id)
-#                     redirect('/tweet')
-#             else:
-#         		# アクセストークンが不正なものだったらログイン画面にリダイレクトする
-#                 redirect('/')
-#
-#     except:
-#         redirect('/')
+@route('/remake_password')
+def remake():
+
+    duplicate_error = ''
+    return template('templates/remake_password', duplicate_error=duplicate_error)
+
+@route('/check_email')
+def email():
+
+    return template('templates/check_email')
+
+@route('/remake_password', method='POST')
+def remake_password():
+
+    remake_mail = remake_password_email(request.POST)
+
+    if remake is False:
+        duplicate_error='登録したEmailを入力してください。'
+        return template('templates/remake_password', duplicate_error=duplicate_error)
+    else:
+        remake_check_mail(remake_mail, 'remake', remake_mail)
+        redirect('/check_email')
+
+@route('/remake/<mail_id>/<mail>')
+def update_password(mail_id ,mail):
+
+    duplicate_error= ''
+    check = url_check(mail_id)
+    if check is True:
+        return template('templates/remake', mail=mail, mail_id=mail_id, duplicate_error=duplicate_error)
+    else:
+        error404(error)
+
+@route('/remake/<mail_id>/<mail>', method='POST')
+def update_password(mail_id, mail):
+
+    checker = password_checker(request.POST)
+
+    if checker is True:
+        remake_password_check(mail, request.POST)
+        redirect('/check_password')
+    else:
+        duplicate_error = 'パスワードは確認用と同様の内容を記述してください。'
+        return template('templates/remake', duplicate_error=duplicate_error, mail=mail, mail_id=mail_id)
+
+@route("/check_password")
+def check_password():
+
+    return template('templates/check_password')
 
 @route("/logout")
 def logout():
@@ -205,11 +167,52 @@ def logout():
 
     return template('templates/logout', current_user=current_user, logout=logout)
 
+@route("/pay")
+def pay():
+
+    publishable_key = stripe_publishable_key()
+
+    return template('templates/pay', publishable_key=publishable_key)
+
+@route("/pay", method='POST')
+def pay_commit():
+
+    stripe = stripe_pay(request.POST)
+    send_mail(request.POST.getunicode('stripeEmail'), 'pay')
+
+    redirect('/pay_after')
+
+@route('/pay_after')
+def pay_after():
+
+    return template('templates/pay_after')
+
+@route("/user/<user_account_email>")
+def user_account_email_redirect(user_account_email):
+
+    redirect('/create')
+
+@route('/check_account')
+def check_account():
+
+    duplicate_error = ''
+    return template('templates/check_account', duplicate_error=duplicate_error)
+
+@route('/check_account', method='POST')
+def check_account_email():
+
+    email = remake_password_email(request.POST)
+
+    if email is not False:
+        redirect('create')
+    else:
+        duplicate_error = '登録したEmailアドレスを入力してください。'
+        return template('templates/check_account', duplicate_error=duplicate_error)
+
 @route("/create", method='GET')
 def create_get():
 
     current_user = get_current_user()
-    is_logged_in_redirect(current_user)
     duplicate_error = ''
 
     return template('templates/create', duplicate_error=duplicate_error, user=User(), current_user=current_user)
@@ -218,15 +221,20 @@ def create_get():
 def users_new_confirm():
 
     current_user = get_current_user()
-    is_logged_in_redirect(current_user)
     user = User(
             email = request.POST.getunicode('email'),
             password = request.POST.getunicode('password'),
             name = request.POST.getunicode('name')
     )
 
-    if is_duplicate_email(user.email):
+    if is_duplicate_email(user.email) and is_duplicate_name(user.name):
+        duplicate_error = '既に登録されているメールアドレス、ユーザー名です。'
+        return template('templates/create', url=url, user=user, current_user=current_user, duplicate_error=duplicate_error)
+    elif is_duplicate_email(user.email):
         duplicate_error = '既に登録されているメールアドレスです。'
+        return template('templates/create', url=url, user=user, current_user=current_user, duplicate_error=duplicate_error)
+    elif is_duplicate_name(user.name):
+        duplicate_error = '既に登録されているユーザ名です。'
         return template('templates/create', url=url, user=user, current_user=current_user, duplicate_error=duplicate_error)
 
     return template('templates/check', current_user=current_user, user=user)
@@ -234,11 +242,26 @@ def users_new_confirm():
 @route('/create', method='POST')
 def create():
     current_user = get_current_user()
-    is_logged_in_redirect(current_user)
     user = create_user(request.POST)
+    send_mail(user.email, 'create')
     duplicate_error = '登録完了しました。'
+    # return template('templates/create_after', user=user, current_user=current_user , duplicate_error=duplicate_error)
 
-    return template('templates/create_after', user=user, current_user=current_user , duplicate_error=duplicate_error)
+    return redirect('/tweet')
+
+@route("/user/delete/<user_id>")
+def delete_user(user_id):
+
+    delete_user = delete_check(request.POST)
+    mail = delete_mail()
+    mail = mail[0][0]
+    if delete_user is True:
+        send_mail(mail, 'delete')
+        delete_account()
+        logout_user()
+        redirect('/')
+    else:
+        redirect('/mypage')
 
 @route("/info")
 def info():
@@ -247,13 +270,15 @@ def info():
 
     return template('templates/info', url=url, current_user=current_user)
 
-@route('/tweet', method='GET')
+@route('/tweet')
 def tweet():
 
     current_user = get_current_user()
+    print(current_user)
     tweets = tweet_view()
     follow_check = follow_id_view()
     fab_check = fab_check_view()
+    is_logged_in_redirect(current_user)
 
     return template('templates/tweet', follow_view=follow_check, fab_check=fab_check, tweets=tweets, current_user=current_user)
 
@@ -265,9 +290,10 @@ def tweer_db():
     img = img_table(request.forms)
     tweet_db = tweet_table(request.forms)
     tweets = tweet_view()
-    comment = 'フォローする'
+    follow_check = follow_id_view()
+    fab_check = fab_check_view()
 
-    return template('templates/tweet', tweet_comment=tweet_comment, tweets=tweets, tweet=tweet_db, img=img_table, current_user=current_user, comment=comment)
+    return template('templates/tweet',follow_view=follow_check ,fab_check=fab_check, tweet_comment=tweet_comment, tweets=tweets, tweet=tweet_db, img=img_table, current_user=current_user)
 
 @route('/follower')
 def follower():
@@ -320,37 +346,41 @@ def view():
 
     tweets = tweet_view()
     current_user = get_current_user()
-    follow_check_view = follow_id_view()
+    follow_check = follow_id_view()
+    fab_check = fab_check_view()
     test = ''
 
-    return template('templates/search', tweets=tweets, test=test, current_user=current_user,follow_check_view=follow_check_view)
+    return template('templates/search', fab_check=fab_check, follow_check=follow_check, tweets=tweets, test=test, current_user=current_user)
 
 @route('/search', method='POST')
 def search():
 
     search = tweet_search(request.POST)
-    follow_check_view = follow_id_view()
+    follow_check = follow_id_view()
+    fab_check = fab_check_view()
     current_user = get_current_user()
     print(search)
 
     if search is not False:
         test=''
         tweets = search
-        return template("templates/search", follow_check_view=follow_check_view, search=search, test=test, current_user=current_user, tweets=tweets)
+        return template("templates/search", follow_check=follow_check, fab_check=fab_check, search=search, test=test, current_user=current_user, tweets=tweets)
     else:
         test = 'キーワードを入力してください。'
         tweets = tweet_view()
-        return template("templates/search", follow_check_view=follow_check_view, tweets=tweets, test=test, current_user=current_user)
+        return template("templates/search", follow_check=follow_check, fab_check=fab_check, tweets=tweets, test=test, current_user=current_user)
 
 @route('/mypage')
 def profile():
 
     current_user = get_current_user()
-    pro=None
+    user_account = loggedin_account()
+    user_account = user_account[0][0]
     my_tweets = my_tweet()
     profile = my_profile()
+    error=''
 
-    return template('templates/mypage', my_tweets=my_tweets, current_user=current_user, pro=pro, profile=profile)
+    return template('templates/mypage', error=error, user_account=user_account, my_tweets=my_tweets, current_user=current_user, profile=profile)
 
 @route('/edit')
 def edit():
@@ -408,88 +438,6 @@ def users_profile(user_id_number):
     follow_check = follow_id_view()
 
     return template('templates/users/profile', follow_check=follow_check, fab_check=fab_check, user_id_number=user_id_number, current_user=current_user, user_profile=profile, user_tweets=tweet)
-#
-# @route("/test")
-# @view("test")
-# def test_view():
-#
-#     return dict(key=stripe_keys['publishable_key'])
-#
-# @route("/test", method='POST')
-# def test_sub():
-#
-#     db = MySQLdb.connect(user='b292b90b1818e0', passwd='4346c8fc', host='us-cdbr-iron-east-01.cleardb.net', db='heroku_ae66112c0cf1b10', charset='utf8')
-#     con = db.cursor()
-#
-#     sql = 'select test from test where id = 1'
-#     test = con.execute(sql)
-#     db.commit()
-#
-#     result = con.fetchall()
-#     result = result[0][0]
-#
-#     amount = '500'
-#
-#     stripe_token = request.forms.get('stripeToken')
-#     mail_address = request.forms.get('stripeEmail')
-#
-#     stripe.api_key = stripe_keys['secret_key']
-#
-#     stripe.Charge.create(
-#         amount=amount,
-#         currency="jpy",
-#         description="Charge for {mail}".format(mail=mail_address),
-#         source=stripe_token
-#     )
-#
-#     gmail_usr = 'defense433@gmail.com'
-#     gmail_password = 'Asatai95!'
-#     you = mail_address
-#     jp_encoding = 'iso-2022-jp'
-#     mail_subject = '〇〇商品について'
-#     body = 'text.txt'
-#     sender_name = u"OkiDoki株式会社"
-#
-#     with open(body, 'r', encoding='utf-8') as file:
-#         body = file.read()
-#
-#     server = smtplib.SMTP('smtp.gmail.com', 587)
-#
-#     server.ehlo()
-#
-#     server.starttls()
-#
-#     server.ehlo()
-#
-#     server.login(gmail_usr, gmail_password)
-#
-#
-#     if server is not False:
-#
-#         msg = MIMEText(body.encode(jp_encoding), "plain", jp_encoding)
-#
-#         from_jp = Header(sender_name, jp_encoding)
-#         msg['From'] = from_jp
-#         From = gmail_usr
-#         msg['Subject'] = Header(mail_subject, jp_encoding)
-#         msg['To'] = you
-#         to = msg['To']
-#
-#         server.sendmail(From, to, msg.as_string())
-#
-#
-#         print('Email')
-#         if server is not False:
-#             message = '確かに支払いは完了しました。'
-#             return template('message' ,message=message, main=result)
-#
-#         server.close()
-#
-#     else:
-#
-#         print('test')
-#
-#         return template("top", amount=amount)
 
 
 run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)

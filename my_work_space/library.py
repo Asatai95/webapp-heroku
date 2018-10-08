@@ -1,4 +1,4 @@
-from bottle import  request, redirect, response, template
+from bottle import  request, redirect, response, template, error
 
 from models.app_setting import session
 from models.user import *
@@ -24,62 +24,169 @@ import random
 
 import sys
 
+import requests
+
+import stripe
 
 UPLOAD_FOLDER = './static/img/'
 ALLOWED_EXTENSIONS = set(['png', 'jpeg', 'gif'])
 path = './static/img/*.ALLOWED_EXTENSIONS'
+
+def error404(error):
+  return template("<h1>{{error_message}}</h1>", error_message="404 Not Found.")
 
 def allowed_file(filename):
 
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
+def stripe_publishable_key():
+
+    publishable_key = models.app_setting.STRIPE_KEYS_PUBLISHABLE_KEY
+
+    return publishable_key
+
+def stripe_pay(form):
+
+    amount = '100'
+
+    stripe_token = form.getunicode('stripeToken')
+    mail_address = form.getunicode('stripeEmail')
+
+    stripe.api_key = models.app_setting.STRIPE_KEYS_SECRET_KEY
+
+    stripe.Charge.create(
+        amount=amount,
+        currency="jpy",
+        description="Charge for {mail}".format(mail=mail_address),
+        source=stripe_token
+    )
+
+    return stripe
+
+def _encrypt_password(password):
+
+    return hmac.new(
+                password.encode('UTF-8'),
+                models.app_setting.SECRET_KEY.encode('UTF-8'),
+                hashlib.sha256
+           ).hexdigest()
+
+def remake_password_email(form):
+
+    user = session.query(User.email).filter(
+               User.email == form.getunicode('email')
+           ).all()
+
+    if user == []:
+        return False
+    else:
+        user = user[0][0]
+        return user
+
+def url_check(mail_id):
+
+    text = 'email_change'
+    email = hmac.new(
+                text.encode('UTF-8'),
+                models.app_setting.SECRET_KEY.encode('UTF-8'),
+                hashlib.sha256
+           ).hexdigest()
+
+    if email == mail_id:
+        return True
+    else:
+        return False
+
+def remake_password_check(mail, form):
+
+    remake = session.query(User).filter(
+              User.email == mail
+           ).first()
+    remake.password = _encrypt_password(form.getunicode('password2'))
+    session.commit()
+
+    return remake
+
+def password_checker(form):
+
+    if form.getunicode('password1') == form.getunicode('password2'):
+        return True
+    else:
+        return False
+
+def loggedin_account():
+
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
+
+    account = session.query(User.id).filter(
+                 User.id == user_id
+              ).all()
+    return account
+
 def create_user(form):
 
     user = User(
+           name = form.getunicode('name'),
            email = form.getunicode('email'),
            password=_encrypt_password(form.getunicode('password')),
-           name = form.getunicode('name')
+           pro_img = './static/img/hi.png'
     )
 
     session.add(user)
     session.commit()
     return user
 
-def create_facebook_user():
-    user = User()
+def create_facebook_user(form):
+
+    user = User(
+               name = form['name'],
+               email = form['email']
+            )
     session.add(user)
     session.commit()
-    print('test')
     return user
 
 def create_socials(user, data, provider):
+
     if provider == 'facebook':
         social = Social(
             user_id = user.id,
             provider = provider,
             provider_id = data['id'],
         )
-
-    print('test_sub')
     # elif provider == 'twitter':
 
     session.add(social)
     session.commit()
 
+def check_socials(data, provider):
+
+    if provider == 'facebook':
+        social = session.query(Social).filter(
+                        Social.provider == 'facebook',
+                        Social.provider_id == data['id']
+                    ).first()
+    if social is None:
+        return False
+    else:
+        login_user(social.user_id)
+        return True
+
 def get_facebook_access_token(code):
+
     url = 'https://graph.facebook.com/v3.1/oauth/access_token'
     params = {
             'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
             'client_id': models.app_setting.FACEBOOK_ID,
             'client_secret': models.app_setting.FACEBOOK_SECRET,
-            'code': code
+            'code': code,
     }
-
     r = requests.get(url, params=params)
     return r.json()['access_token']
 
 def check_facebook_access_tokn(access_token):
+
     url = 'https://graph.facebook.com/debug_token'
     params = {
         'input_token': access_token,
@@ -89,36 +196,25 @@ def check_facebook_access_tokn(access_token):
     return r.json()['data']
 
 def get_facebook_user_info(access_token, user_id):
+
     url = 'https://graph.facebook.com/%s' % (user_id)
     params = {
-        'fields': 'name,email',
+        'fields': 'name, email',
         'access_token': access_token,
     }
     return requests.get(url, params=params).json()
 
+def is_duplicate_email(email):
 
-def check_socials(data, provider):
-    if provider == 'facebook':
-        social = session.query(Social).filter(
-                        Social.provider == 'facebook',
-                        Social.provider_id == data['id']
-                    ).first()
-    print('test_test')
-    if social is None:
+    user = session.query(User).filter(User.email==email).first()
+    if user is None:
         return False
     else:
-        login_user(social.user_id)
         return True
 
-def _encrypt_password(password):
-    return hmac.new(
-                password.encode('UTF-8'),
-                models.app_setting.SECRET_KEY.encode('UTF-8'),
-                hashlib.sha256
-           ).hexdigest()
+def is_duplicate_name(name):
 
-def is_duplicate_email(email):
-    user = session.query(User).filter(User.email==email).first()
+    user = session.query(User).filter(User.name == name).first()
     if user is None:
         return False
     else:
@@ -132,15 +228,16 @@ def get_current_user():
     else:
         return None
 
-
 def is_logged_in_redirect(user):
     if user is not None:
+        return True
+    else:
         redirect('/')
 
 def authenticate(form):
     auth_user = session.query(User).filter(
-                User.password == _encrypt_password(form.getunicode('password')),
-                User.email == form.getunicode('email')
+                User.email == form.getunicode('email'),
+                User.password == _encrypt_password(form.getunicode('password'))
     ).first()
 
     if auth_user is not None:
@@ -289,10 +386,12 @@ def follow_table(form):
     from_id = request.get_cookie('user_id' ,secret=models.app_setting.SECRET_KEY)
     follow_id = 1
 
-    follow_user = session.query(Follow.to_user_id).filter(Follow.to_user_id==form).all()
-    print(follow_user)
+    follow_user = session.query(Follow.follow_id).filter(
+                   Follow.to_user_id==form,
+                   Follow.from_user_id == from_id
+                  ).all()
 
-    if follow_user == []:
+    if follow_id == 1:
         follow = Follow(
                   from_user_id = from_id,
                   to_user_id = form,
@@ -328,8 +427,11 @@ def fab_table(form):
 
     user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
 
-    fab_view = session.query(Fab.tweet_id).filter(Fab.tweet_id == user_id).all()
-    if fab_view == user_id:
+    fab_view = session.query(Fab.fab_id).filter(
+                Fab.user_id == user_id,
+                Fab.tweet_id == form
+               ).all()
+    if fab_view == 1:
         return redirect('/fab')
     else:
         fab = Fab(
@@ -368,7 +470,7 @@ def tweet_search(form):
         return False
     else:
 
-        search = session.query(Tweet.created_at, Tweet_comment.tweet_text, Tweet_comment.id, User.id, User.name, Img.img_url, User.pro_img).join(
+        search = session.query(Tweet.created_at, Tweet_comment.tweet_text, Tweet_comment.id, User.id, User.name, Img.img_url, User.pro_img, Tweet.tweet_id, Tweet.id).join(
                       User, User.id == Tweet.user_id
                  ).join(
                       Tweet_comment, Tweet_comment.id == Tweet.tweet_id
@@ -577,12 +679,86 @@ def users_tweet(form):
                ).all()
     return user_tweet
 
+def send_mail(to_email, send_type):
+    body=''
+    subject = ''
+    url = "http://localhost:5000/user/"+to_email+" "
+    if send_type == 'create':
+        body = '〇〇です。 \n\n新規登録ありがとうございます。'
+        subject = '【新規登録完了】〇〇〇〇〇'
+    elif send_type == 'delete':
+        body = '〇〇です。\n\n〇〇アプリをご利用いただきありがとうございます。'
+        subject = '【削除完了】〇〇〇〇〇'
+    elif send_type == 'pay':
+        body = '〇〇です。\n\nお支払いいただきありがとうございます。\n\n下記のURLからアカウントを登録してください。\n\n'+url+' '
+        subject = '【支払い完了】〇〇〇〇〇'
+
+    message = MIMEText(body)  # 本文
+    message['Subject'] = subject         # 件名
+    message['From'] = models.app_setting.HOST_EMAIL  # 送信元
+    message['To'] = to_email      # 送信先
+
+    sender = smtplib.SMTP_SSL(models.app_setting.HOST_SMTP)
+    sender.login(models.app_setting.HOST_EMAIL, models.app_setting.HOST_PASSWORD)
+    sender.sendmail(models.app_setting.HOST_EMAIL, to_email, message.as_string())
+    sender.quit()
+
+def remake_check_mail(to_email, send_type, mail):
+    body=''
+    subject = ''
+    text = 'email_change'
+    email = hmac.new(
+                text.encode('UTF-8'),
+                models.app_setting.SECRET_KEY.encode('UTF-8'),
+                hashlib.sha256
+           ).hexdigest()
+
+    url = "http://localhost:5000/remake/"+email+"/"+mail+" "
+
+    if send_type == 'remake':
+        body = 'パスワード再設定用のメールです。\n\n下記のURLからパスワードを再設定してください。\n\n '+ url +' '
+
+    message = MIMEText(body)  # 本文
+    message['Subject'] = subject         # 件名
+    message['From'] = models.app_setting.HOST_EMAIL  # 送信元
+    message['To'] = to_email      # 送信先
+
+    sender = smtplib.SMTP_SSL(models.app_setting.HOST_SMTP)
+    sender.login(models.app_setting.HOST_EMAIL, models.app_setting.HOST_PASSWORD)
+    sender.sendmail(models.app_setting.HOST_EMAIL, to_email, message.as_string())
+    sender.quit()
+
+def delete_check(form):
+
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
+
+    check = session.query(User).filter(
+               User.email == form.getunicode('email')
+            ).all()
+
+    if check is not None:
+        return True
+    else:
+        return False
+
+def delete_mail():
+
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
+
+    mail = session.query(User.email).filter(
+                User.id == user_id
+            ).all()
+    return mail
+
+def delete_account():
+
+    user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
+
+    user_account_delete = session.query(User).filter(
+                             User.id == user_id
+                         ).delete()
+    session.commit()
+    return user_account_delete
+
 def logout_user():
     response.delete_cookie('user_id', secret=models.app_setting.SECRET_KEY, path='/')
-
-
-def tweet_view_test():
-
-    view = session.query(Tweet_comment.tweet_text).all()
-
-    return view

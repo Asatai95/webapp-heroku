@@ -1,7 +1,7 @@
 % rebase('templates/base')
 <h1>index</h1>
 
-% if current_user:
+<!-- % if current_user:
 <main>
     <div class="goods">
         % for num in range(1,11):
@@ -35,4 +35,4 @@
         % end
     </div>
 </main>
-% end
+% end -->

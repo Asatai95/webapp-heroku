@@ -31,8 +31,9 @@ def after_action():
 
 @route('/')
 def index():
-    
-    return template('templates/index',url=url, current_user=current_user)
+    publish_key=''
+
+    return template('templates/index',url=url, current_user=current_user, publish_key=publish_key)
 
 
 

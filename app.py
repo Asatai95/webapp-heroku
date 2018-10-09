@@ -31,7 +31,39 @@ def after_action():
 
 @route('/')
 def index():
-        return template('templates/index',url=url, current_user=current_user)
+    
+    return template('templates/index',url=url, current_user=current_user)
+
+
+
+@route('/mypage')
+def mypage():
+    socials = get_socials_info(current_user)
+    return template('templates/users/mypage', url=url, current_user=current_user,socials=socials)
+
+@route('/mypage/edit', method='GET')
+def mypage_edit_get():
+    return template('templates/users/edit',url=url, current_user=current_user, duplicate_error=None)
+
+@route('/mypage/edit', method='POST')
+def mypage_edit_post():
+    if is_duplicate_email(request.POST.getunicode('email')):
+            duplicate_error = '既に登録されているメールアドレスです'
+            return template('templates/users/edit', url=url, current_user=current_user, duplicate_error=duplicate_error)
+
+    update_user(current_user, request.POST)
+    redirect('/mypage')
+
+@route('/mypage/edit_password', method='GET')
+def mypage_password_edit_get():
+    return template('templates/users/edit_password',url=url, current_user=current_user)
+
+@route('/mypage/edit_password', method='POST')
+def mypage_password_edit_post():
+    update_password(current_user, request.POST)
+    redirect('/mypage')
+
+
 
 @route('/users/sign_up', method="GET")
 def users_new():
@@ -76,15 +108,6 @@ def login_post():
             redirect('/')
         else:
             return template('templates/users/login', url=url, current_user=current_user)
-@route('/users/check')
-def check():
-
-    return template('templates/users/check', url=url, current_user=current_user)
-
-@route('/users/check_account')
-def check_account():
-
-    return template('templates/users/check_account', url=url, current_user=current_user)
 
 """
 passはスルー
@@ -118,9 +141,10 @@ def facebook_callback():
             if data['is_valid']:
                 data = get_facebook_user_info(access_token, data['user_id'])
                 if check_socials(data, 'facebook'):
+                    login_user(user.id)
                     redirect('/')
                 else:
-                    user = create_facebook_user()
+                    user = create_facebook_user(data)
                     create_socials(user, data, 'facebook')
                     login_user(user.id)
                     redirect('/')

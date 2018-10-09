@@ -28,6 +28,12 @@ import requests
 
 import stripe
 
+import webbrowser
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.file import Storage
+
+CREDENTIALS_FILE = "./google/credentials"
+
 UPLOAD_FOLDER = './static/img/'
 ALLOWED_EXTENSIONS = set(['png', 'jpeg', 'gif'])
 path = './static/img/*.ALLOWED_EXTENSIONS'
@@ -203,6 +209,45 @@ def get_facebook_user_info(access_token, user_id):
         'access_token': access_token,
     }
     return requests.get(url, params=params).json()
+
+def get_google_access():
+
+    SCOPE = "https://www.googleapis.com/auth/plus.login"
+
+    flow = flow_from_clientsecrets(
+    # API有効化時に取得したOAuth用のJSONファイルを指定
+    'google/client_id.json' ,
+    # スコープを指定
+    scope=SCOPE,
+    # ユーザーの認証後の、トークン受け取り方法を指定（後述）
+    redirect_uri='urn:ietf:wg:oauth:2.0:oob')
+
+    auth_uri = flow.step1_get_authorize_url()
+    webbrowser.open(auth_uri)
+
+def google_token():
+
+    SCOPE = "https://www.googleapis.com/auth/plus.me"
+
+    credentials = "4/cwBlEwPmFR80S0p4lr1bLnN8HzWA173HaB6VSgDCQ8vRcxGl_kiMzBY"
+
+    flow = flow_from_clientsecrets(
+    # API有効化時に取得したOAuth用のJSONファイルを指定
+    'google/client_id.json' ,
+    # スコープを指定
+    scope=SCOPE,
+    # ユーザーの認証後の、トークン受け取り方法を指定（後述）
+    redirect_uri='urn:ietf:wg:oauth:2.0:oob')
+
+    auth_uri = flow.step1_get_authorize_url()
+    webbrowser.open(auth_uri)
+
+    token = input("Input your code > ")
+
+    credentials = flow.step2_exchange(token)
+
+    Storage(CREDENTIALS_FILE).put(credentials)
+
 
 def is_duplicate_email(email):
 

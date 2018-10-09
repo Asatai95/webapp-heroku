@@ -109,6 +109,18 @@ def facebook_callback():
     except:
         redirect('/tweet')
 
+@route('/google/login')
+def google_login():
+
+    test = get_google_access()
+
+    return test
+
+@route('/login/test')
+def login_test():
+
+    google_token()
+
 @route('/remake_password')
 def remake():
 

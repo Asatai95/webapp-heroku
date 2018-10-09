@@ -35,8 +35,10 @@ Facebookログインしたユーザのモデルを生成する
 今回はデータの入力はしない
 個々の処理は、APIの取得情報追加申請などで変えると良い
 """
-def create_facebook_user():
-    user = User()
+def create_facebook_user(data):
+    user = User(
+             name = data['name']
+            )
     session.add(user)
     session.commit()
     return user
@@ -90,9 +92,8 @@ def get_facebook_access_token(code):
             'client_secret': app_setting.FACEBOOK_SECRET,
             'code': code,
     }
-    print(params)
     r = requests.get(url, params=params)
-    print(r.json())
+
     return r.json()['access_token']
 
 
@@ -120,6 +121,34 @@ def get_facebook_user_info(access_token, user_id):
     }
     return requests.get(url, params=params).json()
 
+
+"""
+現在のユーザーのソーシャルログイン情報を取得する
+"""
+def get_socials_info(user):
+    return session.query(Social).filter(Social.user_id == user.id)
+
+"""
+ユーザー編集
+"""
+def update_user(current_user, form):
+    user = session.query(User).get(current_user.id)
+    if form.getunicode('name'):
+        user.name = form.getunicode('name')
+    if form.getunicode('age'):
+        user.age=int(form.getunicode('age')) if form.getunicode('age') else None
+    if form.getunicode('email'):
+        user.email = form.getunicode('email')
+    session.commit()
+
+"""
+パスワード編集
+"""
+def update_password(current_user, form):
+    user = session.query(User).get(current_user.id)
+    if form.getunicode('password1'):
+        user.password = _encrypt_password(form.getunicode('password1'))
+    session.commit()
 
 """
 パスワードの暗号化

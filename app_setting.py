@@ -44,9 +44,6 @@ Pythonのアプリケーションが動作する環境(LOCALlかHEROKU)によっ
 定数 中身は上書きしないもの(上書きは可能)
 """
 
-HOST_EMAIL = 'official@webapp2.com'
-HOST_PASSWORD = 'asatai951156'
-HOST_SMTP = 'smtp.muumuu-mail.com'
 
 ENGINE = create_engine(
     DATABASE,

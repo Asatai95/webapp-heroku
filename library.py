@@ -37,7 +37,7 @@ Facebookログインしたユーザのモデルを生成する
 """
 def create_facebook_user(data):
     user = User(
-             name = data['name']
+             name = data['name'],
              email = data['email']
             )
     session.add(user)

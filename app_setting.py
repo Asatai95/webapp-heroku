@@ -9,11 +9,12 @@ try:
     if os.environ['APP_ENVIRONMENT'] == 'production':
         SECRET_KEY = os.environ['SECRET_KEY']
         HOST_PASSWORD = os.environ['HOST_PASSWORD']
+        HOST_EMAIL = ['HOST_EMAIL']
         FACEBOOK_ID = os.environ['FACEBOOK_ID']
         FACEBOOK_SECRET = os.environ['FACEBOOK_SECRET']
         FACEBOOK_CALLBACK_URL = os.environ['FACEBOOK_CALLBACK_URL']
-        STRIPE_SECRET = ['STRIPE_SECRET']
         STRIPE_PUBLISHABLE = ['STRIPE_PUBLISHABLE']
+        STRIPE_SECRET = ['STRIPE_SECRET']
         DATABASE = os.environ['DATABASE_URL']
 except:
     # for development

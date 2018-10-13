@@ -34,6 +34,7 @@
       <div class='main_content'>
           <div class="container">
             <div class="container-button">
+              <img src="static/img/facebook_icon.png" alt="">
               <a class="container center-align btn waves-effect #1565c0 blue darken-3" href="/facebook/login">Facebookでログインする</a>
             </div>
           </div>
@@ -41,12 +42,9 @@
         <div id="gSignInWrapper">
           <div id="customBtn" class="customGPlusSignIn">
             <span class="icon"></span>
-            <span class="buttonText">Googleでログイン</span>
+            <span class="buttonText"><a href="/google/login">Googleでログイン</a></span>
           </div>
         </div>
-        <script>
-          startApp();
-        </script>
 
 
         <p class='ma'><span class='sen'><img src="static/img/sen.jpeg" alt=""></span> または

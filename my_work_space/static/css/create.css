@@ -54,6 +54,7 @@ div.main {
 p.title_text {
   font-size: 30px;
   color: black;
+  margin-bottom: 0;
 }
 
 .create {
@@ -145,12 +146,18 @@ p.sen a {
   padding: 0;
 }
 
+.top p {
+  font-size: 20px;
+  color: black;
+}
+
 .top li {
-  display: inline-block;
   list-style: none;
 }
 
 .top li a{
+  width: 130px;
+  margin: auto;
   text-decoration: none;
   padding-bottom: 3px;
   display: block;
@@ -194,5 +201,6 @@ p.sen a {
   height: 25px;
   font-size: 18px;
   color: rgba(240, 96, 96);
-  margin-top:0;
+  margin-top:20px;
+  margin-bottom: 0;
 }

@@ -30,20 +30,22 @@
         </ul>
       </div>
       <div class='content'>
-        <form action="/pay" method="post">
+        <form action="/pay/charge" method="post">
           <div class='title'>
             <p class='title-text'>確認画面</p>
           </div>
           <div class='pay_text'>
             <p class='text'>
-              TUBUYAKIをご利用するためには500円、お支払いいただく必要があります。</br>
+              TUBUYAKIをご利用するためには100円、お支払いいただく必要があります。</br>
               下記のボタンよりお支払いしてください。
             </p>
           </div>
           <article>
-            <label>Amount: ¥500</label>
+            <label>Amount: ¥100</label>
           </article>
-          <script src="https://checkout.stripe.com/v2/checkout.js" class="stripe-button" data-key="{{ publishable_key }}" data-locale="auto" data-amount="100" data-name="TUBUYAKI" data-description="アプリ購入" data-currency="jpy" data-image="static/img/ninwanko.png" data-locale="ja"></script>
+          <input type="hidden" name='amount' value='100'>
+          <input type="hidden" name='description' value='アプリ購入'>
+          <script src="https://checkout.stripe.com/v2/checkout.js" class="stripe-button" data-key="{{ publishable_key }}" data-locale="auto" data-amount="100" data-name="TUBUYAKI" data-description="アプリ購入" data-label='アプリ購入' data-currency="jpy" data-image="static/img/ninwanko.png" data-locale="ja"></script>
         </form>
         <div class='back'>
           <p class='back_button'>既にお支払い済みですか？<a href="/check_account">クリック</a></p>

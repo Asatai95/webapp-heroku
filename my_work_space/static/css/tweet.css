@@ -345,15 +345,14 @@ div.tweet_content textarea {
 }
 
 .tweet_button {
-  width: 50px;
-  margin-left: 280px;
+  width: 310px;
+  margin: 0 auto;
   bottom: 1px;
-  position: absolute;
 }
 
 div.tweet_img {
   height: 45px;
-
+  width: 150px;
 }
 
 .file {
@@ -411,7 +410,7 @@ div.tweet_img img.upload {
 .button {
   position: absolute;
   bottom: 3px;
-  padding-left: 150px;
+  padding-left: 180px;
 }
 
 .button button {

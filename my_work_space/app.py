@@ -31,6 +31,13 @@ import requests
 
 import sys
 
+
+import webbrowser
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.file import Storage
+from apiclient.discovery import build
+import httplib2
+
 @hook('before_request')
 def before_action():
         global current_user
@@ -77,15 +84,20 @@ def login():
 @route('/facebook/login')
 def facebook_login():
 
-    url = 'https://www.facebook.com/dialog/oauth'
-    params = {
-        'response_type': 'code',
-        'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
-        'client_id': models.app_setting.FACEBOOK_ID
-    }
+    script_cookie = get_stripe_cookie()
 
-    redirect_url = requests.get(url, params=params).url
-    redirect(redirect_url)
+    if script_cookie is None:
+        redirect('/pay')
+    else:
+        url = 'https://www.facebook.com/dialog/oauth'
+        params = {
+            'response_type': 'code',
+            'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
+            'client_id': models.app_setting.FACEBOOK_ID
+        }
+
+        redirect_url = requests.get(url, params=params).url
+        redirect(redirect_url)
 
 @route('/facebook/callback')
 def facebook_callback():
@@ -95,13 +107,14 @@ def facebook_callback():
             data = check_facebook_access_tokn(access_token)
             if data['is_valid']:
                 data = get_facebook_user_info(access_token, data['user_id'])
-                if check_socials(data, 'facebook'):
+                check = check_socials(data, 'facebook')
+                if check is True:
                     redirect('/tweet')
                 else:
                     user = create_facebook_user(data)
                     create_socials(user, data, 'facebook')
                     login_user(user.id)
-                    send_mail(data['email'], 'create')
+                    # send_mail(data['email'], 'create')
                     redirect('/tweet')
             else:
         		# アクセストークンが不正なものだったらログイン画面にリダイレクトする
@@ -110,16 +123,36 @@ def facebook_callback():
         redirect('/tweet')
 
 @route('/google/login')
-def google_login():
+def test_login():
 
-    test = get_google_access()
+    SCOPE = 'https://www.googleapis.com/auth/plus.login'
 
-    return test
+    flow = flow_from_clientsecrets(
+       './client_id.json',
+       scope=SCOPE,
+       redirect_uri= "http://localhost:5000/google/callback")
 
-@route('/login/test')
-def login_test():
+    auth_uri = flow.step1_get_authorize_url()
 
-    google_token()
+    redirect(auth_uri)
+
+@route('/google/callback')
+def test_login_google():
+
+    try:
+        if request.GET.getunicode('code'):
+            data = google_login_flow(request.GET.getunicode('code'))
+            if check_socials(data, 'google'):
+                redirect('/mypage')
+            else:
+                user = create_google_user()
+                create_socials(user, data, 'google')
+                login_user(user.id)
+                redirect('/mypage')
+        else:
+            redirect('/')
+    except:
+        redirect('/mypage')
 
 @route('/remake_password')
 def remake():
@@ -182,27 +215,39 @@ def logout():
 @route("/pay")
 def pay():
 
-    publishable_key = stripe_publishable_key()
+    return template('templates/pay', publishable_key=models.app_setting.STRIPE_PUBLISHABLE)
 
-    return template('templates/pay', publishable_key=publishable_key)
-
-@route("/pay", method='POST')
+@route("/pay/charge", method='POST')
 def pay_commit():
 
-    stripe = stripe_pay(request.POST)
-    send_mail(request.POST.getunicode('stripeEmail'), 'pay')
+    customer = stripe.Customer.create(
+        email = request.POST.getunicode('stripeEmail'),
+        source = request.POST.getunicode('stripeToken')
+    )
 
-    redirect('/pay_after')
+    set_stripe_id(customer.id, customer.email)
+    login_stripe_id(customer.id)
 
-@route('/pay_after')
-def pay_after():
+    charge = stripe.Charge.create(
+        customer = customer.id,
+        amount = request.POST.getunicode('amount'),
+        currency = 'jpy',
+        description = request.POST.getunicode('description')
+    )
 
-    return template('templates/pay_after')
+    stripe_create_mail(request.POST.getunicode('stripeEmail'), customer.id, 'pay')
 
-@route("/user/<user_account_email>")
-def user_account_email_redirect(user_account_email):
+    return template('templates/pay_after', current_user=current_user)
 
-    redirect('/create')
+@route("/user/<user_account_email>/<stripe_id>")
+def user_account_email_redirect(user_account_email, stripe_id):
+
+    check = check_account_payafter(user_account_email, stripe_id)
+
+    if check is True:
+        redirect('/create')
+    else:
+        redirect('/pay')
 
 @route('/check_account')
 def check_account():
@@ -213,10 +258,11 @@ def check_account():
 @route('/check_account', method='POST')
 def check_account_email():
 
-    email = remake_password_email(request.POST)
+    check_account = check_email_stripe_id(request.POST)
 
-    if email is not False:
-        redirect('create')
+    if check_account is not False:
+        login_stripe_id(check_account)
+        redirect('/create')
     else:
         duplicate_error = '登録したEmailアドレスを入力してください。'
         return template('templates/check_account', duplicate_error=duplicate_error)
@@ -224,30 +270,34 @@ def check_account_email():
 @route("/create", method='GET')
 def create_get():
 
-    current_user = get_current_user()
-    duplicate_error = ''
+    stripe_id = get_current_stripe_id()
 
-    return template('templates/create', duplicate_error=duplicate_error, user=User(), current_user=current_user)
+    if stripe_id is None:
+        redirect('/pay')
+    else:
+        current_user = get_current_user()
+        delete = user_stripe_delete()
+        duplicate_error = ''
+        return template('templates/create', duplicate_error=duplicate_error, user=User(), current_user=current_user, delete=delete)
 
 @route('/check', method='POST')
 def users_new_confirm():
 
     current_user = get_current_user()
-    user = User(
-            email = request.POST.getunicode('email'),
-            password = request.POST.getunicode('password'),
-            name = request.POST.getunicode('name')
-    )
-
+    user =  User(
+               name = request.POST.getunicode('name'),
+               email = request.POST.getunicode('email'),
+               password = request.POST.getunicode('password')
+          )
     if is_duplicate_email(user.email) and is_duplicate_name(user.name):
         duplicate_error = '既に登録されているメールアドレス、ユーザー名です。'
-        return template('templates/create', url=url, user=user, current_user=current_user, duplicate_error=duplicate_error)
+        return template('templates/create', url=url, user=user, current_user=current_user, duplicate_error=duplicate_error, view=view)
     elif is_duplicate_email(user.email):
         duplicate_error = '既に登録されているメールアドレスです。'
-        return template('templates/create', url=url, user=user, current_user=current_user, duplicate_error=duplicate_error)
+        return template('templates/create', url=url, user=user, current_user=current_user, duplicate_error=duplicate_error, view=view)
     elif is_duplicate_name(user.name):
         duplicate_error = '既に登録されているユーザ名です。'
-        return template('templates/create', url=url, user=user, current_user=current_user, duplicate_error=duplicate_error)
+        return template('templates/create', url=url, user=user, current_user=current_user, duplicate_error=duplicate_error, view=view)
 
     return template('templates/check', current_user=current_user, user=user)
 
@@ -259,7 +309,7 @@ def create():
     duplicate_error = '登録完了しました。'
     # return template('templates/create_after', user=user, current_user=current_user , duplicate_error=duplicate_error)
 
-    return redirect('/tweet')
+    return template('templates/create_after', duplicate_error=duplicate_error, current_user=current_user)
 
 @route("/user/delete/<user_id>")
 def delete_user(user_id):
@@ -279,18 +329,17 @@ def delete_user(user_id):
 def info():
 
     current_user = get_current_user()
-
-    return template('templates/info', url=url, current_user=current_user)
+    stripe_cookie = get_stripe_cookie()
+    return template('templates/info', url=url, current_user=current_user, stripe_cookie=stripe_cookie)
 
 @route('/tweet')
 def tweet():
 
     current_user = get_current_user()
-    print(current_user)
     tweets = tweet_view()
     follow_check = follow_id_view()
     fab_check = fab_check_view()
-    is_logged_in_redirect(current_user)
+
 
     return template('templates/tweet', follow_view=follow_check, fab_check=fab_check, tweets=tweets, current_user=current_user)
 
@@ -407,9 +456,8 @@ def edit():
 def edit_post():
 
     current_user = get_current_user()
-    test_edit = test_user(request.forms)
+    test_edit = my_comment(request.forms)
     edit = profile_edit(request.POST)
-
     profile_view = comment()
     commit_text = commit()
 

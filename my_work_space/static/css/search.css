@@ -284,13 +284,12 @@ p .tweet-time {
 }
 
 .erra {
-  width: 480px;
   margin: 0 auto;
   border-radius: 30px;
   text-align: center;
   font-weight: 400;
   font-size: 30px;
-  background-color: rgba(255, 255, 255, .8);
+  background-color: rgba(255, 255, 255, .9);
 }
 
 .content {

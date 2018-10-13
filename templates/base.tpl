@@ -15,13 +15,10 @@
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 % if current_user is None:
                     <li><a href="#">{{current_user}}</a></li>
-                % elif current_user.email is None:
-                    <li><a href="#">{{current_user.name}}</a></li>
                 % else:
                     <li><a href="#">{{current_user.email}}</a></li>
                 % end
-                <li><a href="#">Link1</a></li>
-                <li><a href="#">Link2</a></li>
+                <li><a href="/plans">プラン</a></li>
                 % if current_user:
                     <li><a href="/mypage">マイページ</a></li>
                     <li><a href="/users/logout">ログアウト</a></li>
@@ -33,13 +30,10 @@
             <ul id="slide-out" class="sidenav">
                 % if current_user is None:
                     <li><a href="#">{{current_user}}</a></li>
-                % elif current_user.email is None:
-                    <li><a href="#">{{current_user.name}}</a></li>
                 % else:
                     <li><a href="#">{{current_user.email}}</a></li>
                 % end
-                <li><a href="#">Link1</a></li>
-                <li><a href="#">Link2</a></li>
+                <li><a href="/plans">プラン</a></li>
                 % if current_user:
                     <li><a href="/mypage">マイページ</a></li>
                     <li><a href="/users/logout">ログアウト</a></li>

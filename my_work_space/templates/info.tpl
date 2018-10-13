@@ -10,12 +10,12 @@
   <meta name='viewport' content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" media="screen" href="static/css/info.css">
 
-  <script src="static/js/jquery-3.1.1.min.js"></script>
+  <!-- <script src="static/js/jquery-3.1.1.min.js"></script>
   <script type="text/javascript" src="static/js/tatume.js"></script>
   <link rel="stylesheet" type="text/css" href="static/js/slick-1.8.1/slick/slick.css"/>
   <link rel="stylesheet" type="text/css" href="static/js/slick-1.8.1/slick/slick-theme.css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-  <script type="text/javascript" src="static/js/slick-1.8.1/slick/slick.min.js"></script>
+  <script type="text/javascript" src="static/js/slick-1.8.1/slick/slick.min.js"></script> -->
 
   <title>TUBUYAKI</title>
 
@@ -42,7 +42,11 @@
         % if current_user:
         <li class='login_sub'><a href="/logout">ログアウト</a></li>
         % else:
-        <li class='new'><a href="/create">登録</a></li>
+         %if stripe_cookie is None:
+          <li class='new'><a href="/pay">アプリ購入</a></li>
+         %else:
+          <li class='new'><a href="/create">新規登録</a></li>
+         %end
         %end
       </ul>
      </div>
@@ -53,7 +57,7 @@
       </div>
       <div class='content_tatume'>
         <p class='content_tatume_title'>つぶやきとは</p>
-        <p class='content_tatume_img'><img src="static/img/text.png" alt=""></p>
+        <p class='content_tatume_img'><img src="static/img/oum_pro.png" alt=""></p>
         <p class='content_tatume_text'>
           つぶやきは、日本語の文字数制限を200文字に設定しており、</br>
           Twitterの140文字では自分の思いを表現できない方々のためのツールです。</br>

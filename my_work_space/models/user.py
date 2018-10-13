@@ -11,6 +11,7 @@ from models.app_setting import ENGINE, Base
 class User(Base):
     __tablename__ = 'users'
     id = Column('id', Integer, primary_key = True)
+    stripe_id = Column('stripe_id', String(200))
     name = Column('name', String(45))
     password = Column('password', String(200))
     email = Column('email', String(45))

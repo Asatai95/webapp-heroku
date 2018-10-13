@@ -1,4 +1,4 @@
-from bottle import  request, redirect, response, template, error
+from bottle import  request, redirect, response, template
 
 from models.app_setting import session
 from models.user import *
@@ -27,48 +27,92 @@ import sys
 import requests
 
 import stripe
+stripe.api_key = models.app_setting.STRIPE_SECRET
 
-import webbrowser
+from httplib2 import Http
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
+from apiclient.discovery import build
+import httplib2
 
-CREDENTIALS_FILE = "./google/credentials"
+
+SCOPE = 'https://www.googleapis.com/auth/plus.login'
+
+CREDENTIALS_FILE = "./google/test"
+
+flow = flow_from_clientsecrets(
+   './client_id.json',
+   scope=SCOPE,
+   redirect_uri= "http://localhost:5000/google/callback")
 
 UPLOAD_FOLDER = './static/img/'
 ALLOWED_EXTENSIONS = set(['png', 'jpeg', 'gif'])
 path = './static/img/*.ALLOWED_EXTENSIONS'
-
-def error404(error):
-  return template("<h1>{{error_message}}</h1>", error_message="404 Not Found.")
 
 def allowed_file(filename):
 
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-def stripe_publishable_key():
+def set_stripe_id(stripe_id, email):
 
-    publishable_key = models.app_setting.STRIPE_KEYS_PUBLISHABLE_KEY
-
-    return publishable_key
-
-def stripe_pay(form):
-
-    amount = '100'
-
-    stripe_token = form.getunicode('stripeToken')
-    mail_address = form.getunicode('stripeEmail')
-
-    stripe.api_key = models.app_setting.STRIPE_KEYS_SECRET_KEY
-
-    stripe.Charge.create(
-        amount=amount,
-        currency="jpy",
-        description="Charge for {mail}".format(mail=mail_address),
-        source=stripe_token
+    user = User(
+        stripe_id = stripe_id,
+        email = email
     )
+    session.add(user)
+    session.commit()
 
-    return stripe
+def check_account_payafter(email, stripe_id):
+
+    user = session.query(User).filter(
+               User.email == email,
+               User.stripe_id == stripe_id
+           ).all()
+
+    if user is None:
+        return False
+    else:
+        return True
+
+def check_email_stripe_id(form):
+
+    user = session.query(User.stripe_id).filter(
+                User.email == form.getunicode('email')
+           ).all()
+
+    if user is None:
+        return False
+    else:
+        return user
+
+def user_email_first():
+
+    stripe_id = request.get_cookie('stripe_id', secret=models.app_setting.SECRET_KEY)
+
+    email = session.query(User.email).filter(
+            User.stripe_id == stripe_id
+    ).all()
+
+    email = email[0][0]
+    return email
+
+def user_stripe_delete():
+
+    stripe_id = request.get_cookie('stripe_id', secret=models.app_setting.SECRET_KEY)
+
+    email = session.query(User).filter(
+            User.stripe_id == stripe_id,
+            User.name == None,
+            User.password == None
+    ).delete()
+    print(email)
+
+    if email == 0:
+        pass
+    else:
+        session.commit()
+        return True
 
 def _encrypt_password(password):
 
@@ -132,23 +176,41 @@ def loggedin_account():
 
 def create_user(form):
 
-    user = User(
-           name = form.getunicode('name'),
-           email = form.getunicode('email'),
-           password=_encrypt_password(form.getunicode('password')),
-           pro_img = './static/img/hi.png'
-    )
+    stripe_id = request.get_cookie('stripe_id', secret=models.app_setting.SECRET_KEY)
 
+    user = User(
+        stripe_id = stripe_id,
+        name = form.getunicode('name'),
+        email = form.getunicode('email'),
+        password = _encrypt_password(form.getunicode('password')),
+        pro_img = './static/img/hi.png'
+    )
     session.add(user)
     session.commit()
+
     return user
 
 def create_facebook_user(form):
 
+    stripe_id = request.get_cookie('stripe_id', secret=models.app_setting.SECRET_KEY)
+
     user = User(
+               stripe_id = stripe_id,
                name = form['name'],
-               email = form['email']
+               email = form['email'],
+               pro_img = './static/img/ninwanko.png'
             )
+    session.add(user)
+    session.commit()
+    return user
+
+def create_google_user():
+
+    stripe_id = request.get_cookie('stripe_id', secret=models.app_setting.SECRET_KEY)
+
+    user = User(
+          stripe_id = stripe_id
+    )
     session.add(user)
     session.commit()
     return user
@@ -161,7 +223,13 @@ def create_socials(user, data, provider):
             provider = provider,
             provider_id = data['id'],
         )
-    # elif provider == 'twitter':
+    elif provider == 'google':
+        social = Social(
+            user_id = user.id,
+            provider = provider,
+            provider_id = data
+        )
+    print(social)
 
     session.add(social)
     session.commit()
@@ -173,10 +241,17 @@ def check_socials(data, provider):
                         Social.provider == 'facebook',
                         Social.provider_id == data['id']
                     ).first()
+    else:
+        social = session.query(Social).filter(
+                       Social.provider == 'google',
+                       Social.provider_id == data
+                    ).first()
+
     if social is None:
         return False
     else:
         login_user(social.user_id)
+        print('test')
         return True
 
 def get_facebook_access_token(code):
@@ -210,43 +285,20 @@ def get_facebook_user_info(access_token, user_id):
     }
     return requests.get(url, params=params).json()
 
-def get_google_access():
+def google_login_flow(code):
 
-    SCOPE = "https://www.googleapis.com/auth/plus.login"
+    credentials = flow.step2_exchange(code)
 
-    flow = flow_from_clientsecrets(
-    # API有効化時に取得したOAuth用のJSONファイルを指定
-    'google/client_id.json' ,
-    # スコープを指定
-    scope=SCOPE,
-    # ユーザーの認証後の、トークン受け取り方法を指定（後述）
-    redirect_uri='urn:ietf:wg:oauth:2.0:oob')
-
-    auth_uri = flow.step1_get_authorize_url()
-    webbrowser.open(auth_uri)
-
-def google_token():
-
-    SCOPE = "https://www.googleapis.com/auth/plus.me"
-
-    credentials = "4/cwBlEwPmFR80S0p4lr1bLnN8HzWA173HaB6VSgDCQ8vRcxGl_kiMzBY"
-
-    flow = flow_from_clientsecrets(
-    # API有効化時に取得したOAuth用のJSONファイルを指定
-    'google/client_id.json' ,
-    # スコープを指定
-    scope=SCOPE,
-    # ユーザーの認証後の、トークン受け取り方法を指定（後述）
-    redirect_uri='urn:ietf:wg:oauth:2.0:oob')
-
-    auth_uri = flow.step1_get_authorize_url()
-    webbrowser.open(auth_uri)
-
-    token = input("Input your code > ")
-
-    credentials = flow.step2_exchange(token)
-
+    CREDENTIALS_FILE = "./credentials"
     Storage(CREDENTIALS_FILE).put(credentials)
+
+    credentials = Storage(CREDENTIALS_FILE).get()
+    http_auth = credentials.authorize(Http())
+    service = build('plus', 'v1', http=http_auth)
+
+    result = service.people().get(userId='me').execute()
+
+    return result['id']
 
 
 def is_duplicate_email(email):
@@ -273,6 +325,22 @@ def get_current_user():
     else:
         return None
 
+def get_stripe_cookie():
+
+    stripe_id = request.get_cookie('stripe_id', secret=models.app_setting.SECRET_KEY)
+    if stripe_id:
+        return True
+    else:
+        return None
+
+def get_current_stripe_id():
+
+    stripe_id = request.get_cookie('stripe_id', secret=models.app_setting.SECRET_KEY)
+    if stripe_id:
+        return stripe_id
+    else:
+        return None
+
 def is_logged_in_redirect(user):
     if user is not None:
         return True
@@ -296,6 +364,16 @@ def login_user(user_id):
     response.set_cookie(
          'user_id',
          user_id,
+         secret=models.app_setting.SECRET_KEY,
+         max_age=2678400,
+         path='/'
+    )
+
+def login_stripe_id(stripe_id):
+
+    response.set_cookie(
+         'stripe_id',
+         stripe_id,
          secret=models.app_setting.SECRET_KEY,
          max_age=2678400,
          path='/'
@@ -576,7 +654,7 @@ def comment():
 
     return profile
 
-def test_user(form):
+def my_comment(form):
 
     user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
 
@@ -584,8 +662,8 @@ def test_user(form):
                       User.id == user_id
                    ).first()
 
+    profile_edit.name = form['user_name']
     profile_edit.comment = form['user_intro']
-    print(profile_edit.comment)
 
     session.commit()
 
@@ -598,7 +676,6 @@ def profile_edit(form):
     profile_edit = session.query(User).filter(
                       User.id == user_id
                    ).first()
-    profile_edit.name = form.getunicode('user_name')
     profile_edit.email = form.getunicode('email')
     profile_edit.pro_img = form.getunicode('img_file')
 
@@ -734,8 +811,26 @@ def send_mail(to_email, send_type):
     elif send_type == 'delete':
         body = '〇〇です。\n\n〇〇アプリをご利用いただきありがとうございます。'
         subject = '【削除完了】〇〇〇〇〇'
-    elif send_type == 'pay':
-        body = '〇〇です。\n\nお支払いいただきありがとうございます。\n\n下記のURLからアカウントを登録してください。\n\n'+url+' '
+
+
+    message = MIMEText(body)  # 本文
+    message['Subject'] = subject         # 件名
+    message['From'] = models.app_setting.HOST_EMAIL  # 送信元
+    message['To'] = to_email      # 送信先
+
+    sender = smtplib.SMTP_SSL(models.app_setting.HOST_SMTP)
+    sender.login(models.app_setting.HOST_EMAIL, models.app_setting.HOST_PASSWORD)
+    sender.sendmail(models.app_setting.HOST_EMAIL, to_email, message.as_string())
+    sender.quit()
+
+def stripe_create_mail(to_email, stripe_id, send_type):
+    body=''
+    subject = ''
+
+    url = "http://localhost:5000/user/"+to_email+"/"+stripe_id+" "
+
+    if send_type == 'pay':
+        body = '〇〇です。\n\nご購入いただきありがとうございます。\n\n下記のURLからアカウントを登録してください。\n\n'+url+' '
         subject = '【支払い完了】〇〇〇〇〇'
 
     message = MIMEText(body)  # 本文

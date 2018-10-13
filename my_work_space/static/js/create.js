@@ -11,11 +11,10 @@ $(function() {
 
   if ($('#name').val().length == 0) {
     $('#submit').attr('disabled', 'disabled');
-  } else if ($('#email').val().length == 0) {
+  } else if ($('#passwd').val().length == 0) {
     $('#submit').attr('disabled', 'disabled');
   } else if ($('#passwd').val().length == 0) {
     $('#submit').attr('disabled', 'disabled');
-
   }
 
   $('#passwd').bind('keydown keyup keypress change', function() {

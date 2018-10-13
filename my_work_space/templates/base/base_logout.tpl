@@ -18,7 +18,7 @@
   <script type="text/javascript" src="static/js/slick-1.8.1/slick/slick.min.js"></script> -->
 
 
-  <title>つぶやき</title>
+  <title>TUBUYAKI</title>
 
 </head>
 

@@ -15,15 +15,20 @@ from datetime import datetime
 """
 import os, sys
 sys.path.append(os.getcwd()) # コマンド実行ディレクトリを設定
-from app_setting import ENGINE, Base
+from app_setting import Base, ENGINE
+
+# usersテーブルにリレーションするために読み込む
+from models.user import User
+
+
 
 class Social(Base):
     """
-    ユーザモデル
+    ソーシャルモデル
     """
-    __tablename__ = 'social'
+    __tablename__ = 'socials'
     id = Column('id', Integer, primary_key = True)
-    user_id = Column('user_id', ForeignKey('users.id',onupdate='CASCADE', ondelete='CASCADE'))
+    user_id = Column('user_id', Integer,  ForeignKey('users.id',onupdate='CASCADE', ondelete='CASCADE')) # ここの users.id の users はテーブル名
     provider = Column('provider', String(200))
     provider_id = Column('provider_id', BigInteger)
     created_at = Column('created_at', DateTime, default=datetime.now())
@@ -36,7 +41,7 @@ def main(args):
         Base.metadata.create_all(bind=ENGINE)
 
     elif args[1] == "delete":
-        User.__table__.drop(bind=ENGINE)
+        Social.__table__.drop(bind=ENGINE)
 
 if __name__ == "__main__":
     main(sys.argv)

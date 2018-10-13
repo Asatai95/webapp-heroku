@@ -8,6 +8,9 @@
           <p class='title_text'>アカウント登録</p>
           <ul class='top'>
             <li class='top_li'>
+              <p>TOP画面に戻って、ログインしてみよう！！</p>
+            </li>
+            <li class='top_li'>
               <a href="/">TOPに戻る</a>
             </li>
           </ul>

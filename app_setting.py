@@ -3,6 +3,7 @@ from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import declarative_base
 import os
 
+
 try:
     # for HEROKU
     if os.environ['APP_ENVIRONMENT'] == 'production':
@@ -11,13 +12,13 @@ try:
         FACEBOOK_ID = os.environ['FACEBOOK_ID']
         FACEBOOK_SECRET = os.environ['FACEBOOK_SECRET']
         FACEBOOK_CALLBACK_URL = os.environ['FACEBOOK_CALLBACK_URL']
+        STRIPE_SECRET = ['STRIPE_SECRET']
+        STRIPE_PUBLISHABLE = ['STRIPE_PUBLISHABLE']
         DATABASE = os.environ['DATABASE_URL']
 except:
     # for development
     SECRET_KEY = '2fsKgOLaAHbJUbi6kJsyboVLPchUjL88iZ7sM3A1'
     HOST_PASSWORD = 'PassWord'
-    FACEBOOK_ID = '2165553107045876'
-    FACEBOOK_SECRET = '2b3f9337bb73847b0a63846a74cb5bf7'
     FACEBOOK_CALLBACK_URL = 'http://localhost:5000/facebook/callback'
     DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8mb4' % (
        "root", # user
@@ -44,9 +45,6 @@ Pythonのアプリケーションが動作する環境(LOCALlかHEROKU)によっ
 定数 中身は上書きしないもの(上書きは可能)
 """
 
-HOST_EMAIL = 'official@webapp2.com'
-HOST_PASSWORD = 'asatai951156'
-HOST_SMTP = 'smtp.muumuu-mail.com'
 
 ENGINE = create_engine(
     DATABASE,

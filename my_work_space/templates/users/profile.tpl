@@ -4,7 +4,7 @@
   <div class='main'>
     <div class='header'>
       <div class='img'>
-        <img src="../../static/img/nin_img.png" alt="">
+        <a href="/tweet"><img src="../../static/img/nin_img.png" alt=""></a>
       </div>
       <ul id='header' class='header_main'>
         % if current_user is None:
@@ -13,10 +13,11 @@
         <li class='login_account'><a href="/mypage">{{current_user.name}}</a></li>
         % end
         <li class='text'><a href="/info">TUBUYAKI</a></li>
+        <li class='text'><a href="/search">つぶやき一覧</a></li>
+        <li class='text'><a href="/fab">お気に入り</a></li>
         % if current_user:
         <li class='login_sub'><a href="/logout">ログアウト</a></li>
         % else:
-
         <li class='new'><a href="/create">登録</a></li>
         %end
       </ul>

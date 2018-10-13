@@ -8,7 +8,7 @@
   <meta name='keywords' content=''>
   <meta name='description' content="">
   <meta name='viewport' content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" media="screen" href="static/css/check_email.css">
+  <link rel="stylesheet" media="screen" href="../static/css/check_email.css">
 
   <title>TUBUYAKI</title>
 
@@ -18,7 +18,7 @@
   <div class='main'>
     <div class='header'>
       <div class='img'>
-        <a href="/"><img src="static/img/nin_img.png" alt="">
+        <a href="/"><img src="../static/img/nin_img.png" alt="">
       </div>
       <ul id='header' class='header_main'></a>
         <li class='text'>

@@ -15,6 +15,7 @@
         <li class='text'><a href="/info">TUBUYAKI</a></li>
         <li class='text'><a href="/tweet">つぶやく</a></li>
         <li class='text'><a href="/search">つぶやき検索</a></li>
+        <li class='text'><a href="/fab">お気に入り</a></li>
         % if current_user:
         <li class='login_sub'><a href="/logout">ログアウト</a></li>
         % else:

@@ -320,6 +320,7 @@ span.sen img {
 }
 
 .container {
+
   text-align: center;
   margin: 20px auto;
 }
@@ -340,10 +341,25 @@ span.sen img {
   transform: scale(1.1);
 }
 
+.container-button img {
+  width: 35px;
+  height: 35px;
+  position: absolute;
+}
+
+.container-button img:hover {
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  box-shadow: 0 0 8px rgba(30, 50, 132);
+  transform: scale(1.1);
+}
+
 .container.btn {
+  padding-left: 38px;
   text-decoration: none;
   color: white;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 #my-signin2 {
@@ -398,6 +414,53 @@ p.new_create a {
   opacity: 1.0;
   text-decoration: none;
   margin-left: 5px;
+}
+
+#customBtn {
+  display: inline-block;
+  background: rgba(255, 77, 77, .9);
+  color: #444;
+  width: 240px;
+  height: 40px;
+  text-align: left;
+  border-radius: 5px;
+  white-space: nowrap;
+  margin: 0 0 20px 0;
+  border-radius: 5px;
+}
+
+#customBtn:hover {
+  cursor: pointer;
+  opacity: .9;
+  box-shadow: 0 0 5px rgba(255, 77, 77);
+  transform: scale(1.1);
+}
+
+span.icon {
+  background: url('../img/icon.png') transparent 5px 50% no-repeat;
+  background-repeat: no-repeat;
+  background-size: 60%;
+  display: inline-block;
+  vertical-align: middle;
+  width: 35px;
+  height: 40px;
+  margin-left: 5px;
+}
+
+span.buttonText {
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 10px;
+  padding-right: 25px;
+  font-size: 17px;
+  color: white;
+  font-weight: 600;
+  font-family: 'Roboto', sans-serif;
+}
+
+span.buttonText a {
+  text-decoration: none;
+  color: white;
 }
 
 .error {

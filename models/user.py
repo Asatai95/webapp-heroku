@@ -15,8 +15,9 @@ from datetime import datetime
 """
 import os, sys
 sys.path.append(os.getcwd()) # コマンド実行ディレクトリを設定
-from app_setting import ENGINE, Base
+from app_setting import Base, ENGINE
 
+from models.plan import Plan
 
 
 class User(Base):
@@ -25,6 +26,9 @@ class User(Base):
     """
     __tablename__ = 'users'
     id = Column('id', Integer, primary_key = True)
+    stripe_id = Column('stripe_id', String(200))
+    stripe_subscription_id = Column('stripe_subscription_id', String(200))
+    plan_id = Column('plan_id', Integer,  ForeignKey('plans.id',onupdate='CASCADE', ondelete='CASCADE'))
     name = Column('name', String(200))
     age = Column('age', Integer)
     email = Column('email', String(100))

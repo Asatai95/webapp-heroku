@@ -4,7 +4,7 @@
   <div class='main'>
     <div class='header'>
       <div class='img'>
-        <a href="/"><img src="../static/img/nin_img.png" alt=""></a>
+        <a href="/tweet"><img src="../static/img/nin_img.png" alt=""></a>
       </div>
       <ul id='header' class='header_main'>
         % if current_user is None:
@@ -18,7 +18,7 @@
         % if current_user:
         <li class='login_sub'><a href="/logout">ログアウト</a></li>
         % else:
-        <li class='new'><a href="/create">登録</a></li>
+        <li class='new'><a href="/">ログイン</a></li>
         %end
       </ul>
     </div>

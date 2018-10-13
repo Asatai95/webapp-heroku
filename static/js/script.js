@@ -4,6 +4,10 @@
 // }
 // 戻るボタン
 
+$(document).ready(function(){
+    $('.modal').modal();
+});
+
 $(function(){
 
     // Materialize mobile menu

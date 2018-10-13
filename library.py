@@ -8,6 +8,7 @@ import hashlib
 from app_setting import session
 from models.user import User
 from models.social import Social
+from models.plan import Plan
 
 import app_setting
 
@@ -15,6 +16,14 @@ from email.mime.text import MIMEText
 import smtplib
 
 import requests
+
+import stripe
+
+def stripe_pay_after(form):
+
+    mail = form.getunicode('stripeEmail')
+
+    return mail
 
 """
 ユーザーを作成する
@@ -141,6 +150,12 @@ def update_user(current_user, form):
         user.email = form.getunicode('email')
     session.commit()
 
+def set_stripe_id(user, stripe_id):
+
+    user.stripe_id = stripe_id
+    session.commit()
+
+
 """
 パスワード編集
 """
@@ -244,9 +259,9 @@ def send_mail(to_email, send_type):
     if send_type == 'create':
         body = '〇〇です。 \n\n新規登録ありがとうございます。'
         subject = '【新規登録完了】〇〇〇〇〇'
-    # elif 'delete':
-    #     body = '〇〇です。\n\n新規登録ありがとうございます。'
-    #     subject = '【新規登録完了】〇〇〇〇〇'
+    elif 'pay':
+        body = '〇〇です。\n\n商品購入ありがとうございます。'
+        subject = '【商品購入完了】〇〇〇〇〇'
 
     message = MIMEText(body)  # 本文
     message['Subject'] = subject         # 件名

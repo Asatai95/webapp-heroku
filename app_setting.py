@@ -10,6 +10,7 @@ try:
         SECRET_KEY = os.environ['SECRET_KEY']
         HOST_PASSWORD = os.environ['HOST_PASSWORD']
         HOST_EMAIL = ['HOST_EMAIL']
+        HOST_SMTP = ['HOST_SMTP']
         FACEBOOK_ID = os.environ['FACEBOOK_ID']
         FACEBOOK_SECRET = os.environ['FACEBOOK_SECRET']
         FACEBOOK_CALLBACK_URL = os.environ['FACEBOOK_CALLBACK_URL']

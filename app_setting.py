@@ -9,19 +9,19 @@ try:
     if os.environ['APP_ENVIRONMENT'] == 'production':
         SECRET_KEY = os.environ['SECRET_KEY']
         HOST_PASSWORD = os.environ['HOST_PASSWORD']
-        HOST_EMAIL = ['HOST_EMAIL']
-        HOST_SMTP = ['HOST_SMTP']
+        HOST_EMAIL = os.environ['HOST_EMAIL']
+        HOST_SMTP = os.environ['HOST_SMTP']
         FACEBOOK_ID = os.environ['FACEBOOK_ID']
         FACEBOOK_SECRET = os.environ['FACEBOOK_SECRET']
         FACEBOOK_CALLBACK_URL = os.environ['FACEBOOK_CALLBACK_URL']
-        STRIPE_PUBLISHABLE = ['STRIPE_PUBLISHABLE']
-        STRIPE_SECRET = ['STRIPE_SECRET']
+        STRIPE_PUBLISHABLE = os.environ['STRIPE_PUBLISHABLE']
+        STRIPE_SECRET = os.environ['STRIPE_SECRET']
         DATABASE = os.environ['DATABASE_URL']
 except:
     # for development
     SECRET_KEY = '2fsKgOLaAHbJUbi6kJsyboVLPchUjL88iZ7sM3A1'
-    HOST_PASSWORD = 'PassWord'
     FACEBOOK_CALLBACK_URL = 'http://localhost:5000/facebook/callback'
+    
     DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8mb4' % (
        "root", # user
        "root", # password

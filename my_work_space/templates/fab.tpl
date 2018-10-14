@@ -25,6 +25,15 @@
     <div class="back">
       <a href="javascript:history.back();"><input type="submit" value="戻る" /></a>
     </div>
+
+    %if tweets == []:
+       <div class='fab_none'>
+         <div class='none_main'>
+           <p class='none_img'><img src="static/img/ninwanko.png" alt=""></p>
+           <p class='none_text'>ユーザーの投稿をお気に入りしたら、表示されるよ！</p>
+         </div>
+       </div>
+    %end
     <div class='main_content'>
       %for view in tweets :
       <div class="stream">

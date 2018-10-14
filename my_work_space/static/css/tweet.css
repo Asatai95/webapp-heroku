@@ -89,12 +89,16 @@ div.main {
 
 div.header {
   width: 100%;
-  height: 200px;
+  height: 250px;
+}
+
+div.header_sub {
+  width: 100%;
 }
 
 div.img img {
   width: 150px;
-  height: 100px;
+  height: 120px;
   float: left;
   margin: 30px;
   margin-left: 50px;

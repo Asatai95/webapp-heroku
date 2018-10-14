@@ -106,7 +106,6 @@ def user_stripe_delete():
             User.name == None,
             User.password == None
     ).delete()
-    print(email)
 
     if email == 0:
         pass
@@ -134,7 +133,7 @@ def remake_password_email(form):
         user = user[0][0]
         return user
 
-def url_check(mail_id):
+def url_check(mail_id, mail, get_stripe_cookie):
 
     text = 'email_change'
     email = hmac.new(
@@ -142,21 +141,43 @@ def url_check(mail_id):
                 models.app_setting.SECRET_KEY.encode('UTF-8'),
                 hashlib.sha256
            ).hexdigest()
+    user = session.query(User.email).filter(
+            User.email == mail,
+            User.stripe_id == get_stripe_cookie
+    ).all()
 
-    if email == mail_id:
-        return True
+    if user[0][0] == mail:
+        if email == mail_id:
+            return True
+        else:
+            return False
     else:
         return False
 
-def remake_password_check(mail, form):
 
-    remake = session.query(User).filter(
-              User.email == mail
-           ).first()
-    remake.password = _encrypt_password(form.getunicode('password2'))
-    session.commit()
+def remake_password_check(mail, form, stripe_id):
 
-    return remake
+    password_check = session.query(User.password).filter(
+              User.email == mail,
+              User.stripe_id == stripe_id
+    ).all()
+
+    if password_check is None:
+
+        remake = User(
+              password = _encrypt_password(form.getunicode('password2'))
+        )
+        session.add(remake)
+        session.commit()
+
+    else:
+        remake = session.query(User).filter(
+              User.email == mail,
+              User.stripe_id == stripe_id
+        ).first()
+        print(remake)
+        remake.password = _encrypt_password(form.getunicode('password2'))
+        session.commit()
 
 def password_checker(form):
 
@@ -229,7 +250,6 @@ def create_socials(user, data, provider):
             provider = provider,
             provider_id = data
         )
-    print(social)
 
     session.add(social)
     session.commit()
@@ -251,7 +271,6 @@ def check_socials(data, provider):
         return False
     else:
         login_user(social.user_id)
-        print('test')
         return True
 
 def get_facebook_access_token(code):
@@ -259,12 +278,28 @@ def get_facebook_access_token(code):
     url = 'https://graph.facebook.com/v3.1/oauth/access_token'
     params = {
             'redirect_uri': models.app_setting.FACEBOOK_CALLBACK_URL,
-            'client_id': models.app_setting.FACEBOOK_ID,
-            'client_secret': models.app_setting.FACEBOOK_SECRET,
+            'client_id': models.app_setting.CONSUMER_KEY,
+            'client_secret': models.app_setting.CONSUMER_SECRET,
             'code': code,
     }
     r = requests.get(url, params=params)
     return r.json()['access_token']
+
+def get_twitter_access_token():
+
+    headers = { "Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8" }
+    data = { "grant_type":"client_credentials" }
+    oauth2_url = "https://api.twitter.com/oauth2/token"
+    r = requests.post(oauth2_url, data=data, headers=headers, auth=(models.app_config.CONSUMER_KEY, models.app_config.CONSUMER_SECRET))
+
+    print(r.json()["access_token"])
+    print(r.json()["access_token"])
+    print(r.json()["access_token"])
+    print(r.json()["access_token"])
+    
+
+    return r.json()["access_token"]
+
 
 def check_facebook_access_tokn(access_token):
 
@@ -329,7 +364,7 @@ def get_stripe_cookie():
 
     stripe_id = request.get_cookie('stripe_id', secret=models.app_setting.SECRET_KEY)
     if stripe_id:
-        return True
+        return stripe_id
     else:
         return None
 
@@ -337,7 +372,17 @@ def get_current_stripe_id():
 
     stripe_id = request.get_cookie('stripe_id', secret=models.app_setting.SECRET_KEY)
     if stripe_id:
-        return stripe_id
+        return True
+    else:
+        return None
+
+def get_current_stripe_id_check():
+
+    stripe_id = request.get_cookie('stripe_id', secret=models.app_setting.SECRET_KEY)
+    user = session.query(User).filter(User.stripe_id==stripe_id).all()
+
+    if user:
+        return True
     else:
         return None
 
@@ -366,7 +411,7 @@ def login_user(user_id):
          user_id,
          secret=models.app_setting.SECRET_KEY,
          max_age=2678400,
-         path='/'
+         path='/',
     )
 
 def login_stripe_id(stripe_id):
@@ -376,7 +421,7 @@ def login_stripe_id(stripe_id):
          stripe_id,
          secret=models.app_setting.SECRET_KEY,
          max_age=2678400,
-         path='/'
+         path='/',
     )
 
 def tweet_view():
@@ -672,45 +717,81 @@ def my_comment(form):
 def profile_edit(form):
 
     user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
+    user_mail = session.query(User.email).all()
+    user_email_check = session.query(User.email).filter(User.id == user_id).all()
 
-    profile_edit = session.query(User).filter(
-                      User.id == user_id
-                   ).first()
-    profile_edit.email = form.getunicode('email')
-    profile_edit.pro_img = form.getunicode('img_file')
+    if user_email_check == [('',)]:
+        for mail in user_mail:
+            if (form.getunicode('email'),) == mail:
+                return False
 
-    img_file = profile_edit.pro_img
+        profile_edit = session.query(User).filter(
+                          User.id == user_id
+                     ).first()
+        profile_edit.email = form.getunicode('email')
+        profile_edit.pro_img = form.getunicode('img_file')
 
-    if img_file == '' :
-        try:
-            img_file = './static/img/ninwanko.png'
-            profile_edit.pro_img = img_file
-            session.commit()
-            return profile_edit
+        img_file = profile_edit.pro_img
 
-        except OSError:
+        if img_file == '' :
+            try:
+                img_file = './static/img/ninwanko.png'
+                profile_edit.pro_img = img_file
+                session.commit()
+                return profile_edit
+            except:
+                redirect('/edit')
 
-            session.commit()
-
-            return profile_edit
+        else:
+            if img_file and allowed_file(img_file.filename):
+                filename = img_file.filename
+                path = UPLOAD_FOLDER + filename
+                try:
+                    img_file.save(os.path.join(UPLOAD_FOLDER, filename))
+                    profile_edit.pro_img = path
+                    session.commit()
+                    return profile_edit
+                except OSError:
+                    os.remove(path)
+                    img_file.save(os.path.join(UPLOAD_FOLDER, filename))
+                    profile_edit.pro_img = path
+                    session.commit()
+                    return profile_edit
 
     else:
+        print('test')
+        profile_edit = session.query(User).filter(
+                        User.id == user_id
+                       ).first()
+        profile_edit.email = form.getunicode('email')
+        profile_edit.pro_img = form.getunicode('img_file')
 
-        if img_file and allowed_file(img_file.filename):
-            filename = img_file.filename
-            path = UPLOAD_FOLDER + filename
+        img_file = profile_edit.pro_img
+
+        if img_file == '' :
             try:
-                img_file.save(os.path.join(UPLOAD_FOLDER, filename))
-                profile_edit.pro_img = path
+                img_file = './static/img/ninwanko.png'
+                profile_edit.pro_img = img_file
                 session.commit()
                 return profile_edit
-            except OSError:
+            except:
+                redirect('/edit')
 
-                os.remove(path)
-                img_file.save(os.path.join(UPLOAD_FOLDER, filename))
-                profile_edit.pro_img = path
-                session.commit()
-                return profile_edit
+        else:
+            if img_file and allowed_file(img_file.filename):
+                filename = img_file.filename
+                path = UPLOAD_FOLDER + filename
+                try:
+                    img_file.save(os.path.join(UPLOAD_FOLDER, filename))
+                    profile_edit.pro_img = path
+                    session.commit()
+                    return profile_edit
+                except OSError:
+                    os.remove(path)
+                    img_file.save(os.path.join(UPLOAD_FOLDER, filename))
+                    profile_edit.pro_img = path
+                    session.commit()
+                    return profile_edit
 
 def commit():
 
@@ -742,6 +823,15 @@ def my_tweet_edit(form):
 def my_tweet_edit_input(form):
 
     user_id = request.get_cookie('user_id', secret=models.app_setting.SECRET_KEY)
+
+    tweet_edit = session.query(Tweet_comment.id).join(
+                  Tweet, Tweet.tweet_id == Tweet_comment.id
+             ).filter(
+                  Tweet.user_id == user_id,
+                  Tweet_comment.id == form
+             ).all()
+    if tweet_edit != form:
+        redirect('/mypage')
 
     tweet_edit = session.query(Tweet_comment).join(
                   Tweet, Tweet.tweet_id == Tweet_comment.id

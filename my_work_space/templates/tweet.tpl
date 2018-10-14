@@ -3,6 +3,7 @@
 <body>
   <div class='main'>
     <div class='header'>
+     <div class='header_sub'>
       <div class='img'>
         <a href="/tweet"><img src="static/img/nin_img.png" alt=""></a>
       </div>
@@ -21,8 +22,10 @@
         <li class='new'><a href="/create">登録</a></li>
         %end
       </ul>
+     </div>
     </div>
     <div class='main_content'>
+      
      %for tweet in tweets:
       <div class="stream">
         <div class="content">

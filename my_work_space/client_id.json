@@ -1,0 +1,12 @@
+{
+  "installed": {
+    "client_id": "1079133430628-suo7oocrqn46vbk4b99h0pbpde1d75d6.apps.googleusercontent.com",
+    "project_id": "webapp2-heroku",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://www.googleapis.com/oauth2/v3/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret": "WkWCiFX-pERhn8IgCBrpU0Xf",
+    "redirect_uris": ["urn:ietf:wg:oauth:2.0:oob", "http://localhost:5000/google/callback"],
+    "grant_type": "authorization_code"
+  }
+}

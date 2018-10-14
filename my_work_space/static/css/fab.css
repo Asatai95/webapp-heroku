@@ -90,7 +90,7 @@ div.main {
 
 div.header {
   width: 100%;
-  height: 200px;
+  height: 250px;
 }
 
 div.img img {
@@ -426,6 +426,22 @@ div.tweet_img img.upload {
   box-shadow: 0 0 3px blue;
 }
 
+.fab_none {
+  height: 350px;
+  background-color: rgba(255, 255, 255, .8);
+}
+
+.none_main {
+  margin: 0 auto;
+  padding: 50px 0;
+  width: 600px;
+}
+
+.none_text {
+  font-size: 25px;
+  font-weight: 800;
+}
+
 .submit_text {
   font-size: 20px;
   padding: 2px;
@@ -486,8 +502,7 @@ span.text {
 
 div.back {
   float: right;
-  margin-bottom: 10px;
-  margin-right: 50px;
+  margin: 10px 50px 10px 0;
 }
 
 div.back input {

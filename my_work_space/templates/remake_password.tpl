@@ -27,8 +27,7 @@
           <p class='img_sen'><span class='sen'><img src="static/img/yazirushi.png" alt=""></span> または
             <span class='sen'><img src="static/img/yazirushi.png" alt=""></span>
           </p>
-
-          <p class='sns'><a href="/" id='forgot'>SNSアカウントでログイン</a></p>
+          <p class='sns'><a href="/" id='forgot'>TOPに戻る</a></p>
         </div>
       </div>
     </div>

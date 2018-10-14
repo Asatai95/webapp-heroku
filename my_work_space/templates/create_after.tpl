@@ -8,10 +8,10 @@
           <p class='title_text'>アカウント登録</p>
           <ul class='top'>
             <li class='top_li'>
-              <p>TOP画面に戻って、ログインしてみよう！！</p>
+              <p>早速、ツイートしてみよう！！</p>
             </li>
-            <li class='top_li'>
-              <a href="/">TOPに戻る</a>
+            <li class='top_li tweet'>
+              <a href="/tweet">つぶやく</a><img src="static/img/ninwanko.png" alt="">
             </li>
           </ul>
         </div>

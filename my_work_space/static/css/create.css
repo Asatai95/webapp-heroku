@@ -117,7 +117,7 @@ span.sen img {
 }
 
 p.sns {
-  margin: 28px 0 0 0;
+  margin: 20px 0 0 0;
   text-align: center;
   font-size: 18px;
   color: rgba(0, 0, 0, .4);
@@ -130,7 +130,7 @@ p.sen a {
 
 .login {
   font-size: 18px;
-  margin: 20px 0 0 0;
+  margin: 5px auto;
   color: rgba(0,0,0, .4);
 }
 
@@ -149,14 +149,19 @@ p.sen a {
 .top p {
   font-size: 20px;
   color: black;
+  margin-bottom: 5px;
 }
 
 .top li {
   list-style: none;
 }
 
+.top li.tweet {
+  display: inline-flex;
+}
+
 .top li a{
-  width: 130px;
+  width: 110px;
   margin: auto;
   text-decoration: none;
   padding-bottom: 3px;
@@ -196,6 +201,109 @@ p.sen a {
 	border-bottom: 3px solid grey;
 }
 
+.top li img {
+  height: 40px;
+  padding-bottom: 3px;
+}
+
+.sns_button {
+  position: absolute;
+  right: 50px;
+  bottom: 80px;
+  margin: 0 auto;
+  display: none;
+}
+
+.sns_text {
+  font-size: 25px;
+  font-weight: 800;
+  margin: 20px;
+  border: 2px solid black;
+  height: 35px;
+  line-height: 1.2em;
+}
+
+.container {
+  text-align: center;
+  margin: 10px auto!important;
+}
+
+.container-button {
+  width: 240px;
+  margin: auto;
+  border: 2px solid rgba(30, 50, 132);
+  background-color: rgba(30, 50, 132, .9);
+  height: 37px;
+  line-height: 1.8em;
+  border-radius: 5px;
+}
+
+.container:hover {
+  margin: 10px auto;
+  box-shadow: 0 0 8px rgba(30, 50, 132);
+  transform: scale(1.1);
+}
+
+.container-button img {
+  width: 33px;
+  height: 33px;
+  position: absolute;
+}
+
+.container.btn {
+  padding-left: 38px;
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  line-height: 2.2em;
+}
+
+#customBtn {
+  display: inline-block;
+  background: rgba(255, 77, 77, .9);
+  color: #444;
+  width: 240px;
+  height: 40px;
+  text-align: left;
+  border-radius: 5px;
+  white-space: nowrap;
+  margin: 0 0 20px 0;
+  border-radius: 5px;
+}
+
+#customBtn:hover {
+  cursor: pointer;
+  opacity: .9;
+  box-shadow: 0 0 5px rgba(255, 77, 77);
+  transform: scale(1.1);
+}
+
+span.icon {
+  background: url('../img/icon.png') transparent 5px 50% no-repeat;
+  background-repeat: no-repeat;
+  background-size: 60%;
+  display: inline-block;
+  vertical-align: middle;
+  width: 35px;
+  height: 40px;
+  margin-left: 5px;
+}
+
+span.buttonText {
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 10px;
+  padding-right: 25px;
+  font-size: 17px;
+  color: white;
+  font-weight: 600;
+  font-family: 'Roboto', sans-serif;
+}
+
+span.buttonText a {
+  text-decoration: none;
+  color: white;
+}
 
 .error {
   height: 25px;

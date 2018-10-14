@@ -16,7 +16,7 @@ $(function () {
         $('div.header_sub').css('background-color', 'rgba(255, 255, 255, 0.7)');
         $('div.header_sub').css('z-index', '5');
         $('div.img img').css('width', '130px');
-        $('div.img img').css('height', '80px');
+        $('div.img img').css('height', '100px');
         $('div.img img').css('margin-top', '20px');
         $('.header_main').css('margin-top', '0');
         $('.header_main').css('margin', '25px 0 25px 0');

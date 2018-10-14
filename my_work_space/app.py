@@ -31,8 +31,6 @@ import requests
 
 import sys
 
-
-import webbrowser
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
 from apiclient.discovery import build
@@ -46,7 +44,6 @@ def before_action():
 @hook('after_request')
 def close_db_session():
         session.close()
-
 
 @route("/static/:path#.+#", name='static')
 def test(path):
@@ -68,8 +65,9 @@ def js(filepath):
 def top():
 
     current_user = get_current_user()
+    stripe_cookie = get_stripe_cookie()
 
-    return template("templates/tatume" , current_user=current_user)
+    return template("templates/tatume" , current_user=current_user, stripe_cookie=stripe_cookie)
 
 @route("/", method='POST')
 def login():
@@ -101,29 +99,37 @@ def facebook_login():
 
 @route('/facebook/callback')
 def facebook_callback():
-    try: # 予期せぬエラーがでたらログイン画面にリダイレクトする
-        if request.GET.getunicode('code'):
-            access_token = get_facebook_access_token(request.GET.getunicode('code'))
-            data = check_facebook_access_tokn(access_token)
-            if data['is_valid']:
-                data = get_facebook_user_info(access_token, data['user_id'])
-                check = check_socials(data, 'facebook')
-                if check is True:
-                    redirect('/tweet')
+    # try: # 予期せぬエラーがでたらログイン画面にリダイレクトする
+    if request.GET.getunicode('code'):
+        access_token = get_facebook_access_token(request.GET.getunicode('code'))
+        data = check_facebook_access_tokn(access_token)
+        if data['is_valid']:
+            data = get_facebook_user_info(access_token, data['user_id'])
+            if check_socials(data, 'facebook'):
+                social = session.query(User.name).join(
+                         Social, User.id == Social.user_id).filter(
+                         Social.provider == 'google',
+                         Social.provider_id == data).first()
+                if social is None:
+                    redirect('/mypage')
                 else:
-                    user = create_facebook_user(data)
-                    create_socials(user, data, 'facebook')
-                    login_user(user.id)
-                    # send_mail(data['email'], 'create')
                     redirect('/tweet')
             else:
-        		# アクセストークンが不正なものだったらログイン画面にリダイレクトする
-                redirect('/')
-    except:
-        redirect('/tweet')
+                user = create_facebook_user(data)
+                create_socials(user, data, 'facebook')
+                login_user(user.id)
+                # send_mail(data['email'], 'create')
+                redirect('/tweet')
+        else:
+        	# アクセストークンが不正なものだったらログイン画面にリダイレクトする
+            redirect('/')
+    else:
+        redirect('/')
+    # except:
+    #     redirect('/')
 
 @route('/google/login')
-def test_login():
+def google_login():
 
     SCOPE = 'https://www.googleapis.com/auth/plus.login'
 
@@ -137,22 +143,69 @@ def test_login():
     redirect(auth_uri)
 
 @route('/google/callback')
-def test_login_google():
+def google_callback():
 
-    try:
-        if request.GET.getunicode('code'):
-            data = google_login_flow(request.GET.getunicode('code'))
-            if check_socials(data, 'google'):
+    # try:
+    if request.GET.getunicode('code'):
+        data = google_login_flow(request.GET.getunicode('code'))
+        check = check_socials(data, 'google')
+        if check is not False:
+            social = session.query(User.name).join(
+                     Social, User.id == Social.user_id).filter(
+                     Social.provider == 'google',
+                     Social.provider_id == data).first()
+
+            if social is None:
                 redirect('/mypage')
             else:
-                user = create_google_user()
-                create_socials(user, data, 'google')
-                login_user(user.id)
-                redirect('/mypage')
+                redirect('/tweet')
         else:
-            redirect('/')
-    except:
-        redirect('/mypage')
+            user = create_google_user()
+            create_socials(user, data, 'google')
+            login_user(user.id)
+            redirect('/mypage')
+    else:
+        redirect('/')
+    # except:
+        # redirect('/')
+
+
+@route('/twitter/login')
+def facebook_login():
+
+    test = get_twitter_access_token()
+
+    return test
+# 
+# @route('/twitter/callback')
+# def facebook_callback():
+#     # try: # 予期せぬエラーがでたらログイン画面にリダイレクトする
+#     if request.GET.getunicode('code'):
+#         access_token = get_twitter_access_token(request.GET.getunicode('code'))
+#         data = check_twitter_access_tokn(access_token)
+#         if data['is_valid']:
+#             data = get_facebook_user_info(access_token, data['user_id'])
+#             if check_socials(data, 'facebook'):
+#                 social = session.query(User.name).join(
+#                          Social, User.id == Social.user_id).filter(
+#                          Social.provider == 'google',
+#                          Social.provider_id == data).first()
+#                 if social is None:
+#                     redirect('/mypage')
+#                 else:
+#                     redirect('/tweet')
+#             else:
+#                 user = create_facebook_user(data)
+#                 create_socials(user, data, 'facebook')
+#                 login_user(user.id)
+#                 # send_mail(data['email'], 'create')
+#                 redirect('/tweet')
+#         else:
+#         	# アクセストークンが不正なものだったらログイン画面にリダイレクトする
+#             redirect('/')
+#     else:
+#         redirect('/')
+#
 
 @route('/remake_password')
 def remake():
@@ -181,23 +234,29 @@ def remake_password():
 def update_password(mail_id ,mail):
 
     duplicate_error= ''
-    check = url_check(mail_id)
-    if check is True:
-        return template('templates/remake', mail=mail, mail_id=mail_id, duplicate_error=duplicate_error)
+    check_mail_accuount = url_check(mail_id, mail, get_stripe_cookie())
+    if check_mail_accuount is True:
+        if get_stripe_cookie() is not None:
+            return template('templates/remake', mail=mail, mail_id=mail_id, duplicate_error=duplicate_error)
+        else:
+            redirect('/')
     else:
-        error404(error)
+        redirect('/')
 
 @route('/remake/<mail_id>/<mail>', method='POST')
 def update_password(mail_id, mail):
 
-    checker = password_checker(request.POST)
-
-    if checker is True:
-        remake_password_check(mail, request.POST)
-        redirect('/check_password')
+    stripe_id_check = get_current_stripe_id_check()
+    if stripe_id_check is True:
+        checker = password_checker(request.POST)
+        if checker is True:
+            remake_password_check(mail, request.POST, get_stripe_cookie() )
+            redirect('/check_password')
+        else:
+            duplicate_error = 'パスワードは確認用と同様の内容を記述してください。'
+            return template('templates/remake', duplicate_error=duplicate_error, mail=mail, mail_id=mail_id)
     else:
-        duplicate_error = 'パスワードは確認用と同様の内容を記述してください。'
-        return template('templates/remake', duplicate_error=duplicate_error, mail=mail, mail_id=mail_id)
+        redirect('/pay')
 
 @route("/check_password")
 def check_password():
@@ -229,10 +288,10 @@ def pay_commit():
     login_stripe_id(customer.id)
 
     charge = stripe.Charge.create(
-        customer = customer.id,
-        amount = request.POST.getunicode('amount'),
-        currency = 'jpy',
-        description = request.POST.getunicode('description')
+         customer = customer.id,
+         amount = request.POST.getunicode('amount'),
+         currency = 'jpy',
+         description = request.POST.getunicode('description')
     )
 
     stripe_create_mail(request.POST.getunicode('stripeEmail'), customer.id, 'pay')
@@ -276,9 +335,9 @@ def create_get():
         redirect('/pay')
     else:
         current_user = get_current_user()
-        delete = user_stripe_delete()
+        user_stripe_delete()
         duplicate_error = ''
-        return template('templates/create', duplicate_error=duplicate_error, user=User(), current_user=current_user, delete=delete)
+        return template('templates/create', current_user=current_user, duplicate_error=duplicate_error)
 
 @route('/check', method='POST')
 def users_new_confirm():
@@ -305,6 +364,7 @@ def users_new_confirm():
 def create():
     current_user = get_current_user()
     user = create_user(request.POST)
+    login_user(user.id)
     send_mail(user.email, 'create')
     duplicate_error = '登録完了しました。'
     # return template('templates/create_after', user=user, current_user=current_user , duplicate_error=duplicate_error)
@@ -339,7 +399,7 @@ def tweet():
     tweets = tweet_view()
     follow_check = follow_id_view()
     fab_check = fab_check_view()
-
+    is_logged_in_redirect(current_user)
 
     return template('templates/tweet', follow_view=follow_check, fab_check=fab_check, tweets=tweets, current_user=current_user)
 
@@ -361,13 +421,16 @@ def follower():
 
     current_user = get_current_user()
     follower_view_table = follower_view()
+    is_logged_in_redirect(current_user)
 
     return template('templates/follower', current_user=current_user, follower_view_table=follower_view_table)
 
 @route('/follow/<user_follow:int>')
 def follow(user_follow):
 
+    current_user = get_current_user()
     follow_user = follow_table(user_follow)
+    is_logged_in_redirect(current_user)
 
     return follow_user
 
@@ -375,6 +438,7 @@ def follow(user_follow):
 def delete_follower_id(delete_follower_id):
 
     delete = delete_follower(delete_follower_id)
+    is_logged_in_redirect(current_user)
 
     return delete
 
@@ -385,6 +449,7 @@ def fab_test():
     tweets = fab_view()
     follow_check = follow_id_view()
     fab_check = fab_check_view()
+    is_logged_in_redirect(current_user)
 
     return template('templates/fab', current_user=current_user, tweets=tweets, fab_check=fab_check, follow_check=follow_check)
 
@@ -392,6 +457,7 @@ def fab_test():
 def fab(fab_id):
 
     fab = fab_table(fab_id)
+    is_logged_in_redirect(current_user)
 
     return fab
 
@@ -399,6 +465,7 @@ def fab(fab_id):
 def fab(fab_id):
 
     delete = fab_delete(fab_id)
+    is_logged_in_redirect(current_user)
 
     return delete
 
@@ -409,6 +476,7 @@ def view():
     current_user = get_current_user()
     follow_check = follow_id_view()
     fab_check = fab_check_view()
+    is_logged_in_redirect(current_user)
     test = ''
 
     return template('templates/search', fab_check=fab_check, follow_check=follow_check, tweets=tweets, test=test, current_user=current_user)
@@ -420,7 +488,7 @@ def search():
     follow_check = follow_id_view()
     fab_check = fab_check_view()
     current_user = get_current_user()
-    print(search)
+    is_logged_in_redirect(current_user)
 
     if search is not False:
         test=''
@@ -440,6 +508,7 @@ def profile():
     my_tweets = my_tweet()
     profile = my_profile()
     error=''
+    is_logged_in_redirect(current_user)
 
     return template('templates/mypage', error=error, user_account=user_account, my_tweets=my_tweets, current_user=current_user, profile=profile)
 
@@ -449,6 +518,7 @@ def edit():
     current_user = get_current_user()
     profile_view = comment()
     error = ''
+    is_logged_in_redirect(current_user)
 
     return template('templates/profile_remake', current_user=current_user, profile_view=profile_view, error=error)
 
@@ -456,18 +526,23 @@ def edit():
 def edit_post():
 
     current_user = get_current_user()
-    test_edit = my_comment(request.forms)
     edit = profile_edit(request.POST)
-    profile_view = comment()
-    commit_text = commit()
-
-    return template('templates/profile_remake', current_user=current_user, edit=edit, profile_view=profile_view, error=commit_text, test_edit=test_edit)
+    if edit is False:
+        commit_text = '既に使用されているメールアドレスです。'
+        profile_view = comment()
+        return template('templates/profile_remake', current_user=current_user, edit=edit, error=commit_text, profile_view=profile_view)
+    else:
+        test_edit = my_comment(request.forms)
+        profile_view = comment()
+        commit_text = commit()
+        return template('templates/profile_remake', current_user=current_user, edit=edit, profile_view=profile_view, error=commit_text, test_edit=test_edit)
 
 @route('/mypage/delete/<delete_id>')
 def delete_tweet(delete_id):
 
     current_user = get_current_user()
     delete_tweet = delete(delete_id)
+    is_logged_in_redirect(current_user)
 
     return redirect('/mypage')
 
@@ -477,6 +552,7 @@ def tweet_edit(tweet_edit_id):
     current_user = get_current_user()
     mytweet_edit = my_tweet_edit(tweet_edit_id)
     mytweet_edit = mytweet_edit[0][0]
+    is_logged_in_redirect(current_user)
 
     return template('templates/mytweet_edit', current_user=current_user, tweet_edit_id=tweet_edit_id, mytweet_edit=mytweet_edit)
 
@@ -485,6 +561,7 @@ def tweet_edit_input(tweet_edit_id):
 
     current_user = get_current_user()
     tweet_input = my_tweet_edit_input(tweet_edit_id)
+    is_logged_in_redirect(current_user)
 
     return redirect('/mypage')
 
@@ -496,6 +573,7 @@ def users_profile(user_id_number):
     profile = user_profile(user_id_number)
     fab_check = fab_check_view()
     follow_check = follow_id_view()
+    is_logged_in_redirect(current_user)
 
     return template('templates/users/profile', follow_check=follow_check, fab_check=fab_check, user_id_number=user_id_number, current_user=current_user, user_profile=profile, user_tweets=tweet)
 

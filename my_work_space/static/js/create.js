@@ -62,3 +62,17 @@ $(function (){
     }
   });
 });
+
+$(function() {
+  $(document).on('click', function(e) {
+    if (!$(e.target).closest('.sns_button').length && !$(e.target).closest('#sns').length) {
+      $('.sns_button').fadeOut(800);
+    } else if ($(e.target).closest('#sns').length) {
+      if ($('.sns_button').css('display', 'none') ) {
+        $('.sns_button').fadeIn(800);
+      } else {
+        $('.sns_button').fadeOut(800);
+      }
+    }
+  });
+});

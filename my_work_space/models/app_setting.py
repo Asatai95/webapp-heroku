@@ -14,15 +14,13 @@ try:
         DATABASE = os.environ['DATABASE_URL']
         STRIPE_SECRET = os.environ['SECRET_KEY']
         STRIPE_PUBLISHABLE = os.environ['PUBLISHABLE_KEY']
+        CONSUMER_KEY = os.environ['CONSUMER_KEY']
+        CONSUMER_SECRET = os.environ['CONSUMER_SECRET']
 except:
     # for development
     SECRET_KEY = '2fsKgOLaAHbJUbi6kJsyboVLPchUjL88iZ7sM3A1'
     HOST_PASSWORD = 'PassWord'
-    FACEBOOK_ID = '469722980181511'
-    FACEBOOK_SECRET = '67fcea638494b27eeb9e46756d195e75'
-    FACEBOOK_CALLBACK_URL = 'http://localhost:5000/facebook/callback'
-    STRIPE_SECRET = 'sk_test_RcPOmGOhD54o5kg6ixEr3yQZ'
-    STRIPE_PUBLISHABLE = 'pk_test_8j23sG5Ssj7DKgN4CsIyRlNX'
+
     DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8mb4' % (
        "root", # user
        "root", # password
@@ -30,9 +28,6 @@ except:
        "mamp", # database name
     ) # mysql://ユーザー名:パスワード@ホスト/データベース名
 
-HOST_EMAIL = 'official@webapp2.com'
-HOST_PASSWORD = 'asatai951156'
-HOST_SMTP = 'smtp.muumuu-mail.com'
 
 ENGINE = create_engine(
     DATABASE,

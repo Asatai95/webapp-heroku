@@ -59,7 +59,11 @@
 
           </form>
           <p class='forgot'>パスワード忘れた方は<a href="/remake_password">こちら</a></p>
-          <p class='new'>アカウントをお持ちではないですか？<a href="/pay" id='new'>新規登録</a></p>
+          %if stripe_cookie is None:
+              <p class='new'>アカウントをお持ちではないですか？<a href="/pay" id='new'>新規登録</a></p>
+          %else:
+              <p class='new'>アカウントをお持ちではないですか？<a href="/create" id='new'>新規登録</a></p>
+          %end
         </div>
       </div>
     </div>

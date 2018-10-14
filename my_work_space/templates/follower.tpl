@@ -27,6 +27,15 @@
       <a href="javascript:history.back();"><input type="submit" value="戻る" /></a>
     </div>
 
+    %if follower_view_table == []:
+      <div class='follower_none'>
+        <div class='main_follower_none'>
+          <p class='none_img'><img src="static/img/ninwanko.png" alt=""></p>
+          <p class='none_text'>フォローしたユーザーが表示されるよ！</p>
+        </div>
+      </div>
+    %end
+
     %for view in follower_view_table:
     <div class="profilecard">
       <div class="profile-header">

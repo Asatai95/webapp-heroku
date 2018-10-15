@@ -37,3 +37,8 @@ main {
         margin: 5px
     }
 }
+
+
+.waves-effect.my_plan {
+  cursor: default!important;
+}

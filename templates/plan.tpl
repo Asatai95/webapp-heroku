@@ -11,7 +11,11 @@
                 <span class="card-title activator grey-text text-darken-4">{{plan.name}}</span>
                 <p>￥{{plan.amount}}</p>
                 <!-- Modal Trigger -->
-                <a class="waves-effect waves-light btn modal-trigger" href="/plans/{{plan.namespace}}">詳細を見る</a>
+                %if current_user.plan_id == plan.id :
+                   <a class="waves-effect waves-light btn modal-trigger my_plan" href="/plans/{{plan.namespace}}">契約中</a>
+                %else:
+                   <a class="waves-effect waves-light btn modal-trigger" href="/plans/{{plan.namespace}}">詳細を見る</a>
+                %end
             </div>
             <div class="card-reveal">
                 <span class="card-title grey-text text-darken-4">{{plan.name}}<i class="material-icons right">close</i></span>

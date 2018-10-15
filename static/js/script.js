@@ -9,6 +9,12 @@ $(document).ready(function(){
 });
 
 $(function(){
+  $('a.waves-effect.my_plan').click(function(e){
+    e.preventDefault();
+  });
+});
+
+$(function(){
 
     // Materialize mobile menu
     $(document).ready(function(){

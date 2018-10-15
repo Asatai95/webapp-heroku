@@ -36,12 +36,12 @@ def before_action():
 @hook('after_request')
 def after_action():
         session.close()
-
-@route('/test')
-def test():
-
-    get_twitter_access_token()
-
+#
+# @route('/test')
+# def test():
+#
+#     get_twitter_access_token()
+#
 @route('/twitter/login')
 def test_login():
 
@@ -53,11 +53,15 @@ def test_login():
     )
 
     request_token = dict(parse_qsl(response.content.decode("utf-8")))
+    print(request_token)
+    print(request_token)
 
     authenticate_url = "https://api.twitter.com/oauth/authenticate"
     authenticate_endpoint = '%s?oauth_token=%s' \
         % (authenticate_url, request_token['oauth_token'])
 
+    print(authenticate_endpoint)
+    print(authenticate_endpoint)
     print(authenticate_endpoint)
 
     redirect(authenticate_endpoint)
@@ -188,6 +192,7 @@ def plans_charge(namespace):
         redirect('/mypage')
 
     plan = session.query(Plan).filter(Plan.namespace==namespace).first()
+    user = session.query(User).join(Plan, Plan.id == User.plan_id).filter(current_user.id == User.id).first()
 
     if plan is None:
         redirect('/plans')
@@ -203,11 +208,37 @@ def plans_charge(namespace):
         current_user.plan_id = plan.id
         current_user.stripe_subscription_id = subscription.id
         session.commit()
+    else:
+        subscription = stripe.Subscription.retrieve(user.stripe_subscription_id)
+        item_id = subscription['items']['data'][0].id
+        plans = stripe.Subscription.modify(user.stripe_subscription_id,
+           items=[{
+                   "id": item_id,
+                   "plan": plan.stripe_plan_id,
+           }],
+        )
+        current_user.plan_id = plan.id
+        current_user.stripe_subscription_id = subscription.id
+        session.commit()
 
     return template('templates/charge',
                     url=url,
                     current_user=current_user,
                     plan=plan)
+
+@route('/plans/delete')
+def plans_charge():
+
+    user = session.query(User).join(Plan, Plan.id == User.plan_id).filter(current_user.id == User.id).first()
+
+    subscription = stripe.Subscription.retrieve(user.stripe_subscription_id)
+    subscription.delete()
+
+    current_user.plan_id = None
+    current_user.stripe_subscription_id = None
+    session.commit()
+
+    return template('templates/plans_delete', current_user=current_user, url=url, user=user)
 
 @route('/users/sign_up', method="GET")
 def users_new():

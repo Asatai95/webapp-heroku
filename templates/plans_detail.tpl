@@ -12,6 +12,8 @@
             <a class="waves-effect waves-light btn modal-trigger" href="#modal1">
               % if current_user is None or current_user.plan_id is None:
                 購入する
+              %elif current_user.plan_id == plan.id:
+                契約中
               % else:
                 変更する
               % end

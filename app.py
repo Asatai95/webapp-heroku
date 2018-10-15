@@ -23,6 +23,9 @@ import requests
 import stripe
 stripe.api_key = app_setting.STRIPE_SECRET
 
+from requests_oauthlib import OAuth1Session
+from urllib.parse import parse_qsl
+
 # 各ルートのメソッドの実行前に実行される
 @hook('before_request')
 def before_action():
@@ -38,6 +41,26 @@ def after_action():
 def test():
 
     get_twitter_access_token()
+
+@route('/twitter/login')
+def test_login():
+
+    twitter = OAuth1Session(app_setting.CONSUMER_KEY, app_setting.CONSUMER_SECRET)
+
+    response = twitter.post(
+        'https://api.twitter.com/request_token',
+        params={'oauth_callback': 'http://www.webapp2.com/twitter/callback'}
+    )
+
+    request_token = dict(parse_qsl(response.content.decode("utf-8")))
+
+    authenticate_url = "https://api.twitter.com/oauth/authenticate"
+    authenticate_endpoint = '%s?oauth_token=%s' \
+        % (authenticate_url, request_token['oauth_token'])
+
+    print(authenticate_endpoint)
+
+    redirect(authenticate_endpoint)
 
 @route('/')
 def index():

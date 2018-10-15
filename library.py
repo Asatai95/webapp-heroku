@@ -281,10 +281,14 @@ def get_twitter_access_token():
     oauth2_url = "https://api.twitter.com/oauth2/token"
     r = requests.post(oauth2_url, data=data, headers=headers, auth=(app_setting.CONSUMER_KEY, app_setting.CONSUMER_SECRET))
 
-    print(r.json()["access_token"])
-    print(r.json()["access_token"])
-    print(r.json()["access_token"])
-    print(r.json()["access_token"])
-
-
     return r.json()["access_token"]
+#
+# def get_twitter_request_token():
+#
+#     consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
+#     client = oauth.Client(consumer)
+#
+#     resp, content = client.request('%s?&oauth_callback=%s' % \
+#                                    (request_token_url, callback_url))
+#     request_token = dict(parse_qsl(content))
+#     return request_token['oauth_token']

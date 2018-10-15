@@ -1,0 +1,39 @@
+nav .sidenav-trigger {
+    float: right;
+}
+
+.users-new, .users-create,
+.users-login, .users-logout {
+    height: 80vh;
+}
+
+.facebook-login {
+    margin-top: 50px;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+}
+
+
+.goods {
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.goods .card {
+    width: 22%;
+    margin: 22px
+}
+
+@media (max-width: 766px) {
+    .goods {
+        justify-content: center;
+    }
+    .goods .card {
+        width: 44%;
+        margin: 5px
+    }
+}

@@ -1,0 +1,8 @@
+nav .sidenav-trigger {
+    float: right;
+}
+
+.users-new, .users-create,
+.users-login, .users-logout {
+    height: 80vh;
+}

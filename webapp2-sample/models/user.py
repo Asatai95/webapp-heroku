@@ -2,23 +2,16 @@ from sqlalchemy import *
 from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Float, DateTime
+
+if __name__ == "__main__":
+    from setting import Base
+    from setting import ENGINE
+else:
+    from .setting import Base
+    from .setting import ENGINE
+
 from datetime import datetime
-
-
-"""
-テーブル作成はアプリのルートディレクトリで行うこと
-今回で言うと webapp2-sample/
-テーブル作成実行例
-  webapp2-sampleがカレントディレクトリとして
-    python models/user.py create
-    python models/user.py delete
-"""
-import os, sys
-sys.path.append(os.getcwd()) # コマンド実行ディレクトリを設定
-from app_setting import Base, ENGINE
-
-from models.plan import Plan
-
+import sys
 
 class User(Base):
     """
@@ -26,9 +19,6 @@ class User(Base):
     """
     __tablename__ = 'users'
     id = Column('id', Integer, primary_key = True)
-    stripe_id = Column('stripe_id', String(200))
-    stripe_subscription_id = Column('stripe_subscription_id', String(200))
-    plan_id = Column('plan_id', Integer,  ForeignKey('plans.id',onupdate='CASCADE', ondelete='CASCADE'))
     name = Column('name', String(200))
     age = Column('age', Integer)
     email = Column('email', String(100))
@@ -39,9 +29,10 @@ def main(args):
     """
     メイン関数
     """
+
     if args[1] == "create":
         Base.metadata.create_all(bind=ENGINE)
-
+    
     elif args[1] == "delete":
         User.__table__.drop(bind=ENGINE)
 

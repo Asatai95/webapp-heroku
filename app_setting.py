@@ -23,13 +23,7 @@ except:
     # for development
     SECRET_KEY = '2fsKgOLaAHbJUbi6kJsyboVLPchUjL88iZ7sM3A1'
     FACEBOOK_CALLBACK_URL = 'http://localhost:5000/facebook/callback'
-    FACEBOOK_ID = '2165553107045876'
-    FACEBOOK_SECRET = '2b3f9337bb73847b0a63846a74cb5bf7'
-    HOST_EMAIL = 'official@webapp2.com'
-    HOST_PASSWORD = 'asatai951156'
-    HOST_SMTP = 'smtp.muumuu-mail.com'
-    STRIPE_PUBLISHABLE = 'pk_test_D2EkZu92AC0Hlt2UfAaP8khe'
-    STRIPE_SECRET = 'sk_test_VOJLHFskuSgMHOFarTjCJd2v'
+    
     DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8mb4' % (
        "root", # user
        "root", # password

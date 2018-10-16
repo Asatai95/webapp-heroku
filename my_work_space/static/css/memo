@@ -1,0 +1,136 @@
+
+.tweet_img {
+  display: inline-block;
+  position: relative;
+}
+
+.photo_selector {
+  position: relative;
+  background-color: rgba(255, 255, 255, .8);
+  border-radius: 5px;
+  width: 40px;
+  height: 35px;
+
+}
+
+.add_img .icon_btn .Icon {
+  font-size: 24px;
+  line-height: 24px;
+}
+
+.btn.icon-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #1c94e0;
+  opacity: .8;
+  padding: 0;
+
+}
+
+.icon-btn .Icon {
+  font-size: 35px;
+}
+
+.btn {
+  background-color: #ccd6dd;
+  background-repeat: no-repeat;
+  border: 1px solid #e6ecf0;
+  border-radius: 4px;
+  color: #66757f;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: normal;
+  padding: 8px 16px;
+  position: relative;
+}
+
+.btn .Icon {
+  background: transparent;
+}
+
+.tweet-camera {
+  height: 35px;
+  width: 40px;
+  background-color: rgba(255, 255, 255, .8);
+  line-height: 1px;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.Icon {
+  background: transparent;
+  display: inline-block;
+  font-style: normal;
+  vertical-align: baseline;
+  position: relative;
+
+}
+
+.Icon::before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f03e";
+  display: inline-block;
+  font-variant: normal;
+  line-height: 1;
+  text-rendering: auto;
+  font-weight: normal;
+  font-style: normal;
+  /*text-align: center;*/
+  -webkit-font-smoothing: antialiased;
+}
+
+.icon-btn .text {
+  font-size: 12px;
+  font-weight: normal;
+  margin-left: 3px;
+  position: relative;
+  top: -6px;
+}
+
+.u-hiddenVisually {
+  border: 0!important;
+  clip: rect(1px, 1px, 1px, 1px)!important;
+  height: 1px!important;
+  overflow: hidden!important;
+  padding: 0!important;
+  position: absolute!important;
+  width: 1px!important;
+}
+
+.image-selector {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+.text_box {
+  display: block;
+  margin-bottom: 5px;
+  color: #14171a;
+  cursor: pointer;
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.text {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}

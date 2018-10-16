@@ -1,0 +1,221 @@
+@charset "UTF-8";
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 400;
+  font-family: "ヒラギノ明朝 ProN W6", "HiraMinProN-W6", "HG明朝E", "ＭＳ Ｐ明朝", "MS PMincho", "MS 明朝", serif;
+}
+
+div.main {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(123, 128, 132, 0.3);
+  line-height: 1.4em;
+}
+
+div.header {
+  width: 100%;
+  height: 500px;
+  background-image: url('../img/enpitu.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+div.header_sub {
+  width: 100%;
+}
+
+div.img img {
+  width: 150px;
+  height: 150px;
+  float: left;
+  margin: 30px;
+  margin-left: 50px;
+  margin-top: 40px;
+}
+
+ul.header_main {
+  float: right;
+  padding: 10px;
+  font-size: 25px;
+  font-weight: 800;
+  margin-top: 80px;
+}
+
+li.text {
+  list-style: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+}
+
+.text a {
+  color: black;
+  text-decoration: none;
+}
+
+li.login_sub {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
+}
+
+.login_sub a {
+  color: black;
+  text-decoration: none;
+}
+
+li.new {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
+}
+
+.new a {
+  color: black;
+  text-decoration: none;
+}
+
+li.login_account {
+  list-style: none;
+  text-decoration: none;
+  font-family: serif;
+  float: left;
+  padding: 10px;
+  color: black;
+}
+
+.login_account a {
+  color: black;
+  text-decoration: none;
+}
+
+li.text:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px white;
+}
+
+li.login_sub:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px white;
+}
+
+li.new:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px white;
+}
+
+li.login_account:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px white;
+}
+
+.content {
+  width: 75%;
+  height: 126vh;
+  position: absolute;
+  top: 300px;
+  background-color: rgba(255, 255, 255, 0.9);
+  right: 0;
+  border-radius: 20px;
+  z-index: 1;
+}
+
+.content_left {
+  position: absolute;
+  top: 500px;
+  width: 100%;
+  height: 96vh;
+  background-color: rgba(123, 128, 132, 0.1);
+}
+
+.content_title {
+  width: 25%;
+  height: 300px;
+  left: 0;
+  margin-top: 80px;
+}
+
+p.text_right {
+  margin: 0 auto;
+  padding: 10px 0 0 0;
+  height: 50px;
+  line-height: 3.0;
+  border-top: 1px solid black;
+  width: 150px;
+  text-align: right;
+}
+
+.content_title_last {
+  width: 25%;
+  height: 200px;
+  left: 0;
+  margin-top: 80px;
+}
+
+p.text_right {
+  margin: 0 auto;
+  padding: 10px 10px 0 0 ;
+  height: 50px;
+  line-height: 3.0;
+  border-top: 1px solid black;
+  text-align: right;
+  width: 150px;
+}
+
+.content_sub {
+  height: 200px;
+  font-size: 30px;
+  font-weight: 800;
+}
+
+p.content_text {
+  margin: 0;
+  height: 100px;
+  padding-top: 80px;
+  line-height: 3.8;
+  text-align: left;
+  border-bottom: 1px solid black;
+  width: 500px;
+  margin-left: 80px;
+  padding-left: 50px;
+}
+
+.content_tatume {
+  margin-top: 75px;
+}
+
+p.content_tatume_title {
+  font-size: 25px;
+  text-align: left;
+  margin-left: 50px;
+  margin-bottom: 30px;
+  font-family: inherit;
+}
+
+p.content_tatume_img {
+  margin-bottom: 30px;
+  text-align: left;
+  margin-left: 70px;
+}
+
+p.content_tatume_img img {
+  width: 250px;
+  height: 90px;
+}
+
+.content_tatume_text {
+  text-align: left;
+  margin-left: 50px;
+  line-height: 2.0;
+}

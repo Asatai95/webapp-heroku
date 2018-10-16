@@ -272,23 +272,3 @@ def send_mail(to_email, send_type):
     sender.login(app_setting.HOST_EMAIL, app_setting.HOST_PASSWORD)
     sender.sendmail(app_setting.HOST_EMAIL, to_email, message.as_string())
     sender.quit()
-
-
-def get_twitter_access_token():
-
-    headers = { "Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8" }
-    data = { "grant_type":"client_credentials" }
-    oauth2_url = "https://api.twitter.com/oauth2/token"
-    r = requests.post(oauth2_url, data=data, headers=headers, auth=(app_setting.CONSUMER_KEY, app_setting.CONSUMER_SECRET))
-
-    return r.json()["access_token"]
-#
-# def get_twitter_request_token():
-#
-#     consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
-#     client = oauth.Client(consumer)
-#
-#     resp, content = client.request('%s?&oauth_callback=%s' % \
-#                                    (request_token_url, callback_url))
-#     request_token = dict(parse_qsl(content))
-#     return request_token['oauth_token']

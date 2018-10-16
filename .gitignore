@@ -6,6 +6,5 @@ test_susb.txt
 test.txt
 .credential/
 __pycache__/
-my_work_space/memo.txt
-my_work_space/memo
-my_work_space/Procfile
+my_work_space/
+webapp2-sample/

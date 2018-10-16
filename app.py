@@ -23,9 +23,6 @@ import requests
 import stripe
 stripe.api_key = app_setting.STRIPE_SECRET
 
-from requests_oauthlib import OAuth1Session
-from urllib.parse import parse_qsl
-
 # 各ルートのメソッドの実行前に実行される
 @hook('before_request')
 def before_action():
@@ -36,35 +33,6 @@ def before_action():
 @hook('after_request')
 def after_action():
         session.close()
-#
-# @route('/test')
-# def test():
-#
-#     get_twitter_access_token()
-#
-@route('/twitter/login')
-def test_login():
-
-    twitter = OAuth1Session(app_setting.CONSUMER_KEY, app_setting.CONSUMER_SECRET)
-
-    response = twitter.post(
-        'https://api.twitter.com/request_token',
-        params={'oauth_callback': 'http://www.webapp2.com/twitter/callback'}
-    )
-
-    request_token = dict(parse_qsl(response.content.decode("utf-8")))
-    print(request_token)
-    print(request_token)
-
-    authenticate_url = "https://api.twitter.com/oauth/authenticate"
-    authenticate_endpoint = '%s?oauth_token=%s' \
-        % (authenticate_url, request_token['oauth_token'])
-
-    print(authenticate_endpoint)
-    print(authenticate_endpoint)
-    print(authenticate_endpoint)
-
-    redirect(authenticate_endpoint)
 
 @route('/')
 def index():
@@ -197,7 +165,7 @@ def plans_charge(namespace):
     if plan is None:
         redirect('/plans')
 
-    if current_user.plan_id is None:
+    if current_user.plan_id is None: #新規
         subscription = stripe.Subscription.create(
                  customer = current_user.stripe_id,
                  items = [{
@@ -208,10 +176,18 @@ def plans_charge(namespace):
         current_user.plan_id = plan.id
         current_user.stripe_subscription_id = subscription.id
         session.commit()
-    else:
-        subscription = stripe.Subscription.retrieve(user.stripe_subscription_id)
+    else:#既にサブスクリプションを購入しているので変更
+
+        if plan.id == current_user.plan_id:
+            redirect('/plans')#同じプランには変更できない
+
+        subscription = stripe.Subscription.retrieve(
+               current_user.stripe_subscription_id
+        )
         item_id = subscription['items']['data'][0].id
-        plans = stripe.Subscription.modify(user.stripe_subscription_id,
+        stripe.Subscription.modify(
+           current_user.stripe_subscription_id,
+           cancel_at_period_end=False,
            items=[{
                    "id": item_id,
                    "plan": plan.stripe_plan_id,
@@ -229,16 +205,18 @@ def plans_charge(namespace):
 @route('/plans/delete')
 def plans_charge():
 
-    user = session.query(User).join(Plan, Plan.id == User.plan_id).filter(current_user.id == User.id).first()
-
-    subscription = stripe.Subscription.retrieve(user.stripe_subscription_id)
+    subscription = stripe.Subscription.retrieve(
+            current_user.stripe_subscription_id
+    )
     subscription.delete()
 
     current_user.plan_id = None
     current_user.stripe_subscription_id = None
     session.commit()
 
-    return template('templates/plans_delete', current_user=current_user, url=url, user=user)
+    return template('templates/plans_delete',
+                    current_user=current_user,
+                    url=url)
 
 @route('/users/sign_up', method="GET")
 def users_new():

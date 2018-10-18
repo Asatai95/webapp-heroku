@@ -20,8 +20,6 @@ from email.mime.text import MIMEText
 import smtplib
 
 import os
-import random
-
 import sys
 
 import requests
@@ -40,15 +38,11 @@ from requests_oauthlib import OAuth1Session
 import urllib
 import oauth2 as oauth
 
+import json
+from instagram.client import InstagramAPI
 
 SCOPE = 'https://www.googleapis.com/auth/plus.login'
 CREDENTIALS_FILE = "./google/test"
-
-request_token_url = 'http://twitter.com/oauth/request_token'
-access_token_url = 'http://twitter.com/oauth/access_token'
-authenticate_url = 'https://api.twitter.com/oauth/authenticate'
-callback_url = 'http://localhost:5000/twitter/callback/'
-
 
 flow = flow_from_clientsecrets(
    './client_id.json',
@@ -226,10 +220,10 @@ def create_facebook_user(form):
     stripe_id = request.get_cookie('stripe_id', secret=models.app_setting.SECRET_KEY)
 
     user = User(
-               stripe_id = stripe_id,
-               name = form['name'],
-               email = form['email'],
-               pro_img = './static/img/ninwanko.png'
+       stripe_id = stripe_id,
+       name = form['name'],
+       email = form['email'],
+       pro_img = './static/img/ninwanko.png'
             )
     session.add(user)
     session.commit()
@@ -240,7 +234,8 @@ def create_google_user():
     stripe_id = request.get_cookie('stripe_id', secret=models.app_setting.SECRET_KEY)
 
     user = User(
-          stripe_id = stripe_id
+       stripe_id = stripe_id,
+       pro_img = './static/img/ninwanko.png'
     )
     session.add(user)
     session.commit()
@@ -251,8 +246,22 @@ def create_twitter_user(form):
     stripe_id = request.get_cookie('stripe_id', secret=models.app_setting.SECRET_KEY)
 
     user = User(
+       stripe_id = stripe_id,
+       name = form['screen_name'],
+       pro_img = './static/img/ninwanko.png'
+    )
+    session.add(user)
+    session.commit()
+    return user
+
+def create_instagram_user(form):
+
+    stripe_id = request.get_cookie('stripe_id', secret=models.app_setting.SECRET_KEY)
+
+    user = User(
           stripe_id = stripe_id,
-          name = form['screen_name']
+          name = form['full_name'],
+          pro_img = './static/img/ninwanko.png'
     )
     session.add(user)
     session.commit()
@@ -278,6 +287,12 @@ def create_socials(user, data, provider):
             provider = provider,
             provider_id = data['user_id']
         )
+    elif provider == 'instagram':
+        social = Social(
+            user_id = user.id,
+            provider = provider,
+            provider_id = data['id']
+        )
 
     session.add(social)
     session.commit()
@@ -293,6 +308,11 @@ def check_socials(data, provider):
         social = session.query(Social).filter(
                         Social.provider == 'twitter',
                         Social.provider_id == data['user_id']
+                    ).first()
+    elif provider == 'instagram':
+        social = session.query(Social).filter(
+                        Social.provider == 'instagram',
+                        Social.provider_id == data['id']
                     ).first()
     else:
         social = session.query(Social).filter(
@@ -317,83 +337,6 @@ def get_facebook_access_token(code):
     }
     r = requests.get(url, params=params)
     return r.json()['access_token']
-
-
-def get_twitter_request_token():
-
-    request_token = request.GET["oauth_token"] # リクエストトークンは以前と同じもの
-    verifier = request.GET["oauth_verifier"]
-    oauth = OAuth1Session(
-            models.app_setting.CONSUMER_KEY,
-            client_secret=models.app_setting.CONSUMER_SECRET,
-            resource_owner_key=request_token,
-            verifier=verifier)
-    access_token_url = "https://api.twitter.com/oauth/access_token"
-    # アクセストークン取得
-    response = oauth.fetch_request_token(access_token_url)
-    print(response)
-    return response
-#
-#     # consumer = oauth.Consumer(key=models.app_setting.CONSUMER_KEY, secret=models.app_setting.CONSUMER_SECRET)
-#     # client = oauth.Client(consumer)
-#     # print(client)
-#     #
-#     # # reqest_token を取得
-#     # content = client.request(request_token_url, 'GET')
-#     # request_token = dict(parse_qsl(content))
-#     # print(content)
-#     #
-#     # url = '%s?&oauth_token=%s' % (authenticate_url , request_token['oauth_token'])
-#     # print(url)
-#
-#     # request token取得
-#     oauth = OAuth1Session(
-#             models.app_setting.CONSUMER_KEY,
-#             client_secret=models.app_setting.CONSUMER_SECRET,
-#             callback_uri=callback_url)
-#     request_token_url = "https://api.twitter.com/oauth/request_token"
-#     response = oauth.fetch_request_token(request_token_url)
-#
-#     # 認証用URL作成
-#     redirect_url = "https://api.twitter.com/oauth/authenticate?oauth_token=" + response["oauth_token"]
-#     print(oauth)
-#
-#     # 認証へリダイレクト
-#     return redirect(redirect_url)
-
-#
-# def parse_qsl(url):
-#     param = {}
-#     for i in str(url).split("&"):
-#         _p = i.split("=")
-#         param.update({_p[0]: _p[1]})
-#     return param
-#
-# def get_access_token(oauth_token, oauth_verifier):
-#     consumer = oauth.Consumer(key=models.app_setting.CONSUMER_KEY, secret=models.app_setting.CONSUMER_SECRET)
-#     token = oauth.Token(oauth_token, oauth_verifier)
-#
-#     client = oauth.Client(consumer, token)
-#     content = client.request("https://api.twitter.com/oauth/access_token",
-#                                    "POST", body="oauth_verifier={0}".format(oauth_verifier))
-#     return content
-
-
-# def get_twitter_access_token():
-#
-#     headers = { "Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8" }
-#     data = { "grant_type":"client_credentials" }
-#     oauth2_url = "https://api.twitter.com/oauth2/token"
-#     r = requests.post(oauth2_url, data=data, headers=headers, auth=(models.app_config.CONSUMER_KEY, models.app_config.CONSUMER_SECRET))
-#
-#     print(r.json()["access_token"])
-#     print(r.json()["access_token"])
-#     print(r.json()["access_token"])
-#     print(r.json()["access_token"])
-#
-#
-#     return r.json()["access_token"]
-
 
 def check_facebook_access_tokn(access_token):
 
@@ -429,6 +372,40 @@ def google_login_flow(code):
 
     return result['id']
 
+def get_twitter_request_token():
+
+    request_token = request.GET["oauth_token"]
+    verifier = request.GET["oauth_verifier"]
+    oauth = OAuth1Session(
+            models.app_setting.CONSUMER_KEY,
+            client_secret=models.app_setting.CONSUMER_SECRET,
+            resource_owner_key=request_token,
+            verifier=verifier)
+    response = oauth.fetch_request_token(models.app_setting.TWITTER_ACCESS_TOKEN_URL)
+    return response
+
+def get_instagram_access_token(code):
+
+    url = "https://api.instagram.com/oauth/access_token"
+    params = {
+        'client_id': models.app_setting.INSTAGRAM_ID,
+        'client_secret': models.app_setting.INSTAGRAM_SECRET,
+        'grant_type': 'authorization_code',
+        'redirect_uri': models.app_setting.INSTAGRAM_CALLBACK_URL,
+        'code': code
+    }
+
+    api = InstagramAPI(client_id=models.app_setting.INSTAGRAM_ID, client_secret=models.app_setting.INSTAGRAM_SECRET, redirect_uri=models.app_setting.INSTAGRAM_CALLBACK_URL)
+    access_token = api.exchange_code_for_access_token(code)
+
+    return access_token[0]
+
+def check_instagram_access_token(access_token):
+
+    redirect_url = 'https://api.instagram.com/v1/users/self/?access_token=%s' %(access_token)
+    r = requests.get(redirect_url, headers='')
+
+    return r.json()["data"]
 
 def is_duplicate_email(email):
 

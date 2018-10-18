@@ -20,16 +20,11 @@ except:
     # for development
     SECRET_KEY = '2fsKgOLaAHbJUbi6kJsyboVLPchUjL88iZ7sM3A1'
     HOST_PASSWORD = 'PassWord'
-    FACEBOOK_ID = '469722980181511'
-    FACEBOOK_SECRET = '67fcea638494b27eeb9e46756d195e75'
-    FACEBOOK_CALLBACK_URL = 'http://localhost:5000/facebook/callback'
-    STRIPE_SECRET = 'sk_test_RcPOmGOhD54o5kg6ixEr3yQZ'
-    STRIPE_PUBLISHABLE = 'pk_test_8j23sG5Ssj7DKgN4CsIyRlNX'
-    HOST_EMAIL = 'official@webapp2.com'
-    HOST_PASSWORD = 'asatai951156'
-    HOST_SMTP = 'smtp.muumuu-mail.com'
-    CONSUMER_KEY = 'b5Ud0FkI8ldJMjXF8yKP5OXuJ'
-    CONSUMER_SECRET = '8DWwAjpfLwwo96kP9Dcmq1GeY9V7esHkv6uwXJM342jvHiQgEC'
+    
+    TWITTER_REQUEST_TOKEN_URL = 'http://twitter.com/oauth/request_token'
+    TWITTER_ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token'
+    TWITTER_AUTHENTICATE_URL = 'https://api.twitter.com/oauth/authenticate'
+    TWITTER_CALLBACK_URL = 'http://localhost:5000/twitter/callback'
     DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8mb4' % (
        "root", # user
        "root", # password

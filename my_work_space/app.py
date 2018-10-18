@@ -37,18 +37,15 @@ from apiclient.discovery import build
 import httplib2
 
 from requests_oauthlib import OAuth2Session
-from urllib.parse import parse_qsl
+from urllib.parse import parse_qsl, urlparse
 
 import urllib
+import urllib.request, urllib.error
 import oauth2 as oauth
 import webbrowser
 from requests_oauthlib import OAuth1Session
-
-
-request_token_url = 'http://twitter.com/oauth/request_token'
-access_token_url = 'http://twitter.com/oauth/access_token'
-authenticate_url = 'https://api.twitter.com/oauth/authenticate'
-callback_url = 'http://localhost:5000/twitter/callback'
+import json
+from instagram.client import InstagramAPI
 
 @hook('before_request')
 def before_action():
@@ -189,10 +186,8 @@ def get_request_token_test():
     oauth = OAuth1Session(
             models.app_setting.CONSUMER_KEY,
             client_secret=models.app_setting.CONSUMER_SECRET,
-            callback_uri=callback_url)
-    request_token_url = "https://api.twitter.com/oauth/request_token"
-    response = oauth.fetch_request_token(request_token_url)
-
+            callback_uri=models.app_setting.TWITTER_CALLBACK_URL)
+    response = oauth.fetch_request_token(models.app_setting.TWITTER_REQUEST_TOKEN_URL)
     redirect_url = "https://api.twitter.com/oauth/authenticate?oauth_token=" + response['oauth_token']
 
     redirect(redirect_url)
@@ -220,7 +215,50 @@ def twitter_callback():
             redirect('/mypage')
     else:
         redirect('/')
-    return request['oauth_token']
+
+@route('/insta/login')
+def insta_login():
+
+    url = "https://instagram.com/oauth/authorize"
+    params = {
+         'client_id': models.app_setting.INSTAGRAM_ID,
+         'redirect_uri': models.app_setting.INSTAGRAM_CALLBACK_URL,
+         'response_type': 'code',
+         'scope': 'basic',
+         'display': 'touch'
+    }
+    redirect_url = requests.get(url, params=params).url
+    print(redirect_url)
+
+    redirect(redirect_url)
+
+@route('/insta/callback')
+def insta_callback():
+
+    if request.GET.getunicode('code'):
+        access_token = get_instagram_access_token(request.GET.getunicode('code'))
+        data = check_instagram_access_token(access_token)
+        if data:
+            if check_socials(data, 'instagram'):
+                social = session.query(User.name).join(
+                         Social, User.id == Social.user_id).filter(
+                         Social.provider == 'instagram',
+                         Social.provider_id == data['id']).first()
+                if social is None:
+                    redirect('/mypage')
+                else:
+                    redirect('/tweet')
+            else:
+                user = create_instagram_user(data)
+                create_socials(user, data, 'instagram')
+                login_user(user.id)
+                # send_mail(data['email'], 'create')
+                redirect('/tweet')
+        else:
+        	# アクセストークンが不正なものだったらログイン画面にリダイレクトする
+            redirect('/')
+    else:
+        redirect('/')
 
 @route('/remake_password')
 def remake():

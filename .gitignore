@@ -7,4 +7,6 @@ test.txt
 .credential/
 __pycache__/
 my_work_space/
-webapp2-sample/
+webapp2-sample/memo.txt
+webapp2-sample/memo
+webapp2-sample/Procfile
